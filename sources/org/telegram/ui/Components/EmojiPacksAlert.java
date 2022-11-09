@@ -330,13 +330,17 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                         EmojiImageView emojiImageView = this.imageViewEmojis.get(i);
                         if (emojiImageView.span != null && (animatedEmojiDrawable = (AnimatedEmojiDrawable) EmojiPacksAlert.this.animatedEmojiDrawables.get(emojiImageView.span.getDocumentId())) != null && animatedEmojiDrawable.getImageReceiver() != null) {
                             animatedEmojiDrawable.update(j);
-                            ImageReceiver.BackgroundThreadDrawHolder drawInBackgroundThread = animatedEmojiDrawable.getImageReceiver().setDrawInBackgroundThread(emojiImageView.backgroundThreadDrawHolder);
-                            emojiImageView.backgroundThreadDrawHolder = drawInBackgroundThread;
-                            drawInBackgroundThread.time = j;
+                            ImageReceiver.BackgroundThreadDrawHolder[] backgroundThreadDrawHolderArr = emojiImageView.backgroundThreadDrawHolder;
+                            int i2 = this.threadIndex;
+                            ImageReceiver imageReceiver = animatedEmojiDrawable.getImageReceiver();
+                            ImageReceiver.BackgroundThreadDrawHolder[] backgroundThreadDrawHolderArr2 = emojiImageView.backgroundThreadDrawHolder;
+                            int i3 = this.threadIndex;
+                            backgroundThreadDrawHolderArr[i2] = imageReceiver.setDrawInBackgroundThread(backgroundThreadDrawHolderArr2[i3], i3);
+                            emojiImageView.backgroundThreadDrawHolder[this.threadIndex].time = j;
                             animatedEmojiDrawable.setAlpha(255);
                             android.graphics.Rect rect = AndroidUtilities.rectTmp2;
                             rect.set(emojiImageView.getLeft() + emojiImageView.getPaddingLeft(), emojiImageView.getPaddingTop(), emojiImageView.getRight() - emojiImageView.getPaddingRight(), emojiImageView.getMeasuredHeight() - emojiImageView.getPaddingBottom());
-                            emojiImageView.backgroundThreadDrawHolder.setBounds(rect);
+                            emojiImageView.backgroundThreadDrawHolder[this.threadIndex].setBounds(rect);
                             emojiImageView.imageReceiver = animatedEmojiDrawable.getImageReceiver();
                             this.drawInBackgroundViews.add(emojiImageView);
                         }
@@ -426,7 +430,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 public void drawInBackground(Canvas canvas) {
                     for (int i = 0; i < this.drawInBackgroundViews.size(); i++) {
                         EmojiImageView emojiImageView = this.drawInBackgroundViews.get(i);
-                        emojiImageView.imageReceiver.draw(canvas, emojiImageView.backgroundThreadDrawHolder);
+                        emojiImageView.imageReceiver.draw(canvas, emojiImageView.backgroundThreadDrawHolder[this.threadIndex]);
                     }
                 }
 
@@ -457,7 +461,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 public void onFrameReady() {
                     super.onFrameReady();
                     for (int i = 0; i < this.drawInBackgroundViews.size(); i++) {
-                        this.drawInBackgroundViews.get(i).backgroundThreadDrawHolder.release();
+                        this.drawInBackgroundViews.get(i).backgroundThreadDrawHolder[this.threadIndex].release();
                     }
                     ((BottomSheet) EmojiPacksAlert.this).containerView.invalidate();
                 }
@@ -1222,7 +1226,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view;
             if (i == 0) {
                 view = EmojiPacksAlert.this.paddingView;
@@ -1465,13 +1469,14 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
     /* loaded from: classes3.dex */
     public class EmojiImageView extends View {
         ValueAnimator backAnimator;
-        public ImageReceiver.BackgroundThreadDrawHolder backgroundThreadDrawHolder;
+        public ImageReceiver.BackgroundThreadDrawHolder[] backgroundThreadDrawHolder;
         public ImageReceiver imageReceiver;
         private float pressedProgress;
         public AnimatedEmojiSpan span;
 
         public EmojiImageView(Context context) {
             super(context);
+            this.backgroundThreadDrawHolder = new ImageReceiver.BackgroundThreadDrawHolder[2];
         }
 
         @Override // android.view.View

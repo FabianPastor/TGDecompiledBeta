@@ -78,7 +78,7 @@ public class ChatActivityMemberRequestsDelegate {
                 /* JADX INFO: Access modifiers changed from: protected */
                 @Override // org.telegram.ui.Components.AvatarsImageView, android.view.View
                 public void onMeasure(int i, int i2) {
-                    int i3 = this.avatarsDarawable.count;
+                    int i3 = this.avatarsDrawable.count;
                     super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(i3 == 0 ? 0 : ((i3 - 1) * 20) + 24), NUM), i2);
                 }
             };

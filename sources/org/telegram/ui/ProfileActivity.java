@@ -251,6 +251,7 @@ import org.telegram.ui.Components.BackButtonMenu;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.BulletinFactory;
+import org.telegram.ui.Components.ChatActivityInterface;
 import org.telegram.ui.Components.ChatAvatarContainer;
 import org.telegram.ui.Components.ChatNotificationsPopupWrapper;
 import org.telegram.ui.Components.CombinedDrawable;
@@ -263,6 +264,7 @@ import org.telegram.ui.Components.HintView;
 import org.telegram.ui.Components.ImageUpdater;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.GiftPremiumBottomSheet;
+import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.Premium.PremiumPreviewBottomSheet;
 import org.telegram.ui.Components.Premium.ProfilePremiumCell;
 import org.telegram.ui.Components.ProfileGalleryView;
@@ -443,7 +445,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int premiumSectionsRow;
     private Drawable premiumStarDrawable;
     private ImageLocation prevLoadedImageLocation;
-    ChatActivity previousTransitionFragment;
+    ChatActivityInterface previousTransitionFragment;
     private int privacyRow;
     boolean profileTransitionInProgress;
     private PhotoViewer.PhotoViewerProvider provider;
@@ -538,11 +540,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* JADX INFO: Access modifiers changed from: package-private */
-    public static /* synthetic */ void access$27900(ProfileActivity profileActivity, View view) {
+    public static /* synthetic */ void access$28400(ProfileActivity profileActivity, View view) {
         profileActivity.onTextDetailCellImageClicked(view);
     }
 
-    static /* synthetic */ int access$8212(ProfileActivity profileActivity, int i) {
+    /* JADX INFO: Access modifiers changed from: package-private */
+    public static /* synthetic */ void access$7000(ProfileActivity profileActivity) {
+        profileActivity.onWriteButtonClick();
+    }
+
+    static /* synthetic */ int access$8312(ProfileActivity profileActivity, int i) {
         int i2 = profileActivity.listContentHeight + i;
         profileActivity.listContentHeight = i2;
         return i2;
@@ -707,13 +714,24 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             float currentActionBarHeight = ProfileActivity.this.extraHeight + ActionBar.getCurrentActionBarHeight() + (((BaseFragment) ProfileActivity.this).actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + ProfileActivity.this.searchTransitionOffset;
             int i = (int) ((1.0f - ProfileActivity.this.mediaHeaderAnimationProgress) * currentActionBarHeight);
             if (i != 0) {
-                if (ProfileActivity.this.previousTransitionFragment != null) {
+                ChatActivityInterface chatActivityInterface = ProfileActivity.this.previousTransitionFragment;
+                if (chatActivityInterface != null && chatActivityInterface.getContentView() != null) {
                     Rect rect = AndroidUtilities.rectTmp2;
                     rect.set(0, 0, getMeasuredWidth(), i);
-                    ProfileActivity.this.previousTransitionFragment.contentView.drawBlurRect(canvas, getY(), rect, ProfileActivity.this.previousTransitionFragment.getActionBar().blurScrimPaint, true);
+                    ProfileActivity.this.previousTransitionFragment.getContentView().drawBlurRect(canvas, getY(), rect, ProfileActivity.this.previousTransitionFragment.getActionBar().blurScrimPaint, true);
                 }
                 this.paint.setColor(this.currentColor);
                 canvas.drawRect(0.0f, 0.0f, getMeasuredWidth(), i, this.paint);
+                ChatActivityInterface chatActivityInterface2 = ProfileActivity.this.previousTransitionFragment;
+                if (chatActivityInterface2 != null) {
+                    ActionBar actionBar = chatActivityInterface2.getActionBar();
+                    ActionBarMenu actionBarMenu = actionBar.menu;
+                    int save = canvas.save();
+                    canvas.translate(actionBar.getX() + actionBarMenu.getX(), actionBar.getY() + actionBarMenu.getY());
+                    canvas.saveLayerAlpha(0.0f, 0.0f, actionBarMenu.getMeasuredWidth(), actionBarMenu.getMeasuredHeight(), (int) ((1.0f - ProfileActivity.this.animationProgress) * 255.0f), 31);
+                    actionBarMenu.draw(canvas);
+                    canvas.restoreToCount(save);
+                }
             }
             if (i != currentActionBarHeight) {
                 this.paint.setColor(ProfileActivity.this.getThemedColor("windowBackgroundWhite"));
@@ -1577,6 +1595,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         getNotificationCenter().addObserver(this, NotificationCenter.didReceiveNewMessages);
         getNotificationCenter().addObserver(this, NotificationCenter.closeChats);
         getNotificationCenter().addObserver(this, NotificationCenter.topicsDidLoaded);
+        getNotificationCenter().addObserver(this, NotificationCenter.updateSearchSettings);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
         updateRowsIds();
         ListAdapter listAdapter = this.listAdapter;
@@ -1669,6 +1688,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         getNotificationCenter().removeObserver(this, NotificationCenter.closeChats);
         getNotificationCenter().removeObserver(this, NotificationCenter.didReceiveNewMessages);
         getNotificationCenter().removeObserver(this, NotificationCenter.topicsDidLoaded);
+        getNotificationCenter().removeObserver(this, NotificationCenter.updateSearchSettings);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         ProfileGalleryView profileGalleryView = this.avatarsViewPager;
         if (profileGalleryView != null) {
@@ -1764,7 +1784,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ boolean lambda$createActionBar$4(ImageView imageView, View view) {
-        ActionBarPopupWindow show = BackButtonMenu.show(this, imageView, getDialogId(), this.resourcesProvider);
+        ActionBarPopupWindow show = BackButtonMenu.show(this, imageView, getDialogId(), getTopicId(), this.resourcesProvider);
         if (show != null) {
             show.setOnDismissListener(new PopupWindow.OnDismissListener() { // from class: org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda19
                 @Override // android.widget.PopupWindow.OnDismissListener
@@ -3271,19 +3291,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             return ProfileActivity.this.pinchToZoomHelper.onTouchEvent(motionEvent);
         }
 
-        /* JADX WARN: Removed duplicated region for block: B:135:0x04a8  */
-        /* JADX WARN: Removed duplicated region for block: B:144:0x04e8  */
-        /* JADX WARN: Removed duplicated region for block: B:145:0x04ea  */
-        /* JADX WARN: Removed duplicated region for block: B:148:0x04ef  */
-        /* JADX WARN: Removed duplicated region for block: B:157:? A[RETURN, SYNTHETIC] */
+        /* JADX WARN: Removed duplicated region for block: B:139:0x04cc  */
+        /* JADX WARN: Removed duplicated region for block: B:148:0x050a  */
+        /* JADX WARN: Removed duplicated region for block: B:151:0x050f  */
+        /* JADX WARN: Removed duplicated region for block: B:160:? A[RETURN, SYNTHETIC] */
         @Override // android.widget.FrameLayout, android.view.View
         /*
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
-        protected void onMeasure(int r18, int r19) {
+        protected void onMeasure(int r19, int r20) {
             /*
-                Method dump skipped, instructions count: 1274
+                Method dump skipped, instructions count: 1306
                 To view this dump add '--comments-level debug' option
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.AnonymousClass6.onMeasure(int, int):void");
@@ -4142,62 +4161,62 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int r8 = r7.numberRow
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            boolean r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29000(r0)
+            boolean r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29400(r0)
             r1 = 0
             r2 = 1
             if (r0 == 0) goto L50
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29100(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29500(r0)
             int r0 = r0.size()
             if (r9 >= r0) goto L2b
             org.telegram.ui.ProfileActivity$SearchAdapter r8 = r7.searchAdapter
-            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29100(r8)
+            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29500(r8)
             java.lang.Object r8 = r8.get(r9)
             goto L9d
         L2b:
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29100(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29500(r0)
             int r0 = r0.size()
             int r0 = r0 + r2
             int r9 = r9 - r0
             if (r9 < 0) goto L9d
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29200(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29600(r0)
             int r0 = r0.size()
             if (r9 >= r0) goto L9d
             org.telegram.ui.ProfileActivity$SearchAdapter r8 = r7.searchAdapter
-            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29200(r8)
+            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29600(r8)
             java.lang.Object r8 = r8.get(r9)
             goto L9d
         L50:
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28900(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$19000(r0)
             boolean r0 = r0.isEmpty()
             if (r0 != 0) goto L5e
             int r9 = r9 + (-1)
         L5e:
             if (r9 < 0) goto L77
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28900(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$19000(r0)
             int r0 = r0.size()
             if (r9 >= r0) goto L77
             org.telegram.ui.ProfileActivity$SearchAdapter r8 = r7.searchAdapter
-            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28900(r8)
+            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$19000(r8)
             java.lang.Object r8 = r8.get(r9)
             goto L9d
         L77:
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$28900(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$19000(r0)
             int r0 = r0.size()
             int r0 = r0 + r2
             int r9 = r9 - r0
             if (r9 < 0) goto L9d
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
-            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29300(r0)
+            java.util.ArrayList r0 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29700(r0)
             int r0 = r0.size()
             if (r9 >= r0) goto L9d
             org.telegram.ui.ProfileActivity$SearchAdapter r8 = r7.searchAdapter
-            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29300(r8)
+            java.util.ArrayList r8 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29700(r8)
             java.lang.Object r8 = r8.get(r9)
             r9 = 0
             goto L9e
@@ -4208,7 +4227,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r0 == 0) goto La9
             r0 = r8
             org.telegram.ui.ProfileActivity$SearchAdapter$SearchResult r0 = (org.telegram.ui.ProfileActivity.SearchAdapter.SearchResult) r0
-            org.telegram.ui.ProfileActivity.SearchAdapter.SearchResult.access$29400(r0)
+            org.telegram.ui.ProfileActivity.SearchAdapter.SearchResult.access$29800(r0)
             goto Lca
         La9:
             boolean r0 = r8 instanceof org.telegram.messenger.MessagesController.FaqSearchResult
@@ -4221,7 +4240,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r5 = 2
             java.lang.Object[] r5 = new java.lang.Object[r5]
             org.telegram.ui.ProfileActivity$SearchAdapter r6 = r7.searchAdapter
-            org.telegram.tgnet.TLRPC$WebPage r6 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29500(r6)
+            org.telegram.tgnet.TLRPC$WebPage r6 = org.telegram.ui.ProfileActivity.SearchAdapter.access$29900(r6)
             r5[r1] = r6
             java.lang.String r0 = r0.url
             r5[r2] = r0
@@ -4243,8 +4262,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             return false;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), this.resourcesProvider);
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        builder.setMessage(LocaleController.getString("ClearSearch", R.string.ClearSearch));
+        builder.setTitle(LocaleController.getString(R.string.ClearSearchAlertTitle));
+        builder.setMessage(LocaleController.getString(R.string.ClearSearchAlert));
         builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton), new DialogInterface.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda4
             @Override // android.content.DialogInterface.OnClickListener
             public final void onClick(DialogInterface dialogInterface, int i2) {
@@ -4252,7 +4271,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-        showDialog(builder.create());
+        AlertDialog create = builder.create();
+        showDialog(create);
+        TextView textView = (TextView) create.getButton(-1);
+        if (textView == null) {
+            return true;
+        }
+        textView.setTextColor(Theme.getColor("dialogTextRed2"));
         return true;
     }
 
@@ -5403,7 +5428,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     /* JADX INFO: Access modifiers changed from: private */
     public void leaveChatPressed() {
-        AlertsCreator.createClearOrDeleteDialogAlert(this, false, this.currentChat, null, false, false, true, new MessagesStorage.BooleanCallback() { // from class: org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda39
+        boolean isForum = ChatObject.isForum(this.currentChat);
+        AlertsCreator.createClearOrDeleteDialogAlert(this, false, this.currentChat, null, false, isForum, !isForum, new MessagesStorage.BooleanCallback() { // from class: org.telegram.ui.ProfileActivity$$ExternalSyntheticLambda39
             @Override // org.telegram.messenger.MessagesStorage.BooleanCallback
             public final void run(boolean z) {
                 ProfileActivity.this.lambda$leaveChatPressed$29(z);
@@ -6363,6 +6389,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     @Override // org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
     public void didReceivedNotification(int i, int i2, final Object... objArr) {
+        SearchAdapter searchAdapter;
         TLRPC$Chat tLRPC$Chat;
         RecyclerListView recyclerListView;
         RecyclerListView recyclerListView2;
@@ -6589,9 +6616,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return;
             }
             this.listAdapter.notifyDataSetChanged();
-        } else if (i != NotificationCenter.topicsDidLoaded || !this.isTopic) {
-        } else {
+        } else if (i == NotificationCenter.topicsDidLoaded) {
+            if (!this.isTopic) {
+                return;
+            }
             updateProfileData(false);
+        } else if (i != NotificationCenter.updateSearchSettings || (searchAdapter = this.searchAdapter) == null) {
+        } else {
+            searchAdapter.searchArray = searchAdapter.onCreateSearchArray();
+            this.searchAdapter.recentSearches.clear();
+            this.searchAdapter.updateSearchArray();
+            SearchAdapter searchAdapter2 = this.searchAdapter;
+            searchAdapter2.search(searchAdapter2.lastSearchString);
         }
     }
 
@@ -6913,8 +6949,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         return Theme.getColor("windowBackgroundGray", this.resourcesProvider);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:147:0x04e0  */
-    /* JADX WARN: Removed duplicated region for block: B:93:0x0329  */
+    /* JADX WARN: Removed duplicated region for block: B:143:0x04c1  */
     @Override // org.telegram.ui.ActionBar.BaseFragment
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -6922,7 +6957,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     */
     public android.animation.AnimatorSet onCustomTransitionAnimation(boolean r17, final java.lang.Runnable r18) {
         /*
-            Method dump skipped, instructions count: 1416
+            Method dump skipped, instructions count: 1384
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.onCustomTransitionAnimation(boolean, java.lang.Runnable):android.animation.AnimatorSet");
@@ -7675,6 +7710,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (actionBarMenuItem3 != null) {
             actionBarMenuItem3.setAlpha(f2);
         }
+        ActionBarMenuItem actionBarMenuItem4 = this.qrItem;
+        if (actionBarMenuItem4 != null) {
+            actionBarMenuItem4.setAlpha(f2);
+        }
         this.searchItem.setAlpha(f2);
         this.topView.invalidate();
         this.fragmentView.invalidate();
@@ -8085,7 +8124,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
             View headerCell;
             TextDetailCell textDetailCell;
             String str;
@@ -8107,7 +8146,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     textDetailCell2.setImageClickListener(new View.OnClickListener() { // from class: org.telegram.ui.ProfileActivity$ListAdapter$$ExternalSyntheticLambda0
                         @Override // android.view.View.OnClickListener
                         public final void onClick(View view) {
-                            ProfileActivity.access$27900(ProfileActivity.this, view);
+                            ProfileActivity.access$28400(ProfileActivity.this, view);
                         }
                     });
                     textDetailCell = textDetailCell2;
@@ -8447,18 +8486,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes3.dex */
     public class SearchAdapter extends RecyclerListView.SelectionAdapter {
-        private ArrayList<MessagesController.FaqSearchResult> faqSearchArray;
-        private ArrayList<MessagesController.FaqSearchResult> faqSearchResults;
         private TLRPC$WebPage faqWebPage;
         private String lastSearchString;
         private boolean loadingFaqPage;
         private Context mContext;
-        private ArrayList<Object> recentSearches;
-        private ArrayList<CharSequence> resultNames;
-        private SearchResult[] searchArray;
-        private ArrayList<SearchResult> searchResults;
         private Runnable searchRunnable;
         private boolean searchWas;
+        private SearchResult[] searchArray = onCreateSearchArray();
+        private ArrayList<MessagesController.FaqSearchResult> faqSearchArray = new ArrayList<>();
+        private ArrayList<CharSequence> resultNames = new ArrayList<>();
+        private ArrayList<SearchResult> searchResults = new ArrayList<>();
+        private ArrayList<MessagesController.FaqSearchResult> faqSearchResults = new ArrayList<>();
+        private ArrayList<Object> recentSearches = new ArrayList<>();
 
         /* JADX INFO: Access modifiers changed from: private */
         /* loaded from: classes3.dex */
@@ -8516,19 +8555,891 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         }
 
+        public SearchAdapter(Context context) {
+            this.mContext = context;
+            updateSearchArray();
+        }
+
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$0() {
+        public void updateSearchArray() {
+            String[] strArr;
+            SearchResult searchResult;
+            HashMap hashMap = new HashMap();
+            int i = 0;
+            while (true) {
+                SearchResult[] searchResultArr = this.searchArray;
+                if (i >= searchResultArr.length) {
+                    break;
+                }
+                if (searchResultArr[i] != null) {
+                    hashMap.put(Integer.valueOf(searchResultArr[i].guid), this.searchArray[i]);
+                }
+                i++;
+            }
+            Set<String> stringSet = MessagesController.getGlobalMainSettings().getStringSet("settingsSearchRecent2", null);
+            if (stringSet != null) {
+                for (String str : stringSet) {
+                    try {
+                        SerializedData serializedData = new SerializedData(Utilities.hexToBytes(str));
+                        int readInt32 = serializedData.readInt32(false);
+                        int readInt322 = serializedData.readInt32(false);
+                        if (readInt322 == 0) {
+                            String readString = serializedData.readString(false);
+                            int readInt323 = serializedData.readInt32(false);
+                            if (readInt323 > 0) {
+                                strArr = new String[readInt323];
+                                for (int i2 = 0; i2 < readInt323; i2++) {
+                                    strArr[i2] = serializedData.readString(false);
+                                }
+                            } else {
+                                strArr = null;
+                            }
+                            MessagesController.FaqSearchResult faqSearchResult = new MessagesController.FaqSearchResult(readString, strArr, serializedData.readString(false));
+                            faqSearchResult.num = readInt32;
+                            this.recentSearches.add(faqSearchResult);
+                        } else if (readInt322 == 1 && (searchResult = (SearchResult) hashMap.get(Integer.valueOf(serializedData.readInt32(false)))) != null) {
+                            searchResult.num = readInt32;
+                            this.recentSearches.add(searchResult);
+                        }
+                    } catch (Exception unused) {
+                    }
+                }
+            }
+            Collections.sort(this.recentSearches, new Comparator() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda128
+                @Override // java.util.Comparator
+                public final int compare(Object obj, Object obj2) {
+                    int lambda$updateSearchArray$0;
+                    lambda$updateSearchArray$0 = ProfileActivity.SearchAdapter.this.lambda$updateSearchArray$0(obj, obj2);
+                    return lambda$updateSearchArray$0;
+                }
+            });
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ int lambda$updateSearchArray$0(Object obj, Object obj2) {
+            int num = getNum(obj);
+            int num2 = getNum(obj2);
+            if (num < num2) {
+                return -1;
+            }
+            return num > num2 ? 1 : 0;
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public SearchResult[] onCreateSearchArray() {
+            SearchResult[] searchResultArr = new SearchResult[125];
+            searchResultArr[0] = new SearchResult(this, 500, LocaleController.getString("EditName", R.string.EditName), 0, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda50
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$1();
+                }
+            });
+            searchResultArr[1] = new SearchResult(this, 501, LocaleController.getString("ChangePhoneNumber", R.string.ChangePhoneNumber), 0, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda96
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$2();
+                }
+            });
+            searchResultArr[2] = new SearchResult(this, 502, LocaleController.getString("AddAnotherAccount", R.string.AddAnotherAccount), 0, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda57
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$3();
+                }
+            });
+            searchResultArr[3] = new SearchResult(this, 503, LocaleController.getString("UserBio", R.string.UserBio), 0, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda45
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$4();
+                }
+            });
+            String string = LocaleController.getString(R.string.AddPhoto);
+            final ProfileActivity profileActivity = ProfileActivity.this;
+            searchResultArr[4] = new SearchResult(this, 504, string, 0, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda127
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.access$7000(ProfileActivity.this);
+                }
+            });
+            int i = R.string.NotificationsAndSounds;
+            String string2 = LocaleController.getString("NotificationsAndSounds", i);
+            int i2 = R.drawable.msg_notifications;
+            searchResultArr[5] = new SearchResult(this, 1, string2, i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda31
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$6();
+                }
+            });
+            searchResultArr[6] = new SearchResult(this, 2, LocaleController.getString("NotificationsPrivateChats", R.string.NotificationsPrivateChats), LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda38
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$7();
+                }
+            });
+            searchResultArr[7] = new SearchResult(this, 3, LocaleController.getString("NotificationsGroups", R.string.NotificationsGroups), LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda122
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$8();
+                }
+            });
+            searchResultArr[8] = new SearchResult(this, 4, LocaleController.getString("NotificationsChannels", R.string.NotificationsChannels), LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda2
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$9();
+                }
+            });
+            searchResultArr[9] = new SearchResult(this, 5, LocaleController.getString("VoipNotificationSettings", R.string.VoipNotificationSettings), "callsSectionRow", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda121
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$10();
+                }
+            });
+            searchResultArr[10] = new SearchResult(this, 6, LocaleController.getString("BadgeNumber", R.string.BadgeNumber), "badgeNumberSection", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda123
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$11();
+                }
+            });
+            searchResultArr[11] = new SearchResult(this, 7, LocaleController.getString("InAppNotifications", R.string.InAppNotifications), "inappSectionRow", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda69
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$12();
+                }
+            });
+            searchResultArr[12] = new SearchResult(this, 8, LocaleController.getString("ContactJoined", R.string.ContactJoined), "contactJoinedRow", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda84
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$13();
+                }
+            });
+            searchResultArr[13] = new SearchResult(this, 9, LocaleController.getString("PinnedMessages", R.string.PinnedMessages), "pinnedMessageRow", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda47
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$14();
+                }
+            });
+            searchResultArr[14] = new SearchResult(this, 10, LocaleController.getString("ResetAllNotifications", R.string.ResetAllNotifications), "resetNotificationsRow", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda107
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$15();
+                }
+            });
+            searchResultArr[15] = new SearchResult(this, 11, LocaleController.getString(R.string.NotificationsService), "notificationsServiceRow", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda103
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$16();
+                }
+            });
+            searchResultArr[16] = new SearchResult(this, 12, LocaleController.getString(R.string.NotificationsServiceConnection), "notificationsServiceConnectionRow", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda19
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$17();
+                }
+            });
+            searchResultArr[17] = new SearchResult(this, 13, LocaleController.getString(R.string.RepeatNotifications), "repeatRow", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda102
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$18();
+                }
+            });
+            int i3 = R.string.PrivacySettings;
+            String string3 = LocaleController.getString("PrivacySettings", i3);
+            int i4 = R.drawable.msg_secret;
+            searchResultArr[18] = new SearchResult(this, 100, string3, i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda23
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$19();
+                }
+            });
+            searchResultArr[19] = new SearchResult(this, 101, LocaleController.getString("BlockedUsers", R.string.BlockedUsers), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda39
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$20();
+                }
+            });
+            searchResultArr[20] = new SearchResult(this, 105, LocaleController.getString("PrivacyPhone", R.string.PrivacyPhone), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda72
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$21();
+                }
+            });
+            searchResultArr[21] = new SearchResult(this, 102, LocaleController.getString("PrivacyLastSeen", R.string.PrivacyLastSeen), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda56
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$22();
+                }
+            });
+            searchResultArr[22] = new SearchResult(this, 103, LocaleController.getString("PrivacyProfilePhoto", R.string.PrivacyProfilePhoto), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda34
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$23();
+                }
+            });
+            searchResultArr[23] = new SearchResult(this, 104, LocaleController.getString("PrivacyForwards", R.string.PrivacyForwards), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda98
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$24();
+                }
+            });
+            searchResultArr[24] = new SearchResult(this, 122, LocaleController.getString("PrivacyP2P", R.string.PrivacyP2P), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda18
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$25();
+                }
+            });
+            int i5 = R.string.Calls;
+            searchResultArr[25] = new SearchResult(this, 106, LocaleController.getString("Calls", i5), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda28
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$26();
+                }
+            });
+            searchResultArr[26] = new SearchResult(this, 107, LocaleController.getString("GroupsAndChannels", R.string.GroupsAndChannels), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda100
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$27();
+                }
+            });
+            searchResultArr[27] = new SearchResult(this, 123, LocaleController.getString("PrivacyVoiceMessages", R.string.PrivacyVoiceMessages), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda8
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$28();
+                }
+            });
+            searchResultArr[28] = new SearchResult(this, 108, LocaleController.getString("Passcode", R.string.Passcode), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda90
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$29();
+                }
+            });
+            searchResultArr[29] = new SearchResult(this, 109, LocaleController.getString("TwoStepVerification", R.string.TwoStepVerification), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda12
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$30();
+                }
+            });
+            searchResultArr[30] = new SearchResult(this, 110, LocaleController.getString("SessionsTitle", R.string.SessionsTitle), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda104
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$31();
+                }
+            });
+            SearchResult searchResult = null;
+            searchResultArr[31] = ProfileActivity.this.getMessagesController().autoarchiveAvailable ? new SearchResult(this, 121, LocaleController.getString("ArchiveAndMute", R.string.ArchiveAndMute), "newChatsRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda35
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$32();
+                }
+            }) : null;
+            searchResultArr[32] = new SearchResult(this, 112, LocaleController.getString("DeleteAccountIfAwayFor2", R.string.DeleteAccountIfAwayFor2), "deleteAccountRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda40
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$33();
+                }
+            });
+            searchResultArr[33] = new SearchResult(this, 113, LocaleController.getString("PrivacyPaymentsClear", R.string.PrivacyPaymentsClear), "paymentsClearRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda42
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$34();
+                }
+            });
+            searchResultArr[34] = new SearchResult(this, 114, LocaleController.getString("WebSessionsTitle", R.string.WebSessionsTitle), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda71
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$35();
+                }
+            });
+            searchResultArr[35] = new SearchResult(this, 115, LocaleController.getString("SyncContactsDelete", R.string.SyncContactsDelete), "contactsDeleteRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda108
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$36();
+                }
+            });
+            searchResultArr[36] = new SearchResult(this, 116, LocaleController.getString("SyncContacts", R.string.SyncContacts), "contactsSyncRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda117
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$37();
+                }
+            });
+            searchResultArr[37] = new SearchResult(this, 117, LocaleController.getString("SuggestContacts", R.string.SuggestContacts), "contactsSuggestRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda49
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$38();
+                }
+            });
+            searchResultArr[38] = new SearchResult(this, 118, LocaleController.getString("MapPreviewProvider", R.string.MapPreviewProvider), "secretMapRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda17
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$39();
+                }
+            });
+            searchResultArr[39] = new SearchResult(this, 119, LocaleController.getString("SecretWebPage", R.string.SecretWebPage), "secretWebpageRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda32
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$40();
+                }
+            });
+            int i6 = R.string.Devices;
+            String string4 = LocaleController.getString(i6);
+            int i7 = R.drawable.msg_devices;
+            searchResultArr[40] = new SearchResult(this, 120, string4, i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda54
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$41();
+                }
+            });
+            searchResultArr[41] = new SearchResult(this, 121, LocaleController.getString(R.string.TerminateAllSessions), "terminateAllSessionsRow", LocaleController.getString(i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda20
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$42();
+                }
+            });
+            searchResultArr[42] = new SearchResult(this, 122, LocaleController.getString(R.string.LinkDesktopDevice), LocaleController.getString(i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda51
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$43();
+                }
+            });
+            int i8 = R.string.DataSettings;
+            String string5 = LocaleController.getString("DataSettings", i8);
+            int i9 = R.drawable.msg_data;
+            searchResultArr[43] = new SearchResult(this, 200, string5, i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda76
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$44();
+                }
+            });
+            searchResultArr[44] = new SearchResult(this, 201, LocaleController.getString("DataUsage", R.string.DataUsage), "usageSectionRow", LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda73
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$45();
+                }
+            });
+            int i10 = R.string.StorageUsage;
+            searchResultArr[45] = new SearchResult(this, 202, LocaleController.getString("StorageUsage", i10), LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda77
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$46();
+                }
+            });
+            searchResultArr[46] = new SearchResult(203, LocaleController.getString("KeepMedia", R.string.KeepMedia), "keepMediaRow", LocaleController.getString("DataSettings", i8), LocaleController.getString("StorageUsage", i10), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda80
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$47();
+                }
+            });
+            searchResultArr[47] = new SearchResult(204, LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), "cacheRow", LocaleController.getString("DataSettings", i8), LocaleController.getString("StorageUsage", i10), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda0
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$48();
+                }
+            });
+            searchResultArr[48] = new SearchResult(205, LocaleController.getString("LocalDatabase", R.string.LocalDatabase), "databaseRow", LocaleController.getString("DataSettings", i8), LocaleController.getString("StorageUsage", i10), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda120
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$49();
+                }
+            });
+            searchResultArr[49] = new SearchResult(this, 206, LocaleController.getString("NetworkUsage", R.string.NetworkUsage), LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda64
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$50();
+                }
+            });
+            searchResultArr[50] = new SearchResult(this, 207, LocaleController.getString("AutomaticMediaDownload", R.string.AutomaticMediaDownload), "mediaDownloadSectionRow", LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda41
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$51();
+                }
+            });
+            searchResultArr[51] = new SearchResult(this, 208, LocaleController.getString("WhenUsingMobileData", R.string.WhenUsingMobileData), LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda111
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$52();
+                }
+            });
+            searchResultArr[52] = new SearchResult(this, 209, LocaleController.getString("WhenConnectedOnWiFi", R.string.WhenConnectedOnWiFi), LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda58
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$53();
+                }
+            });
+            searchResultArr[53] = new SearchResult(this, 210, LocaleController.getString("WhenRoaming", R.string.WhenRoaming), LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda26
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$54();
+                }
+            });
+            searchResultArr[54] = new SearchResult(this, 211, LocaleController.getString("ResetAutomaticMediaDownload", R.string.ResetAutomaticMediaDownload), "resetDownloadRow", LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda55
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$55();
+                }
+            });
+            searchResultArr[55] = new SearchResult(this, 212, LocaleController.getString("AutoplayMedia", R.string.AutoplayMedia), "autoplayHeaderRow", LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda65
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$56();
+                }
+            });
+            searchResultArr[56] = new SearchResult(this, 213, LocaleController.getString("AutoplayGIF", R.string.AutoplayGIF), "autoplayGifsRow", LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda15
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$57();
+                }
+            });
+            searchResultArr[57] = new SearchResult(this, 214, LocaleController.getString("AutoplayVideo", R.string.AutoplayVideo), "autoplayVideoRow", LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda10
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$58();
+                }
+            });
+            searchResultArr[58] = new SearchResult(this, 215, LocaleController.getString("Streaming", R.string.Streaming), "streamSectionRow", LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda94
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$59();
+                }
+            });
+            searchResultArr[59] = new SearchResult(this, 216, LocaleController.getString("EnableStreaming", R.string.EnableStreaming), "enableStreamRow", LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda53
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$60();
+                }
+            });
+            searchResultArr[60] = new SearchResult(this, 217, LocaleController.getString("Calls", i5), "callsSectionRow", LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda89
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$61();
+                }
+            });
+            searchResultArr[61] = new SearchResult(this, 218, LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), "useLessDataForCallsRow", LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda5
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$62();
+                }
+            });
+            searchResultArr[62] = new SearchResult(this, 219, LocaleController.getString("VoipQuickReplies", R.string.VoipQuickReplies), "quickRepliesRow", LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda112
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$63();
+                }
+            });
+            int i11 = R.string.ProxySettings;
+            searchResultArr[63] = new SearchResult(this, 220, LocaleController.getString("ProxySettings", i11), LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda48
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$64();
+                }
+            });
+            searchResultArr[64] = new SearchResult(221, LocaleController.getString("UseProxyForCalls", R.string.UseProxyForCalls), "callsRow", LocaleController.getString("DataSettings", i8), LocaleController.getString("ProxySettings", i11), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda59
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$65();
+                }
+            });
+            searchResultArr[65] = new SearchResult(this, 111, LocaleController.getString("PrivacyDeleteCloudDrafts", R.string.PrivacyDeleteCloudDrafts), "clearDraftsRow", LocaleController.getString("DataSettings", i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda87
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$66();
+                }
+            });
+            int i12 = R.string.SaveToGallery;
+            searchResultArr[66] = new SearchResult(this, 222, LocaleController.getString(i12), "saveToGallerySectionRow", LocaleController.getString(i8), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda61
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$67();
+                }
+            });
+            searchResultArr[67] = new SearchResult(223, LocaleController.getString(R.string.SaveToGalleryPrivate), "saveToGalleryPeerRow", LocaleController.getString(i8), LocaleController.getString(i12), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda36
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$68();
+                }
+            });
+            searchResultArr[68] = new SearchResult(224, LocaleController.getString(R.string.SaveToGalleryGroups), "saveToGalleryGroupsRow", LocaleController.getString(i8), LocaleController.getString(i12), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda68
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$69();
+                }
+            });
+            searchResultArr[69] = new SearchResult(225, LocaleController.getString(R.string.SaveToGalleryChannels), "saveToGalleryChannelsRow", LocaleController.getString(i8), LocaleController.getString(i12), i9, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda63
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$70();
+                }
+            });
+            int i13 = R.string.ChatSettings;
+            String string6 = LocaleController.getString("ChatSettings", i13);
+            int i14 = R.drawable.msg_msgbubble3;
+            searchResultArr[70] = new SearchResult(this, 300, string6, i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda99
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$71();
+                }
+            });
+            searchResultArr[71] = new SearchResult(this, 301, LocaleController.getString("TextSizeHeader", R.string.TextSizeHeader), "textSizeHeaderRow", LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda85
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$72();
+                }
+            });
+            searchResultArr[72] = new SearchResult(this, 302, LocaleController.getString(R.string.ChangeChatBackground), LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda27
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$73();
+                }
+            });
+            String string7 = LocaleController.getString("SetColor", R.string.SetColor);
+            String string8 = LocaleController.getString("ChatSettings", i13);
+            int i15 = R.string.ChatBackground;
+            searchResultArr[73] = new SearchResult(303, string7, null, string8, LocaleController.getString("ChatBackground", i15), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda14
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$74();
+                }
+            });
+            searchResultArr[74] = new SearchResult(304, LocaleController.getString("ResetChatBackgrounds", R.string.ResetChatBackgrounds), "resetRow", LocaleController.getString("ChatSettings", i13), LocaleController.getString("ChatBackground", i15), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda118
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$75();
+                }
+            });
+            searchResultArr[75] = new SearchResult(this, 306, LocaleController.getString("ColorTheme", R.string.ColorTheme), "themeHeaderRow", LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda78
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$76();
+                }
+            });
+            int i16 = R.string.BrowseThemes;
+            searchResultArr[76] = new SearchResult(this, 319, LocaleController.getString(i16), null, LocaleController.getString(i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda95
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$77();
+                }
+            });
+            searchResultArr[77] = new SearchResult(320, LocaleController.getString(R.string.CreateNewTheme), "createNewThemeRow", LocaleController.getString(i13), LocaleController.getString(i16), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda101
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$78();
+                }
+            });
+            searchResultArr[78] = new SearchResult(this, 321, LocaleController.getString(R.string.BubbleRadius), "bubbleRadiusHeaderRow", LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda37
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$79();
+                }
+            });
+            searchResultArr[79] = new SearchResult(this, 322, LocaleController.getString(R.string.ChatList), "chatListHeaderRow", LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda52
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$80();
+                }
+            });
+            searchResultArr[80] = new SearchResult(this, 323, LocaleController.getString(R.string.ChatListSwipeGesture), "swipeGestureHeaderRow", LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda33
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$81();
+                }
+            });
+            searchResultArr[81] = new SearchResult(this, 324, LocaleController.getString(R.string.AppIcon), "appIconHeaderRow", LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda116
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$82();
+                }
+            });
+            searchResultArr[82] = new SearchResult(this, 305, LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme), LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda9
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$83();
+                }
+            });
+            searchResultArr[83] = new SearchResult(this, 307, LocaleController.getString("ChromeCustomTabs", R.string.ChromeCustomTabs), "customTabsRow", LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda86
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$84();
+                }
+            });
+            searchResultArr[84] = new SearchResult(this, 308, LocaleController.getString("DirectShare", R.string.DirectShare), "directShareRow", LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda75
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$85();
+                }
+            });
+            searchResultArr[85] = new SearchResult(this, 309, LocaleController.getString("EnableAnimations", R.string.EnableAnimations), "enableAnimationsRow", LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda16
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$86();
+                }
+            });
+            searchResultArr[86] = new SearchResult(this, 310, LocaleController.getString("RaiseToSpeak", R.string.RaiseToSpeak), "raiseToSpeakRow", LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda62
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$87();
+                }
+            });
+            searchResultArr[87] = new SearchResult(this, 325, LocaleController.getString(R.string.MicrophoneForVoiceMessages), "bluetoothScoRow", LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda115
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$88();
+                }
+            });
+            searchResultArr[88] = new SearchResult(this, 311, LocaleController.getString("SendByEnter", R.string.SendByEnter), "sendByEnterRow", LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda83
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$89();
+                }
+            });
+            searchResultArr[89] = SharedConfig.canBlurChat() ? new SearchResult(this, 326, LocaleController.getString(R.string.BlurInChat), "chatBlurRow", LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda119
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$90();
+                }
+            }) : null;
+            searchResultArr[90] = new SearchResult(this, 318, LocaleController.getString("DistanceUnits", R.string.DistanceUnits), "distanceRow", LocaleController.getString("ChatSettings", i13), i14, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda4
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$91();
+                }
+            });
+            int i17 = R.string.StickersName;
+            String string9 = LocaleController.getString(i17);
+            int i18 = R.drawable.msg_sticker;
+            searchResultArr[91] = new SearchResult(this, 600, string9, i18, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda24
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$92();
+                }
+            });
+            searchResultArr[92] = new SearchResult(this, 601, LocaleController.getString("SuggestStickers", R.string.SuggestStickers), "suggestRow", LocaleController.getString(i17), i18, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda44
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$93();
+                }
+            });
+            searchResultArr[93] = new SearchResult(this, 602, LocaleController.getString("FeaturedStickers", R.string.FeaturedStickers), "featuredStickersHeaderRow", LocaleController.getString(i17), i18, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda74
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$94();
+                }
+            });
+            searchResultArr[94] = new SearchResult(this, 603, LocaleController.getString("Masks", R.string.Masks), null, LocaleController.getString(i17), i18, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda81
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$95();
+                }
+            });
+            searchResultArr[95] = new SearchResult(this, 604, LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers), null, LocaleController.getString(i17), i18, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda92
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$96();
+                }
+            });
+            searchResultArr[96] = new SearchResult(this, 605, LocaleController.getString("ArchivedMasks", R.string.ArchivedMasks), null, LocaleController.getString(i17), i18, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda97
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$97();
+                }
+            });
+            searchResultArr[97] = new SearchResult(this, 606, LocaleController.getString(R.string.LargeEmoji), "largeEmojiRow", LocaleController.getString(i17), i18, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda91
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$98();
+                }
+            });
+            searchResultArr[98] = new SearchResult(this, 607, LocaleController.getString(R.string.LoopAnimatedStickers), "loopRow", LocaleController.getString(i17), i18, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda29
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$99();
+                }
+            });
+            int i19 = R.string.Emoji;
+            String string10 = LocaleController.getString(i19);
+            String string11 = LocaleController.getString(i17);
+            int i20 = R.drawable.input_smile;
+            searchResultArr[99] = new SearchResult(this, 608, string10, null, string11, i20, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda25
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$100();
+                }
+            });
+            searchResultArr[100] = new SearchResult(609, LocaleController.getString(R.string.SuggestAnimatedEmoji), "suggestAnimatedEmojiRow", LocaleController.getString(i17), LocaleController.getString(i19), i20, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda7
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$101();
+                }
+            });
+            searchResultArr[101] = new SearchResult(610, LocaleController.getString(R.string.FeaturedEmojiPacks), "featuredStickersHeaderRow", LocaleController.getString(i17), LocaleController.getString(i19), i20, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda60
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$102();
+                }
+            });
+            searchResultArr[102] = new SearchResult(this, 611, LocaleController.getString(R.string.DoubleTapSetting), null, LocaleController.getString(i17), i18, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda70
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$103();
+                }
+            });
+            int i21 = R.string.Filters;
+            String string12 = LocaleController.getString(i21);
+            int i22 = R.drawable.msg_folder;
+            searchResultArr[103] = new SearchResult(this, 700, string12, null, i22, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda6
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$104();
+                }
+            });
+            searchResultArr[104] = new SearchResult(this, 701, LocaleController.getString(R.string.CreateNewFilter), "createFilterRow", LocaleController.getString(i21), i22, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda82
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$105();
+                }
+            });
+            searchResultArr[105] = isPremiumFeatureAvailable(-1) ? new SearchResult(this, 800, LocaleController.getString(R.string.TelegramPremium), R.drawable.msg_settings_premium, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda1
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$106();
+                }
+            }) : null;
+            searchResultArr[106] = isPremiumFeatureAvailable(0) ? new SearchResult(this, 801, LocaleController.getString(R.string.PremiumPreviewLimits), LocaleController.getString(R.string.TelegramPremium), R.drawable.msg_settings_premium, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda110
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$107();
+                }
+            }) : null;
+            searchResultArr[107] = isPremiumFeatureAvailable(11) ? new SearchResult(this, 802, LocaleController.getString(R.string.PremiumPreviewEmoji), LocaleController.getString(R.string.TelegramPremium), R.drawable.msg_settings_premium, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda109
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$108();
+                }
+            }) : null;
+            searchResultArr[108] = isPremiumFeatureAvailable(1) ? new SearchResult(this, 803, LocaleController.getString(R.string.PremiumPreviewUploads), LocaleController.getString(R.string.TelegramPremium), R.drawable.msg_settings_premium, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda43
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$109();
+                }
+            }) : null;
+            searchResultArr[109] = isPremiumFeatureAvailable(2) ? new SearchResult(this, 804, LocaleController.getString(R.string.PremiumPreviewDownloadSpeed), LocaleController.getString(R.string.TelegramPremium), R.drawable.msg_settings_premium, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda13
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$110();
+                }
+            }) : null;
+            searchResultArr[110] = isPremiumFeatureAvailable(8) ? new SearchResult(this, 805, LocaleController.getString(R.string.PremiumPreviewVoiceToText), LocaleController.getString(R.string.TelegramPremium), R.drawable.msg_settings_premium, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda114
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$111();
+                }
+            }) : null;
+            searchResultArr[111] = isPremiumFeatureAvailable(3) ? new SearchResult(this, 806, LocaleController.getString(R.string.PremiumPreviewNoAds), LocaleController.getString(R.string.TelegramPremium), R.drawable.msg_settings_premium, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda11
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$112();
+                }
+            }) : null;
+            searchResultArr[112] = isPremiumFeatureAvailable(4) ? new SearchResult(this, 807, LocaleController.getString(R.string.PremiumPreviewReactions), LocaleController.getString(R.string.TelegramPremium), R.drawable.msg_settings_premium, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda3
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$113();
+                }
+            }) : null;
+            searchResultArr[113] = isPremiumFeatureAvailable(5) ? new SearchResult(this, 808, LocaleController.getString(R.string.PremiumPreviewStickers), LocaleController.getString(R.string.TelegramPremium), R.drawable.msg_settings_premium, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda113
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$114();
+                }
+            }) : null;
+            searchResultArr[114] = isPremiumFeatureAvailable(9) ? new SearchResult(this, 809, LocaleController.getString(R.string.PremiumPreviewAdvancedChatManagement), LocaleController.getString(R.string.TelegramPremium), R.drawable.msg_settings_premium, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda21
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$115();
+                }
+            }) : null;
+            searchResultArr[115] = isPremiumFeatureAvailable(6) ? new SearchResult(this, 810, LocaleController.getString(R.string.PremiumPreviewProfileBadge), LocaleController.getString(R.string.TelegramPremium), R.drawable.msg_settings_premium, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda22
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$116();
+                }
+            }) : null;
+            searchResultArr[116] = isPremiumFeatureAvailable(7) ? new SearchResult(this, 811, LocaleController.getString(R.string.PremiumPreviewAnimatedProfiles), LocaleController.getString(R.string.TelegramPremium), R.drawable.msg_settings_premium, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda93
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$117();
+                }
+            }) : null;
+            searchResultArr[117] = isPremiumFeatureAvailable(10) ? new SearchResult(this, 812, LocaleController.getString(R.string.PremiumPreviewAppIcon), LocaleController.getString(R.string.TelegramPremium), R.drawable.msg_settings_premium, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda46
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$118();
+                }
+            }) : null;
+            searchResultArr[118] = isPremiumFeatureAvailable(12) ? new SearchResult(this, 813, LocaleController.getString(R.string.PremiumPreviewEmojiStatus), LocaleController.getString(R.string.TelegramPremium), R.drawable.msg_settings_premium, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda79
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$119();
+                }
+            }) : null;
+            int i23 = R.string.Language;
+            String string13 = LocaleController.getString("Language", i23);
+            int i24 = R.drawable.msg_language;
+            searchResultArr[119] = new SearchResult(this, 400, string13, i24, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda105
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$120();
+                }
+            });
+            searchResultArr[120] = new SearchResult(this, 405, LocaleController.getString(R.string.ShowTranslateButton), LocaleController.getString(i23), i24, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda67
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$121();
+                }
+            });
+            if (MessagesController.getGlobalMainSettings().getBoolean("translate_button", false)) {
+                searchResult = new SearchResult(this, 406, LocaleController.getString(R.string.DoNotTranslate), LocaleController.getString(i23), i24, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda30
+                    @Override // java.lang.Runnable
+                    public final void run() {
+                        ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$122();
+                    }
+                });
+            }
+            searchResultArr[121] = searchResult;
+            String string14 = LocaleController.getString("AskAQuestion", R.string.AskAQuestion);
+            int i25 = R.string.SettingsHelp;
+            String string15 = LocaleController.getString("SettingsHelp", i25);
+            int i26 = R.drawable.msg_help;
+            searchResultArr[122] = new SearchResult(this, 402, string14, string15, i26, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda88
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$123();
+                }
+            });
+            searchResultArr[123] = new SearchResult(this, 403, LocaleController.getString("TelegramFAQ", R.string.TelegramFAQ), LocaleController.getString("SettingsHelp", i25), i26, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda106
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$124();
+                }
+            });
+            searchResultArr[124] = new SearchResult(this, 404, LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), LocaleController.getString("SettingsHelp", i25), i26, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda66
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ProfileActivity.SearchAdapter.this.lambda$onCreateSearchArray$125();
+                }
+            });
+            return searchResultArr;
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$1() {
             ProfileActivity profileActivity = ProfileActivity.this;
             profileActivity.presentFragment(new ChangeNameActivity(profileActivity.resourcesProvider));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$1() {
+        public /* synthetic */ void lambda$onCreateSearchArray$2() {
             ProfileActivity.this.presentFragment(new ActionIntroActivity(3));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$2() {
+        public /* synthetic */ void lambda$onCreateSearchArray$3() {
             int i = 0;
             while (true) {
                 if (i >= 4) {
@@ -8546,109 +9457,124 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$3() {
+        public /* synthetic */ void lambda$onCreateSearchArray$4() {
             if (ProfileActivity.this.userInfo != null) {
                 ProfileActivity.this.presentFragment(new ChangeBioActivity());
             }
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$4() {
+        public /* synthetic */ void lambda$onCreateSearchArray$6() {
             ProfileActivity.this.presentFragment(new NotificationsSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$5() {
+        public /* synthetic */ void lambda$onCreateSearchArray$7() {
             ProfileActivity.this.presentFragment(new NotificationsCustomSettingsActivity(1, new ArrayList(), true));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$6() {
+        public /* synthetic */ void lambda$onCreateSearchArray$8() {
             ProfileActivity.this.presentFragment(new NotificationsCustomSettingsActivity(0, new ArrayList(), true));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$7() {
+        public /* synthetic */ void lambda$onCreateSearchArray$9() {
             ProfileActivity.this.presentFragment(new NotificationsCustomSettingsActivity(2, new ArrayList(), true));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$8() {
+        public /* synthetic */ void lambda$onCreateSearchArray$10() {
             ProfileActivity.this.presentFragment(new NotificationsSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$9() {
+        public /* synthetic */ void lambda$onCreateSearchArray$11() {
             ProfileActivity.this.presentFragment(new NotificationsSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$10() {
+        public /* synthetic */ void lambda$onCreateSearchArray$12() {
             ProfileActivity.this.presentFragment(new NotificationsSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$11() {
+        public /* synthetic */ void lambda$onCreateSearchArray$13() {
             ProfileActivity.this.presentFragment(new NotificationsSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$12() {
+        public /* synthetic */ void lambda$onCreateSearchArray$14() {
             ProfileActivity.this.presentFragment(new NotificationsSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$13() {
+        public /* synthetic */ void lambda$onCreateSearchArray$15() {
             ProfileActivity.this.presentFragment(new NotificationsSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$14() {
+        public /* synthetic */ void lambda$onCreateSearchArray$16() {
+            ProfileActivity.this.presentFragment(new NotificationsSettingsActivity());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$17() {
+            ProfileActivity.this.presentFragment(new NotificationsSettingsActivity());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$18() {
+            ProfileActivity.this.presentFragment(new NotificationsSettingsActivity());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$19() {
             ProfileActivity.this.presentFragment(new PrivacySettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$15() {
+        public /* synthetic */ void lambda$onCreateSearchArray$20() {
             ProfileActivity.this.presentFragment(new PrivacyUsersActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$16() {
+        public /* synthetic */ void lambda$onCreateSearchArray$21() {
             ProfileActivity.this.presentFragment(new PrivacyControlActivity(6, true));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$17() {
+        public /* synthetic */ void lambda$onCreateSearchArray$22() {
             ProfileActivity.this.presentFragment(new PrivacyControlActivity(0, true));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$18() {
+        public /* synthetic */ void lambda$onCreateSearchArray$23() {
             ProfileActivity.this.presentFragment(new PrivacyControlActivity(4, true));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$19() {
+        public /* synthetic */ void lambda$onCreateSearchArray$24() {
             ProfileActivity.this.presentFragment(new PrivacyControlActivity(5, true));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$20() {
+        public /* synthetic */ void lambda$onCreateSearchArray$25() {
             ProfileActivity.this.presentFragment(new PrivacyControlActivity(3, true));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$21() {
+        public /* synthetic */ void lambda$onCreateSearchArray$26() {
             ProfileActivity.this.presentFragment(new PrivacyControlActivity(2, true));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$22() {
+        public /* synthetic */ void lambda$onCreateSearchArray$27() {
             ProfileActivity.this.presentFragment(new PrivacyControlActivity(1, true));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$23() {
+        public /* synthetic */ void lambda$onCreateSearchArray$28() {
             if (!ProfileActivity.this.getUserConfig().isPremium()) {
                 try {
                     ((BaseFragment) ProfileActivity.this).fragmentView.performHapticFeedback(3, 2);
@@ -8662,914 +9588,496 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$24() {
+        public /* synthetic */ void lambda$onCreateSearchArray$29() {
             ProfileActivity.this.presentFragment(PasscodeActivity.determineOpenFragment());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$25() {
+        public /* synthetic */ void lambda$onCreateSearchArray$30() {
             ProfileActivity.this.presentFragment(new TwoStepVerificationActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$26() {
+        public /* synthetic */ void lambda$onCreateSearchArray$31() {
             ProfileActivity.this.presentFragment(new SessionsActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$27() {
+        public /* synthetic */ void lambda$onCreateSearchArray$32() {
             ProfileActivity.this.presentFragment(new PrivacySettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$28() {
+        public /* synthetic */ void lambda$onCreateSearchArray$33() {
             ProfileActivity.this.presentFragment(new PrivacySettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$29() {
+        public /* synthetic */ void lambda$onCreateSearchArray$34() {
             ProfileActivity.this.presentFragment(new PrivacySettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$30() {
+        public /* synthetic */ void lambda$onCreateSearchArray$35() {
             ProfileActivity.this.presentFragment(new SessionsActivity(1));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$31() {
+        public /* synthetic */ void lambda$onCreateSearchArray$36() {
             ProfileActivity.this.presentFragment(new PrivacySettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$32() {
+        public /* synthetic */ void lambda$onCreateSearchArray$37() {
             ProfileActivity.this.presentFragment(new PrivacySettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$33() {
+        public /* synthetic */ void lambda$onCreateSearchArray$38() {
             ProfileActivity.this.presentFragment(new PrivacySettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$34() {
+        public /* synthetic */ void lambda$onCreateSearchArray$39() {
             ProfileActivity.this.presentFragment(new PrivacySettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$35() {
+        public /* synthetic */ void lambda$onCreateSearchArray$40() {
             ProfileActivity.this.presentFragment(new PrivacySettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$36() {
+        public /* synthetic */ void lambda$onCreateSearchArray$41() {
             ProfileActivity.this.presentFragment(new SessionsActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$37() {
+        public /* synthetic */ void lambda$onCreateSearchArray$42() {
+            ProfileActivity.this.presentFragment(new SessionsActivity(0));
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$43() {
+            ProfileActivity.this.presentFragment(new SessionsActivity(0).setHighlightLinkDesktopDevice());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$44() {
             ProfileActivity.this.presentFragment(new DataSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$38() {
+        public /* synthetic */ void lambda$onCreateSearchArray$45() {
             ProfileActivity.this.presentFragment(new DataSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$39() {
+        public /* synthetic */ void lambda$onCreateSearchArray$46() {
             ProfileActivity.this.presentFragment(new CacheControlActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$40() {
+        public /* synthetic */ void lambda$onCreateSearchArray$47() {
             ProfileActivity.this.presentFragment(new CacheControlActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$41() {
+        public /* synthetic */ void lambda$onCreateSearchArray$48() {
             ProfileActivity.this.presentFragment(new CacheControlActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$42() {
+        public /* synthetic */ void lambda$onCreateSearchArray$49() {
             ProfileActivity.this.presentFragment(new CacheControlActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$43() {
+        public /* synthetic */ void lambda$onCreateSearchArray$50() {
             ProfileActivity.this.presentFragment(new DataUsageActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$44() {
+        public /* synthetic */ void lambda$onCreateSearchArray$51() {
             ProfileActivity.this.presentFragment(new DataSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$45() {
+        public /* synthetic */ void lambda$onCreateSearchArray$52() {
             ProfileActivity.this.presentFragment(new DataAutoDownloadActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$46() {
+        public /* synthetic */ void lambda$onCreateSearchArray$53() {
             ProfileActivity.this.presentFragment(new DataAutoDownloadActivity(1));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$47() {
+        public /* synthetic */ void lambda$onCreateSearchArray$54() {
             ProfileActivity.this.presentFragment(new DataAutoDownloadActivity(2));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$48() {
+        public /* synthetic */ void lambda$onCreateSearchArray$55() {
             ProfileActivity.this.presentFragment(new DataSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$49() {
+        public /* synthetic */ void lambda$onCreateSearchArray$56() {
             ProfileActivity.this.presentFragment(new DataSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$50() {
+        public /* synthetic */ void lambda$onCreateSearchArray$57() {
             ProfileActivity.this.presentFragment(new DataSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$51() {
+        public /* synthetic */ void lambda$onCreateSearchArray$58() {
             ProfileActivity.this.presentFragment(new DataSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$52() {
+        public /* synthetic */ void lambda$onCreateSearchArray$59() {
             ProfileActivity.this.presentFragment(new DataSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$53() {
+        public /* synthetic */ void lambda$onCreateSearchArray$60() {
             ProfileActivity.this.presentFragment(new DataSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$54() {
+        public /* synthetic */ void lambda$onCreateSearchArray$61() {
             ProfileActivity.this.presentFragment(new DataSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$55() {
+        public /* synthetic */ void lambda$onCreateSearchArray$62() {
             ProfileActivity.this.presentFragment(new DataSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$56() {
+        public /* synthetic */ void lambda$onCreateSearchArray$63() {
             ProfileActivity.this.presentFragment(new DataSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$57() {
+        public /* synthetic */ void lambda$onCreateSearchArray$64() {
             ProfileActivity.this.presentFragment(new ProxyListActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$58() {
+        public /* synthetic */ void lambda$onCreateSearchArray$65() {
             ProfileActivity.this.presentFragment(new ProxyListActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$59() {
+        public /* synthetic */ void lambda$onCreateSearchArray$66() {
             ProfileActivity.this.presentFragment(new DataSettingsActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$60() {
+        public /* synthetic */ void lambda$onCreateSearchArray$67() {
+            ProfileActivity.this.presentFragment(new DataSettingsActivity());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$68() {
+            ProfileActivity.this.presentFragment(new DataSettingsActivity());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$69() {
+            ProfileActivity.this.presentFragment(new DataSettingsActivity());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$70() {
+            ProfileActivity.this.presentFragment(new DataSettingsActivity());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$71() {
             ProfileActivity.this.presentFragment(new ThemeActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$61() {
+        public /* synthetic */ void lambda$onCreateSearchArray$72() {
             ProfileActivity.this.presentFragment(new ThemeActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$62() {
+        public /* synthetic */ void lambda$onCreateSearchArray$73() {
             ProfileActivity.this.presentFragment(new WallpapersListActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$63() {
+        public /* synthetic */ void lambda$onCreateSearchArray$74() {
             ProfileActivity.this.presentFragment(new WallpapersListActivity(1));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$64() {
+        public /* synthetic */ void lambda$onCreateSearchArray$75() {
             ProfileActivity.this.presentFragment(new WallpapersListActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$65() {
+        public /* synthetic */ void lambda$onCreateSearchArray$76() {
+            ProfileActivity.this.presentFragment(new ThemeActivity(0));
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$77() {
+            ProfileActivity.this.presentFragment(new ThemeActivity(3));
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$78() {
+            ProfileActivity.this.presentFragment(new ThemeActivity(3));
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$79() {
+            ProfileActivity.this.presentFragment(new ThemeActivity(0));
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$80() {
+            ProfileActivity.this.presentFragment(new ThemeActivity(0));
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$81() {
+            ProfileActivity.this.presentFragment(new ThemeActivity(0));
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$82() {
+            ProfileActivity.this.presentFragment(new ThemeActivity(0));
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$83() {
             ProfileActivity.this.presentFragment(new ThemeActivity(1));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$66() {
+        public /* synthetic */ void lambda$onCreateSearchArray$84() {
             ProfileActivity.this.presentFragment(new ThemeActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$67() {
+        public /* synthetic */ void lambda$onCreateSearchArray$85() {
             ProfileActivity.this.presentFragment(new ThemeActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$68() {
+        public /* synthetic */ void lambda$onCreateSearchArray$86() {
             ProfileActivity.this.presentFragment(new ThemeActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$69() {
+        public /* synthetic */ void lambda$onCreateSearchArray$87() {
             ProfileActivity.this.presentFragment(new ThemeActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$70() {
+        public /* synthetic */ void lambda$onCreateSearchArray$88() {
             ProfileActivity.this.presentFragment(new ThemeActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$71() {
+        public /* synthetic */ void lambda$onCreateSearchArray$89() {
             ProfileActivity.this.presentFragment(new ThemeActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$72() {
+        public /* synthetic */ void lambda$onCreateSearchArray$90() {
             ProfileActivity.this.presentFragment(new ThemeActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$73() {
+        public /* synthetic */ void lambda$onCreateSearchArray$91() {
             ProfileActivity.this.presentFragment(new ThemeActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$74() {
+        public /* synthetic */ void lambda$onCreateSearchArray$92() {
             ProfileActivity.this.presentFragment(new StickersActivity(0, null));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$75() {
+        public /* synthetic */ void lambda$onCreateSearchArray$93() {
             ProfileActivity.this.presentFragment(new StickersActivity(0, null));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$76() {
-            ProfileActivity.this.presentFragment(new FeaturedStickersActivity());
+        public /* synthetic */ void lambda$onCreateSearchArray$94() {
+            ProfileActivity.this.presentFragment(new StickersActivity(0, null));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$77() {
+        public /* synthetic */ void lambda$onCreateSearchArray$95() {
             ProfileActivity.this.presentFragment(new StickersActivity(1, null));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$78() {
+        public /* synthetic */ void lambda$onCreateSearchArray$96() {
             ProfileActivity.this.presentFragment(new ArchivedStickersActivity(0));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$79() {
+        public /* synthetic */ void lambda$onCreateSearchArray$97() {
             ProfileActivity.this.presentFragment(new ArchivedStickersActivity(1));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$80() {
+        public /* synthetic */ void lambda$onCreateSearchArray$98() {
+            ProfileActivity.this.presentFragment(new StickersActivity(0, null));
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$99() {
+            ProfileActivity.this.presentFragment(new StickersActivity(0, null));
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$100() {
+            ProfileActivity.this.presentFragment(new StickersActivity(5, null));
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$101() {
+            ProfileActivity.this.presentFragment(new StickersActivity(5, null));
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$102() {
+            ProfileActivity.this.presentFragment(new StickersActivity(5, null));
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$103() {
+            ProfileActivity.this.presentFragment(new ReactionsDoubleTapManageActivity());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$104() {
+            ProfileActivity.this.presentFragment(new FiltersSetupActivity());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$105() {
+            ProfileActivity.this.presentFragment(new FiltersSetupActivity());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$106() {
+            ProfileActivity.this.presentFragment(new PremiumPreviewFragment("settings"));
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$107() {
+            ProfileActivity.this.showDialog(new PremiumFeatureBottomSheet(ProfileActivity.this, 0, false).setForceAbout());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$108() {
+            ProfileActivity.this.showDialog(new PremiumFeatureBottomSheet(ProfileActivity.this, 11, false).setForceAbout());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$109() {
+            ProfileActivity.this.showDialog(new PremiumFeatureBottomSheet(ProfileActivity.this, 1, false).setForceAbout());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$110() {
+            ProfileActivity.this.showDialog(new PremiumFeatureBottomSheet(ProfileActivity.this, 2, false).setForceAbout());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$111() {
+            ProfileActivity.this.showDialog(new PremiumFeatureBottomSheet(ProfileActivity.this, 8, false).setForceAbout());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$112() {
+            ProfileActivity.this.showDialog(new PremiumFeatureBottomSheet(ProfileActivity.this, 3, false).setForceAbout());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$113() {
+            ProfileActivity.this.showDialog(new PremiumFeatureBottomSheet(ProfileActivity.this, 4, false).setForceAbout());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$114() {
+            ProfileActivity.this.showDialog(new PremiumFeatureBottomSheet(ProfileActivity.this, 5, false).setForceAbout());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$115() {
+            ProfileActivity.this.showDialog(new PremiumFeatureBottomSheet(ProfileActivity.this, 9, false).setForceAbout());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$116() {
+            ProfileActivity.this.showDialog(new PremiumFeatureBottomSheet(ProfileActivity.this, 6, false).setForceAbout());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$117() {
+            ProfileActivity.this.showDialog(new PremiumFeatureBottomSheet(ProfileActivity.this, 7, false).setForceAbout());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$118() {
+            ProfileActivity.this.showDialog(new PremiumFeatureBottomSheet(ProfileActivity.this, 10, false).setForceAbout());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$119() {
+            ProfileActivity.this.showDialog(new PremiumFeatureBottomSheet(ProfileActivity.this, 12, false).setForceAbout());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$120() {
             ProfileActivity.this.presentFragment(new LanguageSelectActivity());
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$81() {
+        public /* synthetic */ void lambda$onCreateSearchArray$121() {
+            ProfileActivity.this.presentFragment(new LanguageSelectActivity());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$122() {
+            ProfileActivity.this.presentFragment(new LanguageSelectActivity());
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        public /* synthetic */ void lambda$onCreateSearchArray$123() {
             ProfileActivity profileActivity = ProfileActivity.this;
             profileActivity.showDialog(AlertsCreator.createSupportAlert(profileActivity, null));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$82() {
+        public /* synthetic */ void lambda$onCreateSearchArray$124() {
             Browser.openUrl(ProfileActivity.this.getParentActivity(), LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl));
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$new$83() {
+        public /* synthetic */ void lambda$onCreateSearchArray$125() {
             Browser.openUrl(ProfileActivity.this.getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", R.string.PrivacyPolicyUrl));
         }
 
-        public SearchAdapter(Context context) {
-            SerializedData serializedData;
-            boolean z;
-            int readInt32;
-            int readInt322;
-            String[] strArr;
-            SearchResult[] searchResultArr = new SearchResult[84];
-            searchResultArr[0] = new SearchResult(this, 500, LocaleController.getString("EditName", R.string.EditName), 0, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda10
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$0();
-                }
-            });
-            searchResultArr[1] = new SearchResult(this, 501, LocaleController.getString("ChangePhoneNumber", R.string.ChangePhoneNumber), 0, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda11
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$1();
-                }
-            });
-            searchResultArr[2] = new SearchResult(this, 502, LocaleController.getString("AddAnotherAccount", R.string.AddAnotherAccount), 0, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda32
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$2();
-                }
-            });
-            searchResultArr[3] = new SearchResult(this, 503, LocaleController.getString("UserBio", R.string.UserBio), 0, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda63
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$3();
-                }
-            });
-            int i = R.string.NotificationsAndSounds;
-            String string = LocaleController.getString("NotificationsAndSounds", i);
-            int i2 = R.drawable.msg_notifications;
-            searchResultArr[4] = new SearchResult(this, 1, string, i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda18
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$4();
-                }
-            });
-            searchResultArr[5] = new SearchResult(this, 2, LocaleController.getString("NotificationsPrivateChats", R.string.NotificationsPrivateChats), LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda7
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$5();
-                }
-            });
-            searchResultArr[6] = new SearchResult(this, 3, LocaleController.getString("NotificationsGroups", R.string.NotificationsGroups), LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda22
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$6();
-                }
-            });
-            searchResultArr[7] = new SearchResult(this, 4, LocaleController.getString("NotificationsChannels", R.string.NotificationsChannels), LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda42
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$7();
-                }
-            });
-            searchResultArr[8] = new SearchResult(this, 5, LocaleController.getString("VoipNotificationSettings", R.string.VoipNotificationSettings), "callsSectionRow", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda0
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$8();
-                }
-            });
-            searchResultArr[9] = new SearchResult(this, 6, LocaleController.getString("BadgeNumber", R.string.BadgeNumber), "badgeNumberSection", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda3
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$9();
-                }
-            });
-            searchResultArr[10] = new SearchResult(this, 7, LocaleController.getString("InAppNotifications", R.string.InAppNotifications), "inappSectionRow", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda64
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$10();
-                }
-            });
-            searchResultArr[11] = new SearchResult(this, 8, LocaleController.getString("ContactJoined", R.string.ContactJoined), "contactJoinedRow", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda52
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$11();
-                }
-            });
-            searchResultArr[12] = new SearchResult(this, 9, LocaleController.getString("PinnedMessages", R.string.PinnedMessages), "pinnedMessageRow", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda62
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$12();
-                }
-            });
-            searchResultArr[13] = new SearchResult(this, 10, LocaleController.getString("ResetAllNotifications", R.string.ResetAllNotifications), "resetNotificationsRow", LocaleController.getString("NotificationsAndSounds", i), i2, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda13
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$13();
-                }
-            });
-            int i3 = R.string.PrivacySettings;
-            String string2 = LocaleController.getString("PrivacySettings", i3);
-            int i4 = R.drawable.msg_secret;
-            searchResultArr[14] = new SearchResult(this, 100, string2, i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda24
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$14();
-                }
-            });
-            searchResultArr[15] = new SearchResult(this, 101, LocaleController.getString("BlockedUsers", R.string.BlockedUsers), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda75
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$15();
-                }
-            });
-            searchResultArr[16] = new SearchResult(this, 105, LocaleController.getString("PrivacyPhone", R.string.PrivacyPhone), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda72
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$16();
-                }
-            });
-            searchResultArr[17] = new SearchResult(this, 102, LocaleController.getString("PrivacyLastSeen", R.string.PrivacyLastSeen), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda26
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$17();
-                }
-            });
-            searchResultArr[18] = new SearchResult(this, 103, LocaleController.getString("PrivacyProfilePhoto", R.string.PrivacyProfilePhoto), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda55
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$18();
-                }
-            });
-            searchResultArr[19] = new SearchResult(this, 104, LocaleController.getString("PrivacyForwards", R.string.PrivacyForwards), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda78
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$19();
-                }
-            });
-            searchResultArr[20] = new SearchResult(this, 122, LocaleController.getString("PrivacyP2P", R.string.PrivacyP2P), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda61
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$20();
-                }
-            });
-            int i5 = R.string.Calls;
-            searchResultArr[21] = new SearchResult(this, 106, LocaleController.getString("Calls", i5), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda5
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$21();
-                }
-            });
-            searchResultArr[22] = new SearchResult(this, 107, LocaleController.getString("GroupsAndChannels", R.string.GroupsAndChannels), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda29
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$22();
-                }
-            });
-            searchResultArr[23] = new SearchResult(this, 123, LocaleController.getString("PrivacyVoiceMessages", R.string.PrivacyVoiceMessages), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda23
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$23();
-                }
-            });
-            searchResultArr[24] = new SearchResult(this, 108, LocaleController.getString("Passcode", R.string.Passcode), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda70
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$24();
-                }
-            });
-            searchResultArr[25] = new SearchResult(this, 109, LocaleController.getString("TwoStepVerification", R.string.TwoStepVerification), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda35
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$25();
-                }
-            });
-            searchResultArr[26] = new SearchResult(this, 110, LocaleController.getString("SessionsTitle", R.string.SessionsTitle), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda17
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$26();
-                }
-            });
-            searchResultArr[27] = ProfileActivity.this.getMessagesController().autoarchiveAvailable ? new SearchResult(this, 121, LocaleController.getString("ArchiveAndMute", R.string.ArchiveAndMute), "newChatsRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda46
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$27();
-                }
-            }) : null;
-            searchResultArr[28] = new SearchResult(this, 112, LocaleController.getString("DeleteAccountIfAwayFor2", R.string.DeleteAccountIfAwayFor2), "deleteAccountRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda79
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$28();
-                }
-            });
-            searchResultArr[29] = new SearchResult(this, 113, LocaleController.getString("PrivacyPaymentsClear", R.string.PrivacyPaymentsClear), "paymentsClearRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda77
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$29();
-                }
-            });
-            searchResultArr[30] = new SearchResult(this, 114, LocaleController.getString("WebSessionsTitle", R.string.WebSessionsTitle), LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda58
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$30();
-                }
-            });
-            searchResultArr[31] = new SearchResult(this, 115, LocaleController.getString("SyncContactsDelete", R.string.SyncContactsDelete), "contactsDeleteRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda19
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$31();
-                }
-            });
-            searchResultArr[32] = new SearchResult(this, 116, LocaleController.getString("SyncContacts", R.string.SyncContacts), "contactsSyncRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda74
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$32();
-                }
-            });
-            searchResultArr[33] = new SearchResult(this, 117, LocaleController.getString("SuggestContacts", R.string.SuggestContacts), "contactsSuggestRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda56
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$33();
-                }
-            });
-            searchResultArr[34] = new SearchResult(this, 118, LocaleController.getString("MapPreviewProvider", R.string.MapPreviewProvider), "secretMapRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda41
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$34();
-                }
-            });
-            searchResultArr[35] = new SearchResult(this, 119, LocaleController.getString("SecretWebPage", R.string.SecretWebPage), "secretWebpageRow", LocaleController.getString("PrivacySettings", i3), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda8
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$35();
-                }
-            });
-            searchResultArr[36] = new SearchResult(this, 120, LocaleController.getString("Devices", R.string.Devices), i4, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda6
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$36();
-                }
-            });
-            int i6 = R.string.DataSettings;
-            String string3 = LocaleController.getString("DataSettings", i6);
-            int i7 = R.drawable.msg_data;
-            searchResultArr[37] = new SearchResult(this, 200, string3, i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda47
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$37();
-                }
-            });
-            searchResultArr[38] = new SearchResult(this, 201, LocaleController.getString("DataUsage", R.string.DataUsage), "usageSectionRow", LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda27
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$38();
-                }
-            });
-            int i8 = R.string.StorageUsage;
-            searchResultArr[39] = new SearchResult(this, 202, LocaleController.getString("StorageUsage", i8), LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda65
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$39();
-                }
-            });
-            searchResultArr[40] = new SearchResult(203, LocaleController.getString("KeepMedia", R.string.KeepMedia), "keepMediaRow", LocaleController.getString("DataSettings", i6), LocaleController.getString("StorageUsage", i8), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda15
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$40();
-                }
-            });
-            searchResultArr[41] = new SearchResult(204, LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), "cacheRow", LocaleController.getString("DataSettings", i6), LocaleController.getString("StorageUsage", i8), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda1
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$41();
-                }
-            });
-            searchResultArr[42] = new SearchResult(205, LocaleController.getString("LocalDatabase", R.string.LocalDatabase), "databaseRow", LocaleController.getString("DataSettings", i6), LocaleController.getString("StorageUsage", i8), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda76
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$42();
-                }
-            });
-            searchResultArr[43] = new SearchResult(this, 206, LocaleController.getString("NetworkUsage", R.string.NetworkUsage), LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda49
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$43();
-                }
-            });
-            searchResultArr[44] = new SearchResult(this, 207, LocaleController.getString("AutomaticMediaDownload", R.string.AutomaticMediaDownload), "mediaDownloadSectionRow", LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda21
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$44();
-                }
-            });
-            searchResultArr[45] = new SearchResult(this, 208, LocaleController.getString("WhenUsingMobileData", R.string.WhenUsingMobileData), LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda16
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$45();
-                }
-            });
-            searchResultArr[46] = new SearchResult(this, 209, LocaleController.getString("WhenConnectedOnWiFi", R.string.WhenConnectedOnWiFi), LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda28
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$46();
-                }
-            });
-            searchResultArr[47] = new SearchResult(this, 210, LocaleController.getString("WhenRoaming", R.string.WhenRoaming), LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda66
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$47();
-                }
-            });
-            searchResultArr[48] = new SearchResult(this, 211, LocaleController.getString("ResetAutomaticMediaDownload", R.string.ResetAutomaticMediaDownload), "resetDownloadRow", LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda2
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$48();
-                }
-            });
-            searchResultArr[49] = new SearchResult(this, 212, LocaleController.getString("AutoplayMedia", R.string.AutoplayMedia), "autoplayHeaderRow", LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda40
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$49();
-                }
-            });
-            searchResultArr[50] = new SearchResult(this, 213, LocaleController.getString("AutoplayGIF", R.string.AutoplayGIF), "autoplayGifsRow", LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda60
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$50();
-                }
-            });
-            searchResultArr[51] = new SearchResult(this, 214, LocaleController.getString("AutoplayVideo", R.string.AutoplayVideo), "autoplayVideoRow", LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda71
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$51();
-                }
-            });
-            searchResultArr[52] = new SearchResult(this, 215, LocaleController.getString("Streaming", R.string.Streaming), "streamSectionRow", LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda4
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$52();
-                }
-            });
-            searchResultArr[53] = new SearchResult(this, 216, LocaleController.getString("EnableStreaming", R.string.EnableStreaming), "enableStreamRow", LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda53
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$53();
-                }
-            });
-            searchResultArr[54] = new SearchResult(this, 217, LocaleController.getString("Calls", i5), "callsSectionRow", LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda44
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$54();
-                }
-            });
-            searchResultArr[55] = new SearchResult(this, 218, LocaleController.getString("VoipUseLessData", R.string.VoipUseLessData), "useLessDataForCallsRow", LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda45
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$55();
-                }
-            });
-            searchResultArr[56] = new SearchResult(this, 219, LocaleController.getString("VoipQuickReplies", R.string.VoipQuickReplies), "quickRepliesRow", LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda33
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$56();
-                }
-            });
-            int i9 = R.string.ProxySettings;
-            searchResultArr[57] = new SearchResult(this, 220, LocaleController.getString("ProxySettings", i9), LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda36
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$57();
-                }
-            });
-            searchResultArr[58] = new SearchResult(221, LocaleController.getString("UseProxyForCalls", R.string.UseProxyForCalls), "callsRow", LocaleController.getString("DataSettings", i6), LocaleController.getString("ProxySettings", i9), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda81
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$58();
-                }
-            });
-            searchResultArr[59] = new SearchResult(this, 111, LocaleController.getString("PrivacyDeleteCloudDrafts", R.string.PrivacyDeleteCloudDrafts), "clearDraftsRow", LocaleController.getString("DataSettings", i6), i7, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda20
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$59();
-                }
-            });
-            int i10 = R.string.ChatSettings;
-            String string4 = LocaleController.getString("ChatSettings", i10);
-            int i11 = R.drawable.msg_msgbubble3;
-            searchResultArr[60] = new SearchResult(this, 300, string4, i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda14
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$60();
-                }
-            });
-            searchResultArr[61] = new SearchResult(this, 301, LocaleController.getString("TextSizeHeader", R.string.TextSizeHeader), "textSizeHeaderRow", LocaleController.getString("ChatSettings", i10), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda82
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$61();
-                }
-            });
-            int i12 = R.string.ChatBackground;
-            searchResultArr[62] = new SearchResult(this, 302, LocaleController.getString("ChatBackground", i12), LocaleController.getString("ChatSettings", i10), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda12
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$62();
-                }
-            });
-            searchResultArr[63] = new SearchResult(303, LocaleController.getString("SetColor", R.string.SetColor), null, LocaleController.getString("ChatSettings", i10), LocaleController.getString("ChatBackground", i12), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda54
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$63();
-                }
-            });
-            searchResultArr[64] = new SearchResult(304, LocaleController.getString("ResetChatBackgrounds", R.string.ResetChatBackgrounds), "resetRow", LocaleController.getString("ChatSettings", i10), LocaleController.getString("ChatBackground", i12), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda51
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$64();
-                }
-            });
-            searchResultArr[65] = new SearchResult(this, 305, LocaleController.getString("AutoNightTheme", R.string.AutoNightTheme), LocaleController.getString("ChatSettings", i10), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda57
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$65();
-                }
-            });
-            searchResultArr[66] = new SearchResult(this, 306, LocaleController.getString("ColorTheme", R.string.ColorTheme), "themeHeaderRow", LocaleController.getString("ChatSettings", i10), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda34
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$66();
-                }
-            });
-            searchResultArr[67] = new SearchResult(this, 307, LocaleController.getString("ChromeCustomTabs", R.string.ChromeCustomTabs), "customTabsRow", LocaleController.getString("ChatSettings", i10), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda50
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$67();
-                }
-            });
-            searchResultArr[68] = new SearchResult(this, 308, LocaleController.getString("DirectShare", R.string.DirectShare), "directShareRow", LocaleController.getString("ChatSettings", i10), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda9
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$68();
-                }
-            });
-            searchResultArr[69] = new SearchResult(this, 309, LocaleController.getString("EnableAnimations", R.string.EnableAnimations), "enableAnimationsRow", LocaleController.getString("ChatSettings", i10), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda39
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$69();
-                }
-            });
-            searchResultArr[70] = new SearchResult(this, 310, LocaleController.getString("RaiseToSpeak", R.string.RaiseToSpeak), "raiseToSpeakRow", LocaleController.getString("ChatSettings", i10), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda83
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$70();
-                }
-            });
-            searchResultArr[71] = new SearchResult(this, 311, LocaleController.getString("SendByEnter", R.string.SendByEnter), "sendByEnterRow", LocaleController.getString("ChatSettings", i10), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda80
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$71();
-                }
-            });
-            searchResultArr[72] = new SearchResult(this, 312, LocaleController.getString("SaveToGallerySettings", R.string.SaveToGallerySettings), "saveToGalleryRow", LocaleController.getString("ChatSettings", i10), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda25
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$72();
-                }
-            });
-            searchResultArr[73] = new SearchResult(this, 318, LocaleController.getString("DistanceUnits", R.string.DistanceUnits), "distanceRow", LocaleController.getString("ChatSettings", i10), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda59
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$73();
-                }
-            });
-            int i13 = R.string.StickersAndMasks;
-            searchResultArr[74] = new SearchResult(this, 313, LocaleController.getString("StickersAndMasks", i13), LocaleController.getString("ChatSettings", i10), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda37
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$74();
-                }
-            });
-            searchResultArr[75] = new SearchResult(314, LocaleController.getString("SuggestStickers", R.string.SuggestStickers), "suggestRow", LocaleController.getString("ChatSettings", i10), LocaleController.getString("StickersAndMasks", i13), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda30
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$75();
-                }
-            });
-            searchResultArr[76] = new SearchResult(315, LocaleController.getString("FeaturedStickers", R.string.FeaturedStickers), null, LocaleController.getString("ChatSettings", i10), LocaleController.getString("StickersAndMasks", i13), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda69
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$76();
-                }
-            });
-            searchResultArr[77] = new SearchResult(316, LocaleController.getString("Masks", R.string.Masks), null, LocaleController.getString("ChatSettings", i10), LocaleController.getString("StickersAndMasks", i13), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda67
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$77();
-                }
-            });
-            searchResultArr[78] = new SearchResult(317, LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers), null, LocaleController.getString("ChatSettings", i10), LocaleController.getString("StickersAndMasks", i13), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda73
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$78();
-                }
-            });
-            searchResultArr[79] = new SearchResult(317, LocaleController.getString("ArchivedMasks", R.string.ArchivedMasks), null, LocaleController.getString("ChatSettings", i10), LocaleController.getString("StickersAndMasks", i13), i11, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda68
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$79();
-                }
-            });
-            searchResultArr[80] = new SearchResult(this, 400, LocaleController.getString("Language", R.string.Language), R.drawable.msg_language, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda48
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$80();
-                }
-            });
-            String string5 = LocaleController.getString("AskAQuestion", R.string.AskAQuestion);
-            int i14 = R.string.SettingsHelp;
-            String string6 = LocaleController.getString("SettingsHelp", i14);
-            int i15 = R.drawable.msg_help;
-            searchResultArr[81] = new SearchResult(this, 402, string5, string6, i15, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda43
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$81();
-                }
-            });
-            searchResultArr[82] = new SearchResult(this, 403, LocaleController.getString("TelegramFAQ", R.string.TelegramFAQ), LocaleController.getString("SettingsHelp", i14), i15, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda31
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$82();
-                }
-            });
-            searchResultArr[83] = new SearchResult(this, 404, LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), LocaleController.getString("SettingsHelp", i14), i15, new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda38
-                @Override // java.lang.Runnable
-                public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$new$83();
-                }
-            });
-            this.searchArray = searchResultArr;
-            this.faqSearchArray = new ArrayList<>();
-            this.resultNames = new ArrayList<>();
-            this.searchResults = new ArrayList<>();
-            this.faqSearchResults = new ArrayList<>();
-            this.recentSearches = new ArrayList<>();
-            this.mContext = context;
-            HashMap hashMap = new HashMap();
-            int i16 = 0;
-            while (true) {
-                SearchResult[] searchResultArr2 = this.searchArray;
-                if (i16 >= searchResultArr2.length) {
-                    break;
-                }
-                if (searchResultArr2[i16] != null) {
-                    hashMap.put(Integer.valueOf(searchResultArr2[i16].guid), this.searchArray[i16]);
-                }
-                i16++;
+        private boolean isPremiumFeatureAvailable(int i) {
+            if (!ProfileActivity.this.getMessagesController().premiumLocked || ProfileActivity.this.getUserConfig().isPremium()) {
+                return i == -1 || ProfileActivity.this.getMessagesController().premiumFeaturesTypesToPosition.get(i, -1) != -1;
             }
-            Set<String> stringSet = MessagesController.getGlobalMainSettings().getStringSet("settingsSearchRecent2", null);
-            if (stringSet != null) {
-                for (String str : stringSet) {
-                    try {
-                        serializedData = new SerializedData(Utilities.hexToBytes(str));
-                        z = false;
-                        readInt32 = serializedData.readInt32(false);
-                        readInt322 = serializedData.readInt32(false);
-                    } catch (Exception unused) {
-                    }
-                    if (readInt322 == 0) {
-                        String readString = serializedData.readString(false);
-                        int readInt323 = serializedData.readInt32(false);
-                        if (readInt323 > 0) {
-                            strArr = new String[readInt323];
-                            int i17 = 0;
-                            while (i17 < readInt323) {
-                                strArr[i17] = serializedData.readString(z);
-                                i17++;
-                                z = false;
-                            }
-                        } else {
-                            strArr = null;
-                        }
-                        MessagesController.FaqSearchResult faqSearchResult = new MessagesController.FaqSearchResult(readString, strArr, serializedData.readString(z));
-                        faqSearchResult.num = readInt32;
-                        this.recentSearches.add(faqSearchResult);
-                    } else if (readInt322 == 1) {
-                        try {
-                            SearchResult searchResult = (SearchResult) hashMap.get(Integer.valueOf(serializedData.readInt32(false)));
-                            if (searchResult != null) {
-                                searchResult.num = readInt32;
-                                this.recentSearches.add(searchResult);
-                            }
-                        } catch (Exception unused2) {
-                        }
-                    }
-                }
-            }
-            Collections.sort(this.recentSearches, new Comparator() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda87
-                @Override // java.util.Comparator
-                public final int compare(Object obj, Object obj2) {
-                    int lambda$new$84;
-                    lambda$new$84 = ProfileActivity.SearchAdapter.this.lambda$new$84(obj, obj2);
-                    return lambda$new$84;
-                }
-            });
-        }
-
-        /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ int lambda$new$84(Object obj, Object obj2) {
-            int num = getNum(obj);
-            int num2 = getNum(obj2);
-            if (num < num2) {
-                return -1;
-            }
-            return num > num2 ? 1 : 0;
+            return false;
         }
 
         /* JADX INFO: Access modifiers changed from: private */
@@ -9586,16 +10094,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             TLRPC$TL_messages_getWebPage tLRPC$TL_messages_getWebPage = new TLRPC$TL_messages_getWebPage();
             tLRPC$TL_messages_getWebPage.url = LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl);
             tLRPC$TL_messages_getWebPage.hash = 0;
-            ProfileActivity.this.getConnectionsManager().sendRequest(tLRPC$TL_messages_getWebPage, new RequestDelegate() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda88
+            ProfileActivity.this.getConnectionsManager().sendRequest(tLRPC$TL_messages_getWebPage, new RequestDelegate() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda129
                 @Override // org.telegram.tgnet.RequestDelegate
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ProfileActivity.SearchAdapter.this.lambda$loadFaqWebPage$86(tLObject, tLRPC$TL_error);
+                    ProfileActivity.SearchAdapter.this.lambda$loadFaqWebPage$127(tLObject, tLRPC$TL_error);
                 }
             });
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$loadFaqWebPage$86(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        public /* synthetic */ void lambda$loadFaqWebPage$127(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             if (tLObject instanceof TLRPC$WebPage) {
                 final ArrayList arrayList = new ArrayList();
                 TLRPC$WebPage tLRPC$WebPage = (TLRPC$WebPage) tLObject;
@@ -9631,10 +10139,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                     this.faqWebPage = tLRPC$WebPage;
                 }
-                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda86
+                AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda126
                     @Override // java.lang.Runnable
                     public final void run() {
-                        ProfileActivity.SearchAdapter.this.lambda$loadFaqWebPage$85(arrayList);
+                        ProfileActivity.SearchAdapter.this.lambda$loadFaqWebPage$126(arrayList);
                     }
                 });
             }
@@ -9642,7 +10150,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$loadFaqWebPage$85(ArrayList arrayList) {
+        public /* synthetic */ void lambda$loadFaqWebPage$126(ArrayList arrayList) {
             this.faqSearchArray.addAll(arrayList);
             ProfileActivity.this.getMessagesController().faqSearchArray = arrayList;
             ProfileActivity.this.getMessagesController().faqWebPage = this.faqWebPage;
@@ -9751,7 +10259,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
             View settingsSearchCell;
             if (i == 0) {
                 settingsSearchCell = new SettingsSearchCell(this.mContext);
@@ -9838,10 +10346,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return;
             }
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            Runnable runnable = new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda84
+            Runnable runnable = new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda124
                 @Override // java.lang.Runnable
                 public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$search$88(str);
+                    ProfileActivity.SearchAdapter.this.lambda$search$129(str);
                 }
             };
             this.searchRunnable = runnable;
@@ -9849,7 +10357,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$search$88(final String str) {
+        public /* synthetic */ void lambda$search$129(final String str) {
             SpannableStringBuilder spannableStringBuilder;
             String str2;
             int i;
@@ -9908,7 +10416,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 while (true) {
                                     if (i6 >= 4) {
                                         break;
-                                    } else if (!UserConfig.getInstance(i3).isClientActivated()) {
+                                    } else if (!UserConfig.getInstance(i6).isClientActivated()) {
                                         i5 = i6;
                                         break;
                                     } else {
@@ -9972,16 +10480,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     size = size;
                 }
             }
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda85
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ProfileActivity$SearchAdapter$$ExternalSyntheticLambda125
                 @Override // java.lang.Runnable
                 public final void run() {
-                    ProfileActivity.SearchAdapter.this.lambda$search$87(str, arrayList, arrayList2, arrayList3);
+                    ProfileActivity.SearchAdapter.this.lambda$search$128(str, arrayList, arrayList2, arrayList3);
                 }
             });
         }
 
         /* JADX INFO: Access modifiers changed from: private */
-        public /* synthetic */ void lambda$search$87(String str, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3) {
+        public /* synthetic */ void lambda$search$128(String str, ArrayList arrayList, ArrayList arrayList2, ArrayList arrayList3) {
             if (!str.equals(this.lastSearchString)) {
                 return;
             }

@@ -1949,18 +1949,18 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         this.topicsGridView.setPivotX(view.getX() + (view.getWidth() / 2.0f));
         this.topicsGridView.setPivotY(view.getY() + (view.getHeight() / 2.0f));
         float f2 = 0.25f * f;
-        float f3 = f2 + 0.75f;
+        float f3 = 0.75f + f2;
         this.topicsGridView.setScaleX(f3);
         this.topicsGridView.setScaleY(f3);
         this.topicsGridView.setAlpha(f);
-        RecyclerListView mainGridView = getMainGridView();
-        mainGridView.setPivotX(view.getX() + (view.getWidth() / 2.0f));
-        mainGridView.setPivotY(view.getY() + (view.getHeight() / 2.0f));
+        RecyclerListView recyclerListView = this.gridView;
+        recyclerListView.setPivotX(view.getX() + (view.getWidth() / 2.0f));
+        recyclerListView.setPivotY(view.getY() + (view.getHeight() / 2.0f));
         float f4 = f2 + 1.0f;
-        mainGridView.setScaleX(f4);
-        mainGridView.setScaleY(f4);
+        recyclerListView.setScaleX(f4);
+        recyclerListView.setScaleY(f4);
         float f5 = 1.0f - f;
-        mainGridView.setAlpha(f5);
+        recyclerListView.setAlpha(f5);
         this.searchView.setPivotX(searchField.getWidth() / 2.0f);
         this.searchView.setPivotY(0.0f);
         float f6 = (0.1f * f5) + 0.9f;
@@ -1973,11 +1973,16 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         this.topicsBackActionBar.setAlpha(f);
         this.topicsGridView.getLocationInWindow(iArr);
         float interpolation = CubicBezierInterpolator.EASE_OUT.getInterpolation(f);
-        for (int i = 0; i < mainGridView.getChildCount(); i++) {
-            View childAt = mainGridView.getChildAt(i);
+        for (int i = 0; i < recyclerListView.getChildCount(); i++) {
+            View childAt = recyclerListView.getChildAt(i);
             if (childAt instanceof ShareDialogCell) {
-                childAt.setTranslationX((childAt.getX() - view.getX()) * 0.75f * interpolation);
-                childAt.setTranslationY((childAt.getY() - view.getY()) * 0.75f * interpolation);
+                childAt.setTranslationX((childAt.getX() - view.getX()) * 0.5f * interpolation);
+                childAt.setTranslationY((childAt.getY() - view.getY()) * 0.5f * interpolation);
+                if (childAt != view) {
+                    childAt.setAlpha(1.0f - (Math.min(f, 0.5f) / 0.5f));
+                } else {
+                    childAt.setAlpha(f5);
+                }
             }
         }
         for (int i2 = 0; i2 < this.topicsGridView.getChildCount(); i2++) {
@@ -1995,7 +2000,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             }
         }
         this.containerView.requestLayout();
-        mainGridView.invalidate();
+        recyclerListView.invalidate();
     }
 
     @Override // org.telegram.ui.ActionBar.BottomSheet
@@ -2835,7 +2840,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
             View shareDialogCell;
             if (i == 0) {
                 shareDialogCell = new ShareDialogCell(this.context, ShareAlert.this.darkTheme ? 1 : 0, ShareAlert.this.resourcesProvider);
@@ -2903,7 +2908,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
             View shareTopicCell;
             if (i == 0) {
                 shareTopicCell = new ShareTopicCell(this.context, ShareAlert.this.resourcesProvider);
@@ -3245,7 +3250,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         /* JADX WARN: Type inference failed for: r5v6, types: [android.view.View] */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
             ShareDialogCell shareDialogCell;
             if (i == 0) {
                 ShareDialogCell shareDialogCell2 = new ShareDialogCell(this.context, ShareAlert.this.darkTheme ? 1 : 0, ShareAlert.this.resourcesProvider);

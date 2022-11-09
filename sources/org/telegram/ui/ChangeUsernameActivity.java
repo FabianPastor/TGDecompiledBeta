@@ -47,6 +47,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
+import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -76,7 +77,9 @@ import org.telegram.ui.Components.CircularProgressDrawable;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.LinkSpanDrawable;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.TypefaceSpan;
 /* loaded from: classes3.dex */
 public class ChangeUsernameActivity extends BaseFragment {
     private Adapter adapter;
@@ -91,7 +94,7 @@ public class ChangeUsernameActivity extends BaseFragment {
     private String lastCheckName;
     private RecyclerListView listView;
     private boolean needReorder;
-    private TextView statusTextView;
+    private LinkSpanDrawable.LinksTextView statusTextView;
     private static Paint linkBackgroundActive = new Paint(1);
     private static Paint linkBackgroundInactive = new Paint(1);
     private static Paint dragPaint = new Paint(1);
@@ -514,14 +517,14 @@ public class ChangeUsernameActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
             if (i == 0) {
                 HeaderCell headerCell = new HeaderCell(ChangeUsernameActivity.this.getContext());
                 headerCell.setBackgroundColor(ChangeUsernameActivity.this.getThemedColor("windowBackgroundWhite"));
                 return new RecyclerListView.Holder(headerCell);
             } else if (i == 1) {
                 ChangeUsernameActivity changeUsernameActivity = ChangeUsernameActivity.this;
-                return new RecyclerListView.Holder(new UsernameHelpCell(changeUsernameActivity, changeUsernameActivity.getContext()));
+                return new RecyclerListView.Holder(new UsernameHelpCell(changeUsernameActivity.getContext()));
             } else if (i == 2) {
                 return new RecyclerListView.Holder(new TextInfoPrivacyCell(ChangeUsernameActivity.this.getContext()));
             } else {
@@ -694,12 +697,12 @@ public class ChangeUsernameActivity extends BaseFragment {
         private Integer height;
         private ValueAnimator heightUpdateAnimator;
         private TextView text1View;
-        private TextView text2View;
+        private LinkSpanDrawable.LinksTextView text2View;
 
-        public UsernameHelpCell(ChangeUsernameActivity changeUsernameActivity, Context context) {
+        public UsernameHelpCell(Context context) {
             super(context);
-            changeUsernameActivity.helpCell = this;
-            setPadding(AndroidUtilities.dp(21.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(21.0f), AndroidUtilities.dp(17.0f));
+            ChangeUsernameActivity.this.helpCell = this;
+            setPadding(AndroidUtilities.dp(18.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(18.0f), AndroidUtilities.dp(17.0f));
             setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
             setClipChildren(false);
             TextView textView = new TextView(context);
@@ -710,13 +713,45 @@ public class ChangeUsernameActivity extends BaseFragment {
             this.text1View.setGravity(LocaleController.isRTL ? 5 : 3);
             this.text1View.setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
             this.text1View.setHighlightColor(Theme.getColor("windowBackgroundWhiteLinkSelection"));
-            TextView textView2 = changeUsernameActivity.statusTextView = new TextView(context);
-            this.text2View = textView2;
-            textView2.setTextSize(1, 15.0f);
+            this.text1View.setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
+            LinkSpanDrawable.LinksTextView linksTextView = ChangeUsernameActivity.this.statusTextView = new LinkSpanDrawable.LinksTextView(context, ChangeUsernameActivity.this) { // from class: org.telegram.ui.ChangeUsernameActivity.UsernameHelpCell.1
+                /* JADX WARN: Multi-variable type inference failed */
+                /* JADX WARN: Type inference failed for: r6v0, types: [android.widget.TextView, org.telegram.ui.ChangeUsernameActivity$UsernameHelpCell$1] */
+                /* JADX WARN: Type inference failed for: r7v0, types: [java.lang.CharSequence] */
+                /* JADX WARN: Type inference failed for: r7v1, types: [java.lang.CharSequence] */
+                /* JADX WARN: Type inference failed for: r7v3, types: [android.text.SpannableStringBuilder] */
+                @Override // android.widget.TextView
+                public void setText(CharSequence charSequence, TextView.BufferType bufferType) {
+                    if (charSequence != 0) {
+                        charSequence = AndroidUtilities.replaceTags(charSequence.toString());
+                        TypefaceSpan[] typefaceSpanArr = (TypefaceSpan[]) charSequence.getSpans(0, charSequence.length(), TypefaceSpan.class);
+                        for (int i2 = 0; i2 < typefaceSpanArr.length; i2++) {
+                            charSequence.setSpan(new ClickableSpan() { // from class: org.telegram.ui.ChangeUsernameActivity.UsernameHelpCell.1.1
+                                @Override // android.text.style.ClickableSpan
+                                public void onClick(View view) {
+                                    Context context2 = getContext();
+                                    Browser.openUrl(context2, "https://fragment.com/username/" + ChangeUsernameActivity.this.username);
+                                }
+
+                                @Override // android.text.style.ClickableSpan, android.text.style.CharacterStyle
+                                public void updateDrawState(TextPaint textPaint) {
+                                    super.updateDrawState(textPaint);
+                                    textPaint.setUnderlineText(false);
+                                }
+                            }, charSequence.getSpanStart(typefaceSpanArr[i2]), charSequence.getSpanEnd(typefaceSpanArr[i2]), 33);
+                            charSequence.removeSpan(typefaceSpanArr[i2]);
+                        }
+                    }
+                    super.setText(charSequence, bufferType);
+                }
+            };
+            this.text2View = linksTextView;
+            linksTextView.setTextSize(1, 15.0f);
             this.text2View.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
             this.text2View.setGravity(!LocaleController.isRTL ? 3 : i);
             this.text2View.setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
             this.text2View.setHighlightColor(Theme.getColor("windowBackgroundWhiteLinkSelection"));
+            this.text2View.setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
             addView(this.text1View, LayoutHelper.createFrame(-1, -2, 48));
             addView(this.text2View, LayoutHelper.createFrame(-1, -2, 48));
             this.text1View.setText(AndroidUtilities.replaceTags(LocaleController.getString("UsernameHelp", R.string.UsernameHelp)));
@@ -1214,9 +1249,9 @@ public class ChangeUsernameActivity extends BaseFragment {
         if (str != null && str.startsWith("@")) {
             str = str.substring(1);
         }
-        TextView textView = this.statusTextView;
-        if (textView != null) {
-            textView.setVisibility(!TextUtils.isEmpty(str) ? 0 : 8);
+        LinkSpanDrawable.LinksTextView linksTextView = this.statusTextView;
+        if (linksTextView != null) {
+            linksTextView.setVisibility(!TextUtils.isEmpty(str) ? 0 : 8);
             UsernameHelpCell usernameHelpCell = this.helpCell;
             if (usernameHelpCell != null) {
                 usernameHelpCell.update();
@@ -1234,9 +1269,9 @@ public class ChangeUsernameActivity extends BaseFragment {
             }
             if (str != null) {
                 if (str.startsWith("_") || str.endsWith("_")) {
-                    TextView textView2 = this.statusTextView;
-                    if (textView2 != null) {
-                        textView2.setText(LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
+                    LinkSpanDrawable.LinksTextView linksTextView2 = this.statusTextView;
+                    if (linksTextView2 != null) {
+                        linksTextView2.setText(LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
                         this.statusTextView.setTag("windowBackgroundWhiteRedText4");
                         this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
                         UsernameHelpCell usernameHelpCell2 = this.helpCell;
@@ -1252,9 +1287,9 @@ public class ChangeUsernameActivity extends BaseFragment {
                         if (z) {
                             AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidStartNumber", R.string.UsernameInvalidStartNumber));
                         } else {
-                            TextView textView3 = this.statusTextView;
-                            if (textView3 != null) {
-                                textView3.setText(LocaleController.getString("UsernameInvalidStartNumber", R.string.UsernameInvalidStartNumber));
+                            LinkSpanDrawable.LinksTextView linksTextView3 = this.statusTextView;
+                            if (linksTextView3 != null) {
+                                linksTextView3.setText(LocaleController.getString("UsernameInvalidStartNumber", R.string.UsernameInvalidStartNumber));
                                 this.statusTextView.setTag("windowBackgroundWhiteRedText4");
                                 this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
                                 UsernameHelpCell usernameHelpCell3 = this.helpCell;
@@ -1268,9 +1303,9 @@ public class ChangeUsernameActivity extends BaseFragment {
                         if (z) {
                             AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
                         } else {
-                            TextView textView4 = this.statusTextView;
-                            if (textView4 != null) {
-                                textView4.setText(LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
+                            LinkSpanDrawable.LinksTextView linksTextView4 = this.statusTextView;
+                            if (linksTextView4 != null) {
+                                linksTextView4.setText(LocaleController.getString("UsernameInvalid", R.string.UsernameInvalid));
                                 this.statusTextView.setTag("windowBackgroundWhiteRedText4");
                                 this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
                                 UsernameHelpCell usernameHelpCell4 = this.helpCell;
@@ -1283,13 +1318,13 @@ public class ChangeUsernameActivity extends BaseFragment {
                     }
                 }
             }
-            if (str == null || str.length() < 5) {
+            if (str == null || str.length() < 4) {
                 if (z) {
                     AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
                 } else {
-                    TextView textView5 = this.statusTextView;
-                    if (textView5 != null) {
-                        textView5.setText(LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
+                    LinkSpanDrawable.LinksTextView linksTextView5 = this.statusTextView;
+                    if (linksTextView5 != null) {
+                        linksTextView5.setText(LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
                         this.statusTextView.setTag("windowBackgroundWhiteRedText4");
                         this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
                         UsernameHelpCell usernameHelpCell5 = this.helpCell;
@@ -1303,9 +1338,9 @@ public class ChangeUsernameActivity extends BaseFragment {
                 if (z) {
                     AlertsCreator.showSimpleAlert(this, LocaleController.getString("UsernameInvalidLong", R.string.UsernameInvalidLong));
                 } else {
-                    TextView textView6 = this.statusTextView;
-                    if (textView6 != null) {
-                        textView6.setText(LocaleController.getString("UsernameInvalidLong", R.string.UsernameInvalidLong));
+                    LinkSpanDrawable.LinksTextView linksTextView6 = this.statusTextView;
+                    if (linksTextView6 != null) {
+                        linksTextView6.setText(LocaleController.getString("UsernameInvalidLong", R.string.UsernameInvalidLong));
                         this.statusTextView.setTag("windowBackgroundWhiteRedText4");
                         this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
                         UsernameHelpCell usernameHelpCell6 = this.helpCell;
@@ -1322,9 +1357,9 @@ public class ChangeUsernameActivity extends BaseFragment {
                         str2 = "";
                     }
                     if (str.equals(str2)) {
-                        TextView textView7 = this.statusTextView;
-                        if (textView7 != null) {
-                            textView7.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, str));
+                        LinkSpanDrawable.LinksTextView linksTextView7 = this.statusTextView;
+                        if (linksTextView7 != null) {
+                            linksTextView7.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, str));
                             this.statusTextView.setTag("windowBackgroundWhiteGreenText");
                             this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGreenText"));
                             UsernameHelpCell usernameHelpCell7 = this.helpCell;
@@ -1334,9 +1369,9 @@ public class ChangeUsernameActivity extends BaseFragment {
                         }
                         return true;
                     }
-                    TextView textView8 = this.statusTextView;
-                    if (textView8 != null) {
-                        textView8.setText(LocaleController.getString("UsernameChecking", R.string.UsernameChecking));
+                    LinkSpanDrawable.LinksTextView linksTextView8 = this.statusTextView;
+                    if (linksTextView8 != null) {
+                        linksTextView8.setText(LocaleController.getString("UsernameChecking", R.string.UsernameChecking));
                         this.statusTextView.setTag("windowBackgroundWhiteGrayText8");
                         this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
                         UsernameHelpCell usernameHelpCell8 = this.helpCell;
@@ -1362,39 +1397,39 @@ public class ChangeUsernameActivity extends BaseFragment {
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$checkUserName$5(final String str) {
-        TLRPC$TL_account_checkUsername tLRPC$TL_account_checkUsername = new TLRPC$TL_account_checkUsername();
+        final TLRPC$TL_account_checkUsername tLRPC$TL_account_checkUsername = new TLRPC$TL_account_checkUsername();
         tLRPC$TL_account_checkUsername.username = str;
         this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_checkUsername, new RequestDelegate() { // from class: org.telegram.ui.ChangeUsernameActivity$$ExternalSyntheticLambda8
             @Override // org.telegram.tgnet.RequestDelegate
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ChangeUsernameActivity.this.lambda$checkUserName$4(str, tLObject, tLRPC$TL_error);
+                ChangeUsernameActivity.this.lambda$checkUserName$4(str, tLRPC$TL_account_checkUsername, tLObject, tLRPC$TL_error);
             }
         }, 2);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkUserName$4(final String str, final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$checkUserName$4(final String str, final TLRPC$TL_account_checkUsername tLRPC$TL_account_checkUsername, final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ChangeUsernameActivity$$ExternalSyntheticLambda4
             @Override // java.lang.Runnable
             public final void run() {
-                ChangeUsernameActivity.this.lambda$checkUserName$3(str, tLRPC$TL_error, tLObject);
+                ChangeUsernameActivity.this.lambda$checkUserName$3(str, tLRPC$TL_error, tLObject, tLRPC$TL_account_checkUsername);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkUserName$3(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$checkUserName$3(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_account_checkUsername tLRPC$TL_account_checkUsername) {
         this.checkReqId = 0;
         String str2 = this.lastCheckName;
         if (str2 == null || !str2.equals(str)) {
             return;
         }
         if (tLRPC$TL_error == null && (tLObject instanceof TLRPC$TL_boolTrue)) {
-            TextView textView = this.statusTextView;
-            if (textView == null) {
+            LinkSpanDrawable.LinksTextView linksTextView = this.statusTextView;
+            if (linksTextView == null) {
                 return;
             }
-            textView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, str));
+            linksTextView.setText(LocaleController.formatString("UsernameAvailable", R.string.UsernameAvailable, str));
             this.statusTextView.setTag("windowBackgroundWhiteGreenText");
             this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGreenText"));
             UsernameHelpCell usernameHelpCell = this.helpCell;
@@ -1402,20 +1437,31 @@ public class ChangeUsernameActivity extends BaseFragment {
                 return;
             }
             usernameHelpCell.update();
-            return;
+        } else if (this.statusTextView == null) {
+        } else {
+            if (tLRPC$TL_error != null && "USERNAME_INVALID".equals(tLRPC$TL_error.text) && tLRPC$TL_account_checkUsername.username.length() == 4) {
+                this.statusTextView.setText(LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
+                this.statusTextView.setTag("windowBackgroundWhiteRedText4");
+                this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
+            } else if (tLRPC$TL_error != null && "USERNAME_PURCHASE_AVAILABLE".equals(tLRPC$TL_error.text)) {
+                if (tLRPC$TL_account_checkUsername.username.length() == 4) {
+                    this.statusTextView.setText(LocaleController.getString("UsernameInvalidShortPurchase", R.string.UsernameInvalidShortPurchase));
+                } else {
+                    this.statusTextView.setText(LocaleController.getString("UsernameInUsePurchase", R.string.UsernameInUsePurchase));
+                }
+                this.statusTextView.setTag("windowBackgroundWhiteYellowText");
+                this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteYellowText"));
+            } else {
+                this.statusTextView.setText(LocaleController.getString("UsernameInUse", R.string.UsernameInUse));
+                this.statusTextView.setTag("windowBackgroundWhiteRedText4");
+                this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
+            }
+            UsernameHelpCell usernameHelpCell2 = this.helpCell;
+            if (usernameHelpCell2 == null) {
+                return;
+            }
+            usernameHelpCell2.update();
         }
-        TextView textView2 = this.statusTextView;
-        if (textView2 == null) {
-            return;
-        }
-        textView2.setText(LocaleController.getString("UsernameInUse", R.string.UsernameInUse));
-        this.statusTextView.setTag("windowBackgroundWhiteRedText4");
-        this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
-        UsernameHelpCell usernameHelpCell2 = this.helpCell;
-        if (usernameHelpCell2 == null) {
-            return;
-        }
-        usernameHelpCell2.update();
     }
 
     /* JADX INFO: Access modifiers changed from: private */

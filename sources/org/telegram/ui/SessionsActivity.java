@@ -3,7 +3,9 @@ package org.telegram.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -76,6 +78,7 @@ import org.telegram.ui.Components.LinkSpanDrawable;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.UndoView;
+import org.telegram.ui.Components.voip.CellFlickerDrawable;
 import org.telegram.ui.SessionBottomSheet;
 import org.telegram.ui.SessionsActivity;
 /* loaded from: classes3.dex */
@@ -85,7 +88,9 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     private int currentSessionSectionRow;
     private int currentType;
     private EmptyTextProgressView emptyView;
+    private boolean fragmentOpened;
     private FlickerLoadingView globalFlickerLoadingView;
+    private boolean highlightLinkDesktopDevice;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     private boolean loading;
@@ -120,6 +125,11 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         this.currentType = i;
     }
 
+    public SessionsActivity setHighlightLinkDesktopDevice() {
+        this.highlightLinkDesktopDevice = true;
+        return this;
+    }
+
     @Override // org.telegram.ui.ActionBar.BaseFragment
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
@@ -133,6 +143,21 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.newSessionReceived);
+    }
+
+    @Override // org.telegram.ui.ActionBar.BaseFragment
+    public void onTransitionAnimationEnd(boolean z, boolean z2) {
+        super.onTransitionAnimationEnd(z, z2);
+        if (!z || z2) {
+            return;
+        }
+        this.fragmentOpened = true;
+        for (int i = 0; i < this.listView.getChildCount(); i++) {
+            View childAt = this.listView.getChildAt(i);
+            if (childAt instanceof ScanQRCodeView) {
+                ((ScanQRCodeView) childAt).buttonTextView.invalidate();
+            }
+        }
     }
 
     @Override // org.telegram.ui.ActionBar.BaseFragment
@@ -938,7 +963,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
             View textCell;
             if (i == 0) {
                 textCell = new TextCell(this.mContext);
@@ -1173,14 +1198,20 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
     /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes3.dex */
     public class ScanQRCodeView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
+        TextView buttonTextView;
+        CellFlickerDrawable flickerDrawable;
         BackupImageView imageView;
         TextView textView;
 
         public ScanQRCodeView(Context context) {
             super(context);
+            this.flickerDrawable = new CellFlickerDrawable();
             BackupImageView backupImageView = new BackupImageView(context);
             this.imageView = backupImageView;
             addView(backupImageView, LayoutHelper.createFrame(120, 120.0f, 1, 0.0f, 16.0f, 0.0f, 0.0f));
+            CellFlickerDrawable cellFlickerDrawable = this.flickerDrawable;
+            cellFlickerDrawable.repeatEnabled = false;
+            cellFlickerDrawable.animationSpeedScale = 1.2f;
             this.imageView.setOnClickListener(new View.OnClickListener(SessionsActivity.this) { // from class: org.telegram.ui.SessionsActivity.ScanQRCodeView.1
                 @Override // android.view.View.OnClickListener
                 public void onClick(View view) {
@@ -1226,24 +1257,39 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 spannableStringBuilder.setSpan(new URLSpanNoUnderline(LocaleController.getString("AuthAnotherWebClientUrl", R.string.AuthAnotherWebClientUrl)), indexOf3, indexOf4 - 1, 33);
             }
             this.textView.setText(spannableStringBuilder);
-            TextView textView = new TextView(context);
+            TextView textView = new TextView(context, SessionsActivity.this) { // from class: org.telegram.ui.SessionsActivity.ScanQRCodeView.2
+                @Override // android.view.View
+                public void draw(Canvas canvas) {
+                    super.draw(canvas);
+                    ScanQRCodeView scanQRCodeView = ScanQRCodeView.this;
+                    if (scanQRCodeView.flickerDrawable.progress > 1.0f || !SessionsActivity.this.highlightLinkDesktopDevice || !SessionsActivity.this.fragmentOpened) {
+                        return;
+                    }
+                    RectF rectF = AndroidUtilities.rectTmp;
+                    rectF.set(0.0f, 0.0f, getWidth(), getHeight());
+                    ScanQRCodeView.this.flickerDrawable.setParentWidth(getMeasuredWidth());
+                    ScanQRCodeView.this.flickerDrawable.draw(canvas, rectF, AndroidUtilities.dp(8.0f), null);
+                    invalidate();
+                }
+            };
+            this.buttonTextView = textView;
             textView.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
-            textView.setGravity(17);
-            textView.setTextSize(1, 14.0f);
-            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            this.buttonTextView.setGravity(17);
+            this.buttonTextView.setTextSize(1, 14.0f);
+            this.buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             SpannableStringBuilder spannableStringBuilder3 = new SpannableStringBuilder();
             spannableStringBuilder3.append((CharSequence) ".  ").append((CharSequence) LocaleController.getString("LinkDesktopDevice", R.string.LinkDesktopDevice));
             spannableStringBuilder3.setSpan(new ColoredImageSpan(ContextCompat.getDrawable(getContext(), R.drawable.msg_mini_qr)), 0, 1, 0);
-            textView.setText(spannableStringBuilder3);
-            textView.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-            textView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
-            textView.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.SessionsActivity$ScanQRCodeView$$ExternalSyntheticLambda0
+            this.buttonTextView.setText(spannableStringBuilder3);
+            this.buttonTextView.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+            this.buttonTextView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+            this.buttonTextView.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.SessionsActivity$ScanQRCodeView$$ExternalSyntheticLambda0
                 @Override // android.view.View.OnClickListener
                 public final void onClick(View view) {
                     SessionsActivity.ScanQRCodeView.this.lambda$new$0(view);
                 }
             });
-            addView(textView, LayoutHelper.createFrame(-1, 48.0f, 80, 16.0f, 15.0f, 16.0f, 16.0f));
+            addView(this.buttonTextView, LayoutHelper.createFrame(-1, 48.0f, 80, 16.0f, 15.0f, 16.0f, 16.0f));
             setSticker();
         }
 

@@ -539,7 +539,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
         this.parentContainer = groupCallRenderersContainer;
         this.attachedRenderers = arrayList;
         this.activity = groupCallActivity;
-        this.textureView.renderer.init(VideoCapturerDevice.getEglBase().mo2467getEglBaseContext(), new RendererCommon.RendererEvents() { // from class: org.telegram.ui.Components.voip.GroupCallMiniTextureView.2
+        this.textureView.renderer.init(VideoCapturerDevice.getEglBase().mo2460getEglBaseContext(), new RendererCommon.RendererEvents() { // from class: org.telegram.ui.Components.voip.GroupCallMiniTextureView.2
             @Override // org.webrtc.RendererCommon.RendererEvents
             public void onFrameResolutionChanged(int i, int i2, int i3) {
             }

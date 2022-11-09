@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -31,6 +30,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TopicExceptionCell;
+import org.telegram.ui.Components.ListView.AdapterWithDiffUtils;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.NotificationsSettingsActivity;
 import org.telegram.ui.ProfileNotificationsActivity;
@@ -108,7 +108,7 @@ public class TopicsNotifySettingsFragments extends BaseFragment {
                 TopicsNotifySettingsFragments.this.presentFragment(topicsFragment);
             }
             if (TopicsNotifySettingsFragments.this.items.get(i).viewType == 2) {
-                TLRPC$TL_forumTopic tLRPC$TL_forumTopic = TopicsNotifySettingsFragments.this.items.get(i).object;
+                TLRPC$TL_forumTopic tLRPC$TL_forumTopic = TopicsNotifySettingsFragments.this.items.get(i).topic;
                 Bundle bundle2 = new Bundle();
                 bundle2.putLong("dialog_id", TopicsNotifySettingsFragments.this.dialogId);
                 bundle2.putInt("topic_id", tLRPC$TL_forumTopic.id);
@@ -230,11 +230,10 @@ public class TopicsNotifySettingsFragments extends BaseFragment {
 
     /* JADX INFO: Access modifiers changed from: private */
     public void updateRows() {
-        final ArrayList arrayList;
+        ArrayList<? extends AdapterWithDiffUtils.Item> arrayList;
         int i = 0;
-        boolean z = !this.isPaused && this.adapter != null;
-        if (z) {
-            arrayList = new ArrayList();
+        if (!this.isPaused && this.adapter != null) {
+            arrayList = new ArrayList<>();
             arrayList.addAll(this.items);
         } else {
             arrayList = null;
@@ -260,31 +259,7 @@ public class TopicsNotifySettingsFragments extends BaseFragment {
         this.items.add(new Item(3, null));
         Adapter adapter = this.adapter;
         if (adapter != null) {
-            if (!z) {
-                adapter.notifyDataSetChanged();
-            } else {
-                DiffUtil.calculateDiff(new DiffUtil.Callback() { // from class: org.telegram.ui.TopicsNotifySettingsFragments.3
-                    @Override // androidx.recyclerview.widget.DiffUtil.Callback
-                    public boolean areContentsTheSame(int i3, int i4) {
-                        return false;
-                    }
-
-                    @Override // androidx.recyclerview.widget.DiffUtil.Callback
-                    public int getOldListSize() {
-                        return arrayList.size();
-                    }
-
-                    @Override // androidx.recyclerview.widget.DiffUtil.Callback
-                    public int getNewListSize() {
-                        return TopicsNotifySettingsFragments.this.items.size();
-                    }
-
-                    @Override // androidx.recyclerview.widget.DiffUtil.Callback
-                    public boolean areItemsTheSame(int i3, int i4) {
-                        return TopicsNotifySettingsFragments.this.items.get(i4).compare((Item) arrayList.get(i3));
-                    }
-                }).dispatchUpdatesTo(this.adapter);
-            }
+            adapter.setItems(arrayList, this.items);
         }
     }
 
@@ -294,13 +269,13 @@ public class TopicsNotifySettingsFragments extends BaseFragment {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes3.dex */
-    public class Adapter extends RecyclerListView.SelectionAdapter {
+    public class Adapter extends AdapterWithDiffUtils {
         private Adapter() {
         }
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextCell textCell = null;
             if (i == 1) {
                 TextCell textCell2 = new TextCell(viewGroup.getContext());
@@ -330,7 +305,7 @@ public class TopicsNotifySettingsFragments extends BaseFragment {
             if (TopicsNotifySettingsFragments.this.items.get(i).viewType == 2) {
                 TopicExceptionCell topicExceptionCell = (TopicExceptionCell) viewHolder.itemView;
                 TopicsNotifySettingsFragments topicsNotifySettingsFragments = TopicsNotifySettingsFragments.this;
-                topicExceptionCell.setTopic(topicsNotifySettingsFragments.dialogId, topicsNotifySettingsFragments.items.get(i).object);
+                topicExceptionCell.setTopic(topicsNotifySettingsFragments.dialogId, topicsNotifySettingsFragments.items.get(i).topic);
                 boolean z = true;
                 if (i != TopicsNotifySettingsFragments.this.items.size() - 1 && TopicsNotifySettingsFragments.this.items.get(i + 1).viewType != 2) {
                     z = false;
@@ -357,19 +332,28 @@ public class TopicsNotifySettingsFragments extends BaseFragment {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes3.dex */
-    public class Item {
-        final TLRPC$TL_forumTopic object;
-        final int viewType;
+    public class Item extends AdapterWithDiffUtils.Item {
+        final TLRPC$TL_forumTopic topic;
 
         private Item(TopicsNotifySettingsFragments topicsNotifySettingsFragments, int i, TLRPC$TL_forumTopic tLRPC$TL_forumTopic) {
-            this.viewType = i;
-            this.object = tLRPC$TL_forumTopic;
+            super(i, false);
+            this.topic = tLRPC$TL_forumTopic;
         }
 
-        boolean compare(Item item) {
+        public boolean equals(Object obj) {
             TLRPC$TL_forumTopic tLRPC$TL_forumTopic;
-            TLRPC$TL_forumTopic tLRPC$TL_forumTopic2;
-            return this.viewType == item.viewType && (tLRPC$TL_forumTopic = this.object) != null && (tLRPC$TL_forumTopic2 = item.object) != null && tLRPC$TL_forumTopic.id == tLRPC$TL_forumTopic2.id;
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || Item.class != obj.getClass()) {
+                return false;
+            }
+            Item item = (Item) obj;
+            if (this.viewType != item.viewType) {
+                return false;
+            }
+            TLRPC$TL_forumTopic tLRPC$TL_forumTopic2 = this.topic;
+            return tLRPC$TL_forumTopic2 == null || (tLRPC$TL_forumTopic = item.topic) == null || tLRPC$TL_forumTopic2.id == tLRPC$TL_forumTopic.id;
         }
     }
 }

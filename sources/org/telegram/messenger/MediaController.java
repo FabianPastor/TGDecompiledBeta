@@ -4558,14 +4558,15 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:76:0x00c3 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:78:0x00c4 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Unsupported multi-entry loop pattern (BACK_EDGE: B:65:0x00be -> B:76:0x00c1). Please submit an issue!!! */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public static java.lang.String getStickerExt(android.net.Uri r8) {
         /*
-            Method dump skipped, instructions count: 204
+            Method dump skipped, instructions count: 205
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.getStickerExt(android.net.Uri):java.lang.String");

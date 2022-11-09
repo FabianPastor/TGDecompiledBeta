@@ -523,6 +523,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$new$0(View view) {
             this.preferences.edit().putBoolean("translate_button", !getValue()).apply();
+            NotificationCenter.getInstance(((BaseFragment) LanguageSelectActivity.this).currentAccount).postNotificationName(NotificationCenter.updateSearchSettings, new Object[0]);
         }
 
         /* JADX INFO: Access modifiers changed from: private */
@@ -713,7 +714,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextRadioCell textRadioCell;
             View view;
             if (i == 0) {

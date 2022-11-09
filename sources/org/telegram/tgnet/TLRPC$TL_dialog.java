@@ -1,7 +1,13 @@
 package org.telegram.tgnet;
+
+import org.telegram.messenger.MessagesController;
 /* loaded from: classes.dex */
 public class TLRPC$TL_dialog extends TLRPC$Dialog {
     public static int constructor = -NUM;
+
+    public TLRPC$TL_dialog() {
+        MessagesController.stableIdPointer++;
+    }
 
     @Override // org.telegram.tgnet.TLObject
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {

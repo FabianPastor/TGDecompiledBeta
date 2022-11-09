@@ -88,6 +88,7 @@ public class FileLog {
         try {
             String str3 = "requestMsgId=" + j + " requestingTime=" + (System.currentTimeMillis() - j2) + " request_token=" + i;
             getInstance().tlStreamWriter.write(getInstance().dateFormat.format(j3) + " " + str3);
+            getInstance().tlStreamWriter.write("\n");
             getInstance().tlStreamWriter.write(str);
             getInstance().tlStreamWriter.write("\n");
             getInstance().tlStreamWriter.write(str2);
@@ -125,6 +126,7 @@ public class FileLog {
     public static /* synthetic */ void lambda$dumpUnparsedMessage$1(long j, String str, long j2) {
         try {
             getInstance().tlStreamWriter.write(getInstance().dateFormat.format(j));
+            getInstance().tlStreamWriter.write("\n");
             getInstance().tlStreamWriter.write(str);
             getInstance().tlStreamWriter.write("\n\n");
             getInstance().tlStreamWriter.flush();

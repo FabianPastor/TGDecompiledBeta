@@ -52,6 +52,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
     FrameLayout content;
     int contentHeight;
     boolean enterAnimationIsRunning;
+    private boolean forceAbout;
     private int gradientAlpha;
     private final boolean onlySelectedType;
     private PremiumButtonView premiumButtonView;
@@ -202,7 +203,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
 
             @Override // androidx.viewpager.widget.PagerAdapter
             /* renamed from: instantiateItem */
-            public Object mo1633instantiateItem(ViewGroup viewGroup, int i4) {
+            public Object mo1613instantiateItem(ViewGroup viewGroup, int i4) {
                 PremiumFeatureBottomSheet premiumFeatureBottomSheet = PremiumFeatureBottomSheet.this;
                 ViewPage viewPage = new ViewPage(premiumFeatureBottomSheet.getContext(), i4);
                 viewGroup.addView(viewPage);
@@ -422,7 +423,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         if (baseFragment != null && baseFragment.getVisibleDialog() != null) {
             baseFragment.getVisibleDialog().dismiss();
         }
-        if (z && baseFragment != null) {
+        if ((z || this.forceAbout) && baseFragment != null) {
             baseFragment.presentFragment(new PremiumPreviewFragment(PremiumPreviewFragment.featureTypeToServerString(premiumFeatureData.type)));
         } else {
             PremiumPreviewFragment.buyPremium(baseFragment, this.selectedTier, PremiumPreviewFragment.featureTypeToServerString(premiumFeatureData.type));
@@ -435,25 +436,31 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         dismiss();
     }
 
+    public PremiumFeatureBottomSheet setForceAbout() {
+        this.forceAbout = true;
+        this.premiumButtonView.clearOverlayText();
+        setButtonText();
+        return this;
+    }
+
     private void setButtonText() {
-        if (this.onlySelectedType) {
+        if (this.forceAbout) {
+            this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.AboutTelegramPremium));
+        } else if (this.onlySelectedType) {
             int i = this.startType;
             if (i == 4) {
                 this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.UnlockPremiumReactions));
                 this.premiumButtonView.setIcon(R.raw.unlock_icon);
-                return;
             } else if (i == 3 || i == 2 || i == 9 || i == 8) {
                 this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.AboutTelegramPremium));
-                return;
             } else if (i != 10) {
-                return;
             } else {
                 this.premiumButtonView.buttonTextView.setText(LocaleController.getString(R.string.UnlockPremiumIcons));
                 this.premiumButtonView.setIcon(R.raw.unlock_icon);
-                return;
             }
+        } else {
+            this.premiumButtonView.buttonTextView.setText(PremiumPreviewFragment.getPremiumButtonText(this.currentAccount, this.selectedTier));
         }
-        this.premiumButtonView.buttonTextView.setText(PremiumPreviewFragment.getPremiumButtonText(this.currentAccount, this.selectedTier));
     }
 
     @Override // org.telegram.ui.ActionBar.BottomSheet, android.app.Dialog

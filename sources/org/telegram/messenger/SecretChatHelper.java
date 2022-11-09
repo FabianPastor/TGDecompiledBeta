@@ -930,15 +930,15 @@ public class SecretChatHelper extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.encryptedChatUpdated, tLRPC$EncryptedChat);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:309:0x07da  */
-    /* JADX WARN: Removed duplicated region for block: B:310:0x07ea  */
+    /* JADX WARN: Removed duplicated region for block: B:309:0x07db  */
+    /* JADX WARN: Removed duplicated region for block: B:310:0x07eb  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public org.telegram.tgnet.TLRPC$Message processDecryptedObject(org.telegram.tgnet.TLRPC$EncryptedChat r18, org.telegram.tgnet.TLRPC$EncryptedFile r19, int r20, org.telegram.tgnet.TLObject r21, boolean r22) {
         /*
-            Method dump skipped, instructions count: 2376
+            Method dump skipped, instructions count: 2377
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SecretChatHelper.processDecryptedObject(org.telegram.tgnet.TLRPC$EncryptedChat, org.telegram.tgnet.TLRPC$EncryptedFile, int, org.telegram.tgnet.TLObject, boolean):org.telegram.tgnet.TLRPC$Message");

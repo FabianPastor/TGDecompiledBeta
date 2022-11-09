@@ -59,6 +59,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
     }
 
     public DialogsItemAnimator(RecyclerListView recyclerListView) {
+        setSupportsChangeAnimations(false);
         this.listView = recyclerListView;
     }
 

@@ -83,7 +83,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesController$$ExternalSyntheticLambda224;
+import org.telegram.messenger.MessagesController$$ExternalSyntheticLambda226;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
@@ -294,6 +294,7 @@ public class Theme {
     public static Paint chat_textSearchSelectionPaint = null;
     public static Paint chat_timeBackgroundPaint = null;
     public static TextPaint chat_timePaint = null;
+    public static TextPaint chat_topicTextPaint = null;
     public static TextPaint chat_unlockExtendedMediaTextPaint = null;
     public static Paint chat_urlPaint = null;
     public static Paint checkboxSquare_backgroundPaint = null;
@@ -322,6 +323,7 @@ public class Theme {
     public static Drawable dialogs_errorDrawable = null;
     public static Paint dialogs_errorPaint = null;
     public static ScamDrawable dialogs_fakeDrawable = null;
+    public static Drawable dialogs_forum_arrowDrawable = null;
     public static Drawable dialogs_halfCheckDrawable = null;
     public static RLottieDrawable dialogs_hidePsaDrawable = null;
     public static boolean dialogs_hidePsaDrawableRecolored = false;
@@ -461,6 +463,7 @@ public class Theme {
     public static Path[] chat_filePath = new Path[2];
     public static Path[] chat_updatePath = new Path[3];
     public static String[] keys_avatar_background = {"avatar_backgroundRed", "avatar_backgroundOrange", "avatar_backgroundViolet", "avatar_backgroundGreen", "avatar_backgroundCyan", "avatar_backgroundBlue", "avatar_backgroundPink"};
+    public static String[] keys_avatar_background2 = {"avatar_background2Red", "avatar_background2Orange", "avatar_background2Violet", "avatar_background2Green", "avatar_background2Cyan", "avatar_background2Blue", "avatar_background2Pink"};
     public static String[] keys_avatar_nameInMessage = {"avatar_nameInMessageRed", "avatar_nameInMessageOrange", "avatar_nameInMessageViolet", "avatar_nameInMessageGreen", "avatar_nameInMessageCyan", "avatar_nameInMessageBlue", "avatar_nameInMessagePink"};
     private static final HashMap<String, Drawable> defaultChatDrawables = new HashMap<>();
     private static final HashMap<String, String> defaultChatDrawableColorKeys = new HashMap<>();
@@ -2586,17 +2589,17 @@ public class Theme {
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:150:0x37e6 A[Catch: Exception -> 0x39d0, TryCatch #3 {Exception -> 0x39d0, blocks: (B:38:0x3492, B:40:0x34ab, B:50:0x34ec, B:52:0x34fb, B:60:0x3527, B:62:0x352b, B:64:0x3533, B:65:0x3545, B:66:0x3551, B:68:0x3557, B:70:0x3561, B:72:0x3565, B:74:0x3594, B:76:0x3598, B:148:0x37e0, B:150:0x37e6, B:151:0x37ef, B:153:0x37f3, B:155:0x37fb, B:157:0x37ff, B:159:0x3803, B:160:0x3805, B:162:0x380f, B:131:0x36cc, B:134:0x36ef, B:136:0x36fa, B:138:0x3706, B:140:0x3712, B:144:0x371e, B:146:0x37c5, B:141:0x3718, B:167:0x3827, B:168:0x382d, B:172:0x3838, B:174:0x388f, B:176:0x389d, B:178:0x38ab, B:180:0x38b9, B:179:0x38b2, B:175:0x3896, B:53:0x350a, B:55:0x3512, B:57:0x351b, B:59:0x3525, B:41:0x34ba, B:43:0x34c2, B:45:0x34ca, B:47:0x34d4, B:49:0x34dc, B:78:0x35a9, B:81:0x35bf, B:83:0x35d4, B:84:0x35da, B:86:0x35ec, B:89:0x35fc, B:93:0x3608, B:97:0x361f, B:101:0x3630, B:103:0x363f, B:106:0x3648, B:108:0x365b, B:111:0x3664, B:113:0x366b, B:114:0x367b, B:116:0x367f, B:117:0x3683, B:119:0x368e, B:121:0x369a, B:98:0x3626, B:94:0x3612), top: B:221:0x3492 }] */
-    /* JADX WARN: Removed duplicated region for block: B:157:0x37ff A[Catch: Exception -> 0x39d0, TryCatch #3 {Exception -> 0x39d0, blocks: (B:38:0x3492, B:40:0x34ab, B:50:0x34ec, B:52:0x34fb, B:60:0x3527, B:62:0x352b, B:64:0x3533, B:65:0x3545, B:66:0x3551, B:68:0x3557, B:70:0x3561, B:72:0x3565, B:74:0x3594, B:76:0x3598, B:148:0x37e0, B:150:0x37e6, B:151:0x37ef, B:153:0x37f3, B:155:0x37fb, B:157:0x37ff, B:159:0x3803, B:160:0x3805, B:162:0x380f, B:131:0x36cc, B:134:0x36ef, B:136:0x36fa, B:138:0x3706, B:140:0x3712, B:144:0x371e, B:146:0x37c5, B:141:0x3718, B:167:0x3827, B:168:0x382d, B:172:0x3838, B:174:0x388f, B:176:0x389d, B:178:0x38ab, B:180:0x38b9, B:179:0x38b2, B:175:0x3896, B:53:0x350a, B:55:0x3512, B:57:0x351b, B:59:0x3525, B:41:0x34ba, B:43:0x34c2, B:45:0x34ca, B:47:0x34d4, B:49:0x34dc, B:78:0x35a9, B:81:0x35bf, B:83:0x35d4, B:84:0x35da, B:86:0x35ec, B:89:0x35fc, B:93:0x3608, B:97:0x361f, B:101:0x3630, B:103:0x363f, B:106:0x3648, B:108:0x365b, B:111:0x3664, B:113:0x366b, B:114:0x367b, B:116:0x367f, B:117:0x3683, B:119:0x368e, B:121:0x369a, B:98:0x3626, B:94:0x3612), top: B:221:0x3492 }] */
-    /* JADX WARN: Removed duplicated region for block: B:158:0x3802  */
-    /* JADX WARN: Removed duplicated region for block: B:162:0x380f A[Catch: Exception -> 0x39d0, TryCatch #3 {Exception -> 0x39d0, blocks: (B:38:0x3492, B:40:0x34ab, B:50:0x34ec, B:52:0x34fb, B:60:0x3527, B:62:0x352b, B:64:0x3533, B:65:0x3545, B:66:0x3551, B:68:0x3557, B:70:0x3561, B:72:0x3565, B:74:0x3594, B:76:0x3598, B:148:0x37e0, B:150:0x37e6, B:151:0x37ef, B:153:0x37f3, B:155:0x37fb, B:157:0x37ff, B:159:0x3803, B:160:0x3805, B:162:0x380f, B:131:0x36cc, B:134:0x36ef, B:136:0x36fa, B:138:0x3706, B:140:0x3712, B:144:0x371e, B:146:0x37c5, B:141:0x3718, B:167:0x3827, B:168:0x382d, B:172:0x3838, B:174:0x388f, B:176:0x389d, B:178:0x38ab, B:180:0x38b9, B:179:0x38b2, B:175:0x3896, B:53:0x350a, B:55:0x3512, B:57:0x351b, B:59:0x3525, B:41:0x34ba, B:43:0x34c2, B:45:0x34ca, B:47:0x34d4, B:49:0x34dc, B:78:0x35a9, B:81:0x35bf, B:83:0x35d4, B:84:0x35da, B:86:0x35ec, B:89:0x35fc, B:93:0x3608, B:97:0x361f, B:101:0x3630, B:103:0x363f, B:106:0x3648, B:108:0x365b, B:111:0x3664, B:113:0x366b, B:114:0x367b, B:116:0x367f, B:117:0x3683, B:119:0x368e, B:121:0x369a, B:98:0x3626, B:94:0x3612), top: B:221:0x3492 }] */
-    /* JADX WARN: Removed duplicated region for block: B:231:0x381d A[SYNTHETIC] */
-    /* JADX WARN: Type inference failed for: r1v75, types: [boolean] */
-    /* JADX WARN: Type inference failed for: r1v81 */
-    /* JADX WARN: Type inference failed for: r1v84 */
+    /* JADX WARN: Removed duplicated region for block: B:150:0x3903 A[Catch: Exception -> 0x3aed, TryCatch #1 {Exception -> 0x3aed, blocks: (B:38:0x35af, B:40:0x35c8, B:50:0x3609, B:52:0x3618, B:60:0x3644, B:62:0x3648, B:64:0x3650, B:65:0x3662, B:66:0x366e, B:68:0x3674, B:70:0x367e, B:72:0x3682, B:74:0x36b1, B:76:0x36b5, B:148:0x38fd, B:150:0x3903, B:151:0x390c, B:153:0x3910, B:155:0x3918, B:157:0x391c, B:159:0x3920, B:160:0x3922, B:162:0x392c, B:131:0x37e9, B:134:0x380c, B:136:0x3817, B:138:0x3823, B:140:0x382f, B:144:0x383b, B:146:0x38e2, B:141:0x3835, B:167:0x3944, B:168:0x394a, B:172:0x3955, B:174:0x39ac, B:176:0x39ba, B:178:0x39c8, B:180:0x39d6, B:179:0x39cf, B:175:0x39b3, B:53:0x3627, B:55:0x362f, B:57:0x3638, B:59:0x3642, B:41:0x35d7, B:43:0x35df, B:45:0x35e7, B:47:0x35f1, B:49:0x35f9, B:78:0x36c6, B:124:0x37d0, B:125:0x37d5), top: B:219:0x35af }] */
+    /* JADX WARN: Removed duplicated region for block: B:157:0x391c A[Catch: Exception -> 0x3aed, TryCatch #1 {Exception -> 0x3aed, blocks: (B:38:0x35af, B:40:0x35c8, B:50:0x3609, B:52:0x3618, B:60:0x3644, B:62:0x3648, B:64:0x3650, B:65:0x3662, B:66:0x366e, B:68:0x3674, B:70:0x367e, B:72:0x3682, B:74:0x36b1, B:76:0x36b5, B:148:0x38fd, B:150:0x3903, B:151:0x390c, B:153:0x3910, B:155:0x3918, B:157:0x391c, B:159:0x3920, B:160:0x3922, B:162:0x392c, B:131:0x37e9, B:134:0x380c, B:136:0x3817, B:138:0x3823, B:140:0x382f, B:144:0x383b, B:146:0x38e2, B:141:0x3835, B:167:0x3944, B:168:0x394a, B:172:0x3955, B:174:0x39ac, B:176:0x39ba, B:178:0x39c8, B:180:0x39d6, B:179:0x39cf, B:175:0x39b3, B:53:0x3627, B:55:0x362f, B:57:0x3638, B:59:0x3642, B:41:0x35d7, B:43:0x35df, B:45:0x35e7, B:47:0x35f1, B:49:0x35f9, B:78:0x36c6, B:124:0x37d0, B:125:0x37d5), top: B:219:0x35af }] */
+    /* JADX WARN: Removed duplicated region for block: B:158:0x391f  */
+    /* JADX WARN: Removed duplicated region for block: B:162:0x392c A[Catch: Exception -> 0x3aed, TryCatch #1 {Exception -> 0x3aed, blocks: (B:38:0x35af, B:40:0x35c8, B:50:0x3609, B:52:0x3618, B:60:0x3644, B:62:0x3648, B:64:0x3650, B:65:0x3662, B:66:0x366e, B:68:0x3674, B:70:0x367e, B:72:0x3682, B:74:0x36b1, B:76:0x36b5, B:148:0x38fd, B:150:0x3903, B:151:0x390c, B:153:0x3910, B:155:0x3918, B:157:0x391c, B:159:0x3920, B:160:0x3922, B:162:0x392c, B:131:0x37e9, B:134:0x380c, B:136:0x3817, B:138:0x3823, B:140:0x382f, B:144:0x383b, B:146:0x38e2, B:141:0x3835, B:167:0x3944, B:168:0x394a, B:172:0x3955, B:174:0x39ac, B:176:0x39ba, B:178:0x39c8, B:180:0x39d6, B:179:0x39cf, B:175:0x39b3, B:53:0x3627, B:55:0x362f, B:57:0x3638, B:59:0x3642, B:41:0x35d7, B:43:0x35df, B:45:0x35e7, B:47:0x35f1, B:49:0x35f9, B:78:0x36c6, B:124:0x37d0, B:125:0x37d5), top: B:219:0x35af }] */
+    /* JADX WARN: Removed duplicated region for block: B:232:0x393a A[SYNTHETIC] */
+    /* JADX WARN: Type inference failed for: r1v76, types: [boolean] */
+    /* JADX WARN: Type inference failed for: r1v82 */
+    /* JADX WARN: Type inference failed for: r1v85 */
     static {
         /*
-            Method dump skipped, instructions count: 16504
+            Method dump skipped, instructions count: 16790
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.<clinit>():void");
@@ -3838,7 +3841,7 @@ public class Theme {
             org.telegram.ui.ActionBar.Theme.switchNightThemeDelay = r0     // Catch: java.lang.Exception -> La3
             long r0 = android.os.SystemClock.elapsedRealtime()     // Catch: java.lang.Exception -> La3
             org.telegram.ui.ActionBar.Theme.lastDelayUpdateTime = r0     // Catch: java.lang.Exception -> La3
-            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda224 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda224.INSTANCE     // Catch: java.lang.Exception -> La3
+            org.telegram.messenger.MessagesController$$ExternalSyntheticLambda226 r0 = org.telegram.messenger.MessagesController$$ExternalSyntheticLambda226.INSTANCE     // Catch: java.lang.Exception -> La3
             r1 = 2100(0x834, double:1.0375E-320)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)     // Catch: java.lang.Exception -> La3
         L5c:
@@ -3971,7 +3974,7 @@ public class Theme {
                 if (isCurrentThemeNight()) {
                     switchNightThemeDelay = 2000;
                     lastDelayUpdateTime = SystemClock.elapsedRealtime();
-                    AndroidUtilities.runOnUIThread(MessagesController$$ExternalSyntheticLambda224.INSTANCE, 2100L);
+                    AndroidUtilities.runOnUIThread(MessagesController$$ExternalSyntheticLambda226.INSTANCE, 2100L);
                 }
             }
             currentTheme = themeInfo;
@@ -5392,6 +5395,7 @@ public class Theme {
             dialogs_mentionDrawable = resources.getDrawable(R.drawable.mentionchatslist);
             dialogs_reactionsMentionDrawable = resources.getDrawable(R.drawable.reactionchatslist);
             dialogs_pinnedDrawable = resources.getDrawable(R.drawable.list_pin);
+            dialogs_forum_arrowDrawable = resources.getDrawable(R.drawable.msg_mini_forumarrow);
             moveUpDrawable = resources.getDrawable(R.drawable.preview_arrow);
             RectF rectF = new RectF();
             chat_updatePath[0] = new Path();
@@ -5467,6 +5471,7 @@ public class Theme {
         setDrawableColorByKey(dialogs_muteDrawable, "chats_muteIcon");
         setDrawableColorByKey(dialogs_unmuteDrawable, "chats_muteIcon");
         setDrawableColorByKey(dialogs_mentionDrawable, "chats_mentionIcon");
+        setDrawableColorByKey(dialogs_forum_arrowDrawable, "chats_message");
         setDrawableColorByKey(dialogs_reactionsMentionDrawable, "chats_mentionIcon");
         setDrawableColorByKey(dialogs_verifiedDrawable, "chats_verifiedBackground");
         setDrawableColorByKey(dialogs_verifiedCheckDrawable, "chats_verifiedCheck");
@@ -5510,6 +5515,9 @@ public class Theme {
                 chat_replyNamePaint = textPaint3;
                 textPaint3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 chat_replyTextPaint = new TextPaint(1);
+                TextPaint textPaint4 = new TextPaint(1);
+                chat_topicTextPaint = textPaint4;
+                textPaint4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 chat_forwardNamePaint = new TextPaint(1);
                 chat_adminPaint = new TextPaint(1);
                 chat_timePaint = new TextPaint(1);
@@ -5533,8 +5541,10 @@ public class Theme {
                     chat_namePaint.setTextSize(AndroidUtilities.dp(f));
                     chat_replyNamePaint.setTextSize(AndroidUtilities.dp(f));
                     chat_replyTextPaint.setTextSize(AndroidUtilities.dp(f));
+                    float f2 = f - 1.0f;
+                    chat_topicTextPaint.setTextSize(AndroidUtilities.dp(f2));
                     chat_forwardNamePaint.setTextSize(AndroidUtilities.dp(f));
-                    chat_adminPaint.setTextSize(AndroidUtilities.dp(f - 1.0f));
+                    chat_adminPaint.setTextSize(AndroidUtilities.dp(f2));
                 }
             }
         }
@@ -5608,10 +5618,13 @@ public class Theme {
             chat_replyNamePaint = textPaint10;
             textPaint10.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_replyTextPaint = new TextPaint(1);
-            chat_commentTextPaint = new TextPaint(1);
             TextPaint textPaint11 = new TextPaint(1);
-            chat_instantViewPaint = textPaint11;
+            chat_topicTextPaint = textPaint11;
             textPaint11.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            chat_commentTextPaint = new TextPaint(1);
+            TextPaint textPaint12 = new TextPaint(1);
+            chat_instantViewPaint = textPaint12;
+            textPaint12.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             Paint paint7 = new Paint(1);
             chat_instantViewRectPaint = paint7;
             paint7.setStyle(Paint.Style.STROKE);
@@ -5627,19 +5640,19 @@ public class Theme {
             chat_statusRecordPaint = paint9;
             paint9.setStyle(Paint.Style.STROKE);
             chat_statusRecordPaint.setStrokeCap(Paint.Cap.ROUND);
-            TextPaint textPaint12 = new TextPaint(1);
-            chat_actionTextPaint = textPaint12;
-            textPaint12.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             TextPaint textPaint13 = new TextPaint(1);
-            chat_unlockExtendedMediaTextPaint = textPaint13;
+            chat_actionTextPaint = textPaint13;
             textPaint13.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            TextPaint textPaint14 = new TextPaint(1);
+            chat_unlockExtendedMediaTextPaint = textPaint14;
+            textPaint14.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             Paint paint10 = new Paint(1);
             chat_actionBackgroundGradientDarkenPaint = paint10;
             paint10.setColor(NUM);
             chat_timeBackgroundPaint = new Paint(1);
-            TextPaint textPaint14 = new TextPaint(1);
-            chat_contextResult_titleTextPaint = textPaint14;
-            textPaint14.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            TextPaint textPaint15 = new TextPaint(1);
+            chat_contextResult_titleTextPaint = textPaint15;
+            textPaint15.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_contextResult_descriptionTextPaint = new TextPaint(1);
             chat_composeBackgroundPaint = new Paint();
             new Paint(1);
@@ -5982,8 +5995,10 @@ public class Theme {
         chat_namePaint.setTextSize(AndroidUtilities.dp(f));
         chat_replyNamePaint.setTextSize(AndroidUtilities.dp(f));
         chat_replyTextPaint.setTextSize(AndroidUtilities.dp(f));
+        float f2 = f - 1.0f;
+        chat_topicTextPaint.setTextSize(AndroidUtilities.dp(f2));
         chat_forwardNamePaint.setTextSize(AndroidUtilities.dp(f));
-        chat_adminPaint.setTextSize(AndroidUtilities.dp(f - 1.0f));
+        chat_adminPaint.setTextSize(AndroidUtilities.dp(f2));
         int i27 = SharedConfig.fontSize;
         chat_timePaint.setTextSize(AndroidUtilities.dp(12.0f));
         chat_gamePaint.setTextSize(AndroidUtilities.dp(13.0f));

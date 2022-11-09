@@ -2620,18 +2620,30 @@ public class MessagesStorage extends BaseController {
     }
 
     private void saveTopicsInternal(long j, List<TLRPC$TL_forumTopic> list, boolean z, boolean z2) {
+        int i;
+        int i2;
         SQLitePreparedStatement sQLitePreparedStatement = null;
         try {
             try {
                 HashSet hashSet = new HashSet();
-                for (int i = 0; i < list.size(); i++) {
+                HashMap hashMap = new HashMap();
+                int i3 = 0;
+                while (true) {
+                    i = 2;
+                    if (i3 >= list.size()) {
+                        break;
+                    }
                     SQLiteDatabase sQLiteDatabase = this.database;
-                    SQLiteCursor queryFinalized = sQLiteDatabase.queryFinalized("SELECT did FROM topics WHERE did = " + j + " AND topic_id = " + list.get(i).id, new Object[0]);
+                    SQLiteCursor queryFinalized = sQLiteDatabase.queryFinalized("SELECT did, pinned FROM topics WHERE did = " + j + " AND topic_id = " + list.get(i3).id, new Object[0]);
                     boolean next = queryFinalized.next();
+                    if (next) {
+                        hashMap.put(Integer.valueOf(i3), Integer.valueOf(queryFinalized.intValue(2)));
+                    }
                     queryFinalized.dispose();
                     if (next) {
-                        hashSet.add(Integer.valueOf(i));
+                        hashSet.add(Integer.valueOf(i3));
                     }
+                    i3++;
                 }
                 if (z) {
                     SQLiteDatabase sQLiteDatabase2 = this.database;
@@ -2659,12 +2671,13 @@ public class MessagesStorage extends BaseController {
                         throw th;
                     }
                 }
-                for (int i2 = 0; i2 < list.size(); i2++) {
-                    TLRPC$TL_forumTopic tLRPC$TL_forumTopic = list.get(i2);
-                    boolean contains = hashSet.contains(Integer.valueOf(i2));
+                int i4 = 0;
+                while (i4 < list.size()) {
+                    TLRPC$TL_forumTopic tLRPC$TL_forumTopic = list.get(i4);
+                    boolean contains = hashSet.contains(Integer.valueOf(i4));
                     executeFast.requery();
                     executeFast.bindLong(1, j);
-                    executeFast.bindInteger(2, tLRPC$TL_forumTopic.id);
+                    executeFast.bindInteger(i, tLRPC$TL_forumTopic.id);
                     NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$TL_forumTopic.getObjectSize());
                     tLRPC$TL_forumTopic.serializeToStream(nativeByteBuffer);
                     executeFast.bindByteBuffer(3, nativeByteBuffer);
@@ -2677,16 +2690,22 @@ public class MessagesStorage extends BaseController {
                     executeFast.bindInteger(8, tLRPC$TL_forumTopic.unread_mentions_count);
                     executeFast.bindInteger(9, tLRPC$TL_forumTopic.unread_reactions_count);
                     executeFast.bindInteger(10, tLRPC$TL_forumTopic.read_outbox_max_id);
-                    executeFast.bindInteger(11, tLRPC$TL_forumTopic.pinned ? 1 : 0);
+                    if (tLRPC$TL_forumTopic.isShort && hashMap.containsKey(Integer.valueOf(i4))) {
+                        executeFast.bindInteger(11, ((Integer) hashMap.get(Integer.valueOf(i4))).intValue());
+                    } else {
+                        executeFast.bindInteger(11, tLRPC$TL_forumTopic.pinned ? tLRPC$TL_forumTopic.pinnedOrder + 1 : 0);
+                    }
                     executeFast.step();
                     nativeByteBuffer2.reuse();
                     nativeByteBuffer.reuse();
                     if (contains) {
-                        int i3 = tLRPC$TL_forumTopic.top_message;
-                        closeHolesInTable("messages_holes_topics", j, i3, i3, tLRPC$TL_forumTopic.id);
-                        int i4 = tLRPC$TL_forumTopic.top_message;
-                        closeHolesInMedia(j, i4, i4, -1, 0);
+                        int i5 = tLRPC$TL_forumTopic.top_message;
+                        i2 = i4;
+                        closeHolesInTable("messages_holes_topics", j, i5, i5, tLRPC$TL_forumTopic.id);
+                        int i6 = tLRPC$TL_forumTopic.top_message;
+                        closeHolesInMedia(j, i6, i6, -1, 0);
                     } else {
+                        i2 = i4;
                         SQLiteDatabase sQLiteDatabase3 = this.database;
                         Locale locale = Locale.ENGLISH;
                         sQLiteDatabase3.executeFast(String.format(locale, "DELETE FROM messages_holes_topics WHERE uid = %d AND topic_id = %d", Long.valueOf(j), Integer.valueOf(tLRPC$TL_forumTopic.id))).stepThis().dispose();
@@ -2698,6 +2717,8 @@ public class MessagesStorage extends BaseController {
                         executeFast2.dispose();
                         executeFast2.dispose();
                     }
+                    i4 = i2 + 1;
+                    i = 2;
                 }
                 resetAllUnreadCounters(false);
                 if (executeFast != null) {
@@ -2753,8 +2774,11 @@ public class MessagesStorage extends BaseController {
                         }
                         if ((i & 4) != 0) {
                             tLRPC$TL_forumTopic2.pinned = tLRPC$TL_forumTopic.pinned;
+                            tLRPC$TL_forumTopic2.pinnedOrder = tLRPC$TL_forumTopic.pinnedOrder;
                         }
-                        boolean z = tLRPC$TL_forumTopic2.pinned;
+                        if (tLRPC$TL_forumTopic2.pinned) {
+                            i2 = tLRPC$TL_forumTopic2.pinnedOrder + 1;
+                        }
                         if ((i & 8) != 0) {
                             tLRPC$TL_forumTopic2.closed = tLRPC$TL_forumTopic.closed;
                         }
@@ -2764,9 +2788,6 @@ public class MessagesStorage extends BaseController {
                             NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$TL_forumTopic2.getObjectSize());
                             tLRPC$TL_forumTopic2.serializeToStream(nativeByteBuffer);
                             executeFast.bindByteBuffer(1, nativeByteBuffer);
-                            if (z) {
-                                i2 = 1;
-                            }
                             executeFast.bindInteger(2, i2);
                             executeFast.bindLong(3, j);
                             executeFast.bindInteger(4, tLRPC$TL_forumTopic2.id);
@@ -2828,17 +2849,17 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:149:0x02b8  */
-    /* JADX WARN: Removed duplicated region for block: B:154:0x02c4  */
-    /* JADX WARN: Removed duplicated region for block: B:187:0x01af A[SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:74:0x01a0 A[Catch: Exception -> 0x01a4, all -> 0x0295, TRY_LEAVE, TryCatch #8 {all -> 0x0295, blocks: (B:35:0x00e3, B:37:0x00ff, B:38:0x0105, B:40:0x010b, B:42:0x0116, B:44:0x0123, B:45:0x012e, B:48:0x0141, B:50:0x0147, B:51:0x0152, B:53:0x0158, B:55:0x015c, B:57:0x0160, B:59:0x0166, B:61:0x016a, B:63:0x016e, B:65:0x0175, B:67:0x017b, B:70:0x0197, B:72:0x019c, B:74:0x01a0, B:80:0x01a8, B:88:0x01bf, B:90:0x01cf, B:91:0x01d6, B:93:0x01dc, B:94:0x01e3, B:96:0x01f4, B:97:0x021f, B:99:0x0225, B:101:0x0230, B:103:0x023a, B:105:0x0242, B:107:0x024a, B:110:0x025d, B:112:0x0263, B:120:0x0279, B:125:0x0288, B:127:0x028d), top: B:162:0x00e3 }] */
+    /* JADX WARN: Removed duplicated region for block: B:153:0x02c9  */
+    /* JADX WARN: Removed duplicated region for block: B:158:0x02d5  */
+    /* JADX WARN: Removed duplicated region for block: B:191:0x01c0 A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:78:0x01b1 A[Catch: Exception -> 0x01b5, all -> 0x02a6, TRY_LEAVE, TryCatch #1 {all -> 0x02a6, blocks: (B:39:0x00f4, B:41:0x0110, B:42:0x0116, B:44:0x011c, B:46:0x0127, B:48:0x0134, B:49:0x013f, B:52:0x0152, B:54:0x0158, B:55:0x0163, B:57:0x0169, B:59:0x016d, B:61:0x0171, B:63:0x0177, B:65:0x017b, B:67:0x017f, B:69:0x0186, B:71:0x018c, B:74:0x01a8, B:76:0x01ad, B:78:0x01b1, B:84:0x01b9, B:92:0x01d0, B:94:0x01e0, B:95:0x01e7, B:97:0x01ed, B:98:0x01f4, B:100:0x0205, B:101:0x0230, B:103:0x0236, B:105:0x0241, B:107:0x024b, B:109:0x0253, B:111:0x025b, B:114:0x026e, B:116:0x0274, B:124:0x028a, B:129:0x0299, B:131:0x029e), top: B:164:0x00f4 }] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public /* synthetic */ void lambda$loadTopics$41(long r22, j$.util.function.Consumer r24) {
         /*
-            Method dump skipped, instructions count: 714
+            Method dump skipped, instructions count: 731
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$loadTopics$41(long, j$.util.function.Consumer):void");
@@ -8888,11 +8909,11 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:58:0x0173  */
-    /* JADX WARN: Removed duplicated region for block: B:60:0x0178  */
-    /* JADX WARN: Removed duplicated region for block: B:64:0x017f  */
-    /* JADX WARN: Removed duplicated region for block: B:66:0x0184  */
-    /* JADX WARN: Removed duplicated region for block: B:79:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:61:0x0181  */
+    /* JADX WARN: Removed duplicated region for block: B:63:0x0186  */
+    /* JADX WARN: Removed duplicated region for block: B:67:0x018d  */
+    /* JADX WARN: Removed duplicated region for block: B:69:0x0192  */
+    /* JADX WARN: Removed duplicated region for block: B:82:? A[RETURN, SYNTHETIC] */
     /* renamed from: updateRepliesMaxReadIdInternal */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -8900,7 +8921,7 @@ public class MessagesStorage extends BaseController {
     */
     public void lambda$updateRepliesMaxReadId$164(final long r19, final int r21, final int r22, int r23) {
         /*
-            Method dump skipped, instructions count: 392
+            Method dump skipped, instructions count: 406
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateRepliesMaxReadId$164(long, int, int, int):void");
@@ -10071,12 +10092,12 @@ public class MessagesStorage extends BaseController {
             if (tLRPC$MessageMedia.bytes.length != 0) {
                 return;
             }
-            tLRPC$MessageMedia.bytes = Utilities.intToBytes(148);
+            tLRPC$MessageMedia.bytes = Utilities.intToBytes(149);
         } else if (!(tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported)) {
         } else {
             TLRPC$TL_messageMediaUnsupported_old tLRPC$TL_messageMediaUnsupported_old = new TLRPC$TL_messageMediaUnsupported_old();
             tLRPC$Message.media = tLRPC$TL_messageMediaUnsupported_old;
-            tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(148);
+            tLRPC$TL_messageMediaUnsupported_old.bytes = Utilities.intToBytes(149);
             tLRPC$Message.flags |= 512;
         }
     }

@@ -131,9 +131,7 @@ import org.telegram.ui.Adapters.FiltersView;
 import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Cells.HeaderCell;
-import org.telegram.ui.Cells.HintDialogCell;
 import org.telegram.ui.Cells.ProfileSearchCell;
-import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AnimationProperties;
@@ -7632,91 +7630,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         updateVisibleRows(i, true);
     }
 
-    private void updateVisibleRows(int i, boolean z) {
-        if ((!this.dialogsListFrozen || (MessagesController.UPDATE_MASK_REORDER & i) != 0) && !this.isPaused) {
-            for (int i2 = 0; i2 < 3; i2++) {
-                RecyclerView recyclerView = null;
-                if (i2 == 2) {
-                    SearchViewPager searchViewPager = this.searchViewPager;
-                    if (searchViewPager != null) {
-                        recyclerView = searchViewPager.searchListView;
-                    }
-                } else {
-                    ViewPage[] viewPageArr = this.viewPages;
-                    if (viewPageArr != null) {
-                        if (i2 < viewPageArr.length) {
-                            recyclerView = viewPageArr[i2].listView;
-                        }
-                        if (recyclerView != null && this.viewPages[i2].getVisibility() != 0) {
-                        }
-                    }
-                }
-                if (recyclerView != null) {
-                    int childCount = recyclerView.getChildCount();
-                    for (int i3 = 0; i3 < childCount; i3++) {
-                        View childAt = recyclerView.getChildAt(i3);
-                        if ((childAt instanceof DialogCell) && recyclerView.getAdapter() != this.searchViewPager.dialogsSearchAdapter) {
-                            DialogCell dialogCell = (DialogCell) childAt;
-                            boolean z2 = true;
-                            if ((MessagesController.UPDATE_MASK_REORDER & i) != 0) {
-                                dialogCell.onReorderStateChanged(this.actionBar.isActionModeShowed(), true);
-                                if (this.dialogsListFrozen) {
-                                }
-                            }
-                            if ((MessagesController.UPDATE_MASK_CHECK & i) != 0) {
-                                if ((MessagesController.UPDATE_MASK_CHAT & i) == 0) {
-                                    z2 = false;
-                                }
-                                dialogCell.setChecked(false, z2);
-                            } else {
-                                if ((MessagesController.UPDATE_MASK_NEW_MESSAGE & i) != 0) {
-                                    dialogCell.checkCurrentDialogIndex(this.dialogsListFrozen);
-                                    if (this.viewPages[i2].isDefaultDialogType() && AndroidUtilities.isTablet()) {
-                                        if (dialogCell.getDialogId() != this.openedDialogId) {
-                                            z2 = false;
-                                        }
-                                        dialogCell.setDialogSelected(z2);
-                                    }
-                                } else if ((MessagesController.UPDATE_MASK_SELECT_DIALOG & i) != 0) {
-                                    if (this.viewPages[i2].isDefaultDialogType() && AndroidUtilities.isTablet()) {
-                                        if (dialogCell.getDialogId() != this.openedDialogId) {
-                                            z2 = false;
-                                        }
-                                        dialogCell.setDialogSelected(z2);
-                                    }
-                                } else {
-                                    dialogCell.update(i, z);
-                                }
-                                ArrayList<Long> arrayList = this.selectedDialogs;
-                                if (arrayList != null) {
-                                    dialogCell.setChecked(arrayList.contains(Long.valueOf(dialogCell.getDialogId())), false);
-                                }
-                            }
-                        }
-                        if (childAt instanceof UserCell) {
-                            ((UserCell) childAt).update(i);
-                        } else if (childAt instanceof ProfileSearchCell) {
-                            ProfileSearchCell profileSearchCell = (ProfileSearchCell) childAt;
-                            profileSearchCell.update(i);
-                            ArrayList<Long> arrayList2 = this.selectedDialogs;
-                            if (arrayList2 != null) {
-                                profileSearchCell.setChecked(arrayList2.contains(Long.valueOf(profileSearchCell.getDialogId())), false);
-                            }
-                        }
-                        if (!this.dialogsListFrozen && (childAt instanceof RecyclerListView)) {
-                            RecyclerListView recyclerListView = (RecyclerListView) childAt;
-                            int childCount2 = recyclerListView.getChildCount();
-                            for (int i4 = 0; i4 < childCount2; i4++) {
-                                View childAt2 = recyclerListView.getChildAt(i4);
-                                if (childAt2 instanceof HintDialogCell) {
-                                    ((HintDialogCell) childAt2).update(i);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    /* JADX WARN: Removed duplicated region for block: B:82:0x00fe  */
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
+    private void updateVisibleRows(int r14, boolean r15) {
+        /*
+            Method dump skipped, instructions count: 352
+            To view this dump add '--comments-level debug' option
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.updateVisibleRows(int, boolean):void");
     }
 
     public void setDelegate(DialogsActivityDelegate dialogsActivityDelegate) {

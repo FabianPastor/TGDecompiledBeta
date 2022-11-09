@@ -2,7 +2,9 @@ package org.telegram.ui.Components;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.LinearGradient;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Layout;
@@ -24,7 +26,14 @@ public class AvatarDrawable extends Drawable {
     private float archivedAvatarProgress;
     private int avatarType;
     private int color;
+    private int color2;
     private boolean drawDeleted;
+    private LinearGradient gradient;
+    private int gradientBottom;
+    private int gradientColor1;
+    private int gradientColor2;
+    private int gradientTop;
+    private boolean hasGradient;
     private TextPaint namePaint;
     private boolean needApplyColorAccent;
     private Theme.ResourcesProvider resourcesProvider;
@@ -96,7 +105,7 @@ public class AvatarDrawable extends Drawable {
         }
     }
 
-    private static int getColorIndex(long j) {
+    public static int getColorIndex(long j) {
         return (j < 0 || j >= 7) ? (int) Math.abs(j % Theme.keys_avatar_background.length) : (int) j;
     }
 
@@ -148,37 +157,65 @@ public class AvatarDrawable extends Drawable {
 
     public void setAvatarType(int i) {
         this.avatarType = i;
-        boolean z = true;
+        boolean z = false;
         if (i == 13) {
-            this.color = Theme.getColor("chats_actionBackground");
+            this.hasGradient = false;
+            int color = Theme.getColor("chats_actionBackground");
+            this.color2 = color;
+            this.color = color;
         } else if (i == 2) {
-            this.color = getThemedColor("avatar_backgroundArchivedHidden");
+            this.hasGradient = false;
+            int themedColor = getThemedColor("avatar_backgroundArchivedHidden");
+            this.color2 = themedColor;
+            this.color = themedColor;
         } else if (i == 12) {
+            this.hasGradient = true;
             this.color = getThemedColor("avatar_backgroundSaved");
+            this.color2 = getThemedColor("avatar_background2Saved");
         } else if (i == 1) {
+            this.hasGradient = true;
             this.color = getThemedColor("avatar_backgroundSaved");
+            this.color2 = getThemedColor("avatar_background2Saved");
         } else if (i == 3) {
+            this.hasGradient = true;
             this.color = getThemedColor(Theme.keys_avatar_background[getColorIndex(5L)]);
+            this.color2 = getThemedColor(Theme.keys_avatar_background2[getColorIndex(5L)]);
         } else if (i == 4) {
+            this.hasGradient = true;
             this.color = getThemedColor(Theme.keys_avatar_background[getColorIndex(5L)]);
+            this.color2 = getThemedColor(Theme.keys_avatar_background2[getColorIndex(5L)]);
         } else if (i == 5) {
+            this.hasGradient = true;
             this.color = getThemedColor(Theme.keys_avatar_background[getColorIndex(4L)]);
+            this.color2 = getThemedColor(Theme.keys_avatar_background2[getColorIndex(4L)]);
         } else if (i == 6) {
+            this.hasGradient = true;
             this.color = getThemedColor(Theme.keys_avatar_background[getColorIndex(3L)]);
+            this.color2 = getThemedColor(Theme.keys_avatar_background2[getColorIndex(3L)]);
         } else if (i == 7) {
+            this.hasGradient = true;
             this.color = getThemedColor(Theme.keys_avatar_background[getColorIndex(1L)]);
+            this.color2 = getThemedColor(Theme.keys_avatar_background2[getColorIndex(1L)]);
         } else if (i == 8) {
+            this.hasGradient = true;
             this.color = getThemedColor(Theme.keys_avatar_background[getColorIndex(0L)]);
+            this.color2 = getThemedColor(Theme.keys_avatar_background2[getColorIndex(0L)]);
         } else if (i == 9) {
+            this.hasGradient = true;
             this.color = getThemedColor(Theme.keys_avatar_background[getColorIndex(6L)]);
+            this.color2 = getThemedColor(Theme.keys_avatar_background2[getColorIndex(6L)]);
         } else if (i == 10) {
+            this.hasGradient = true;
             this.color = getThemedColor(Theme.keys_avatar_background[getColorIndex(5L)]);
+            this.color2 = getThemedColor(Theme.keys_avatar_background2[getColorIndex(5L)]);
         } else {
+            this.hasGradient = true;
             this.color = getThemedColor(Theme.keys_avatar_background[getColorIndex(4L)]);
+            this.color2 = getThemedColor(Theme.keys_avatar_background2[getColorIndex(4L)]);
         }
         int i2 = this.avatarType;
-        if (i2 == 2 || i2 == 1 || i2 == 12) {
-            z = false;
+        if (i2 != 2 && i2 != 1 && i2 != 12) {
+            z = true;
         }
         this.needApplyColorAccent = z;
     }
@@ -204,7 +241,16 @@ public class AvatarDrawable extends Drawable {
     }
 
     public void setColor(int i) {
+        this.hasGradient = false;
+        this.color2 = i;
         this.color = i;
+        this.needApplyColorAccent = false;
+    }
+
+    public void setColor(int i, int i2) {
+        this.hasGradient = true;
+        this.color = i;
+        this.color2 = i2;
         this.needApplyColorAccent = false;
     }
 
@@ -220,8 +266,14 @@ public class AvatarDrawable extends Drawable {
         return this.needApplyColorAccent ? Theme.changeColorAccent(this.color) : this.color;
     }
 
+    public int getColor2() {
+        return this.needApplyColorAccent ? Theme.changeColorAccent(this.color2) : this.color2;
+    }
+
     public void setInfo(long j, String str, String str2, String str3) {
+        this.hasGradient = true;
         this.color = getThemedColor(Theme.keys_avatar_background[getColorIndex(j)]);
+        this.color2 = getThemedColor(Theme.keys_avatar_background2[getColorIndex(j)]);
         this.needApplyColorAccent = j == 5;
         this.avatarType = 0;
         this.drawDeleted = false;
@@ -292,25 +344,42 @@ public class AvatarDrawable extends Drawable {
         }
         int width = bounds.width();
         this.namePaint.setColor(ColorUtils.setAlphaComponent(getThemedColor("avatar_text"), this.alpha));
-        Theme.avatar_backgroundPaint.setColor(ColorUtils.setAlphaComponent(getColor(), this.alpha));
+        if (this.hasGradient) {
+            int alphaComponent = ColorUtils.setAlphaComponent(getColor(), this.alpha);
+            int alphaComponent2 = ColorUtils.setAlphaComponent(getColor2(), this.alpha);
+            if (this.gradient == null || this.gradientTop != bounds.top || this.gradientBottom != bounds.bottom || this.gradientColor1 != alphaComponent || this.gradientColor2 != alphaComponent2) {
+                int i = bounds.top;
+                this.gradientTop = i;
+                float f = i;
+                int i2 = bounds.bottom;
+                this.gradientBottom = i2;
+                this.gradientColor1 = alphaComponent;
+                this.gradientColor2 = alphaComponent2;
+                this.gradient = new LinearGradient(0.0f, f, 0.0f, i2, alphaComponent, alphaComponent2, Shader.TileMode.CLAMP);
+            }
+            Theme.avatar_backgroundPaint.setShader(this.gradient);
+        } else {
+            Theme.avatar_backgroundPaint.setShader(null);
+            Theme.avatar_backgroundPaint.setColor(ColorUtils.setAlphaComponent(getColor(), this.alpha));
+        }
         canvas.save();
         canvas.translate(bounds.left, bounds.top);
         if (this.roundRadius > 0) {
             RectF rectF = AndroidUtilities.rectTmp;
-            float f = width;
-            rectF.set(0.0f, 0.0f, f, f);
-            int i = this.roundRadius;
-            canvas.drawRoundRect(rectF, i, i, Theme.avatar_backgroundPaint);
+            float f2 = width;
+            rectF.set(0.0f, 0.0f, f2, f2);
+            int i3 = this.roundRadius;
+            canvas.drawRoundRect(rectF, i3, i3, Theme.avatar_backgroundPaint);
         } else {
-            float f2 = width / 2.0f;
-            canvas.drawCircle(f2, f2, f2, Theme.avatar_backgroundPaint);
+            float f3 = width / 2.0f;
+            canvas.drawCircle(f3, f3, f3, Theme.avatar_backgroundPaint);
         }
-        int i2 = this.avatarType;
-        if (i2 == 2) {
+        int i4 = this.avatarType;
+        if (i4 == 2) {
             if (this.archivedAvatarProgress != 0.0f) {
                 Theme.avatar_backgroundPaint.setColor(ColorUtils.setAlphaComponent(getThemedColor("avatar_backgroundArchived"), this.alpha));
-                float f3 = width / 2.0f;
-                canvas.drawCircle(f3, f3, this.archivedAvatarProgress * f3, Theme.avatar_backgroundPaint);
+                float f4 = width / 2.0f;
+                canvas.drawCircle(f4, f4, this.archivedAvatarProgress * f4, Theme.avatar_backgroundPaint);
                 if (Theme.dialogs_archiveAvatarDrawableRecolored) {
                     Theme.dialogs_archiveAvatarDrawable.beginApplyLayerColors();
                     Theme.dialogs_archiveAvatarDrawable.setLayerColor("Arrow1.**", Theme.getNonAnimatedColor("avatar_backgroundArchived"));
@@ -327,32 +396,32 @@ public class AvatarDrawable extends Drawable {
             }
             int intrinsicWidth = Theme.dialogs_archiveAvatarDrawable.getIntrinsicWidth();
             int intrinsicHeight = Theme.dialogs_archiveAvatarDrawable.getIntrinsicHeight();
-            int i3 = (width - intrinsicWidth) / 2;
-            int i4 = (width - intrinsicHeight) / 2;
+            int i5 = (width - intrinsicWidth) / 2;
+            int i6 = (width - intrinsicHeight) / 2;
             canvas.save();
-            Theme.dialogs_archiveAvatarDrawable.setBounds(i3, i4, intrinsicWidth + i3, intrinsicHeight + i4);
+            Theme.dialogs_archiveAvatarDrawable.setBounds(i5, i6, intrinsicWidth + i5, intrinsicHeight + i6);
             Theme.dialogs_archiveAvatarDrawable.draw(canvas);
             canvas.restore();
-        } else if (i2 != 0) {
-            if (i2 == 12) {
+        } else if (i4 != 0) {
+            if (i4 == 12) {
                 drawable = Theme.avatarDrawables[11];
-            } else if (i2 == 1) {
+            } else if (i4 == 1) {
                 drawable = Theme.avatarDrawables[0];
-            } else if (i2 == 3) {
+            } else if (i4 == 3) {
                 drawable = Theme.avatarDrawables[10];
-            } else if (i2 == 4) {
+            } else if (i4 == 4) {
                 drawable = Theme.avatarDrawables[2];
-            } else if (i2 == 5) {
+            } else if (i4 == 5) {
                 drawable = Theme.avatarDrawables[3];
-            } else if (i2 == 6) {
+            } else if (i4 == 6) {
                 drawable = Theme.avatarDrawables[4];
-            } else if (i2 == 7) {
+            } else if (i4 == 7) {
                 drawable = Theme.avatarDrawables[5];
-            } else if (i2 == 8) {
+            } else if (i4 == 8) {
                 drawable = Theme.avatarDrawables[6];
-            } else if (i2 == 9) {
+            } else if (i4 == 9) {
                 drawable = Theme.avatarDrawables[7];
-            } else if (i2 == 10) {
+            } else if (i4 == 10) {
                 drawable = Theme.avatarDrawables[8];
             } else {
                 drawable = Theme.avatarDrawables[9];
@@ -364,12 +433,12 @@ public class AvatarDrawable extends Drawable {
                     intrinsicWidth2 = (int) (intrinsicWidth2 * 0.8f);
                     intrinsicHeight2 = (int) (intrinsicHeight2 * 0.8f);
                 }
-                int i5 = (width - intrinsicWidth2) / 2;
-                int i6 = (width - intrinsicHeight2) / 2;
-                drawable.setBounds(i5, i6, intrinsicWidth2 + i5, intrinsicHeight2 + i6);
-                int i7 = this.alpha;
-                if (i7 != 255) {
-                    drawable.setAlpha(i7);
+                int i7 = (width - intrinsicWidth2) / 2;
+                int i8 = (width - intrinsicHeight2) / 2;
+                drawable.setBounds(i7, i8, intrinsicWidth2 + i7, intrinsicHeight2 + i8);
+                int i9 = this.alpha;
+                if (i9 != 255) {
+                    drawable.setAlpha(i9);
                     drawable.draw(canvas);
                     drawable.setAlpha(255);
                 } else {
@@ -387,18 +456,18 @@ public class AvatarDrawable extends Drawable {
                         intrinsicWidth3 = (int) (intrinsicWidth3 * dp);
                         intrinsicHeight3 = (int) (intrinsicHeight3 * dp);
                     }
-                    int i8 = (width - intrinsicWidth3) / 2;
-                    int i9 = (width - intrinsicHeight3) / 2;
-                    Theme.avatarDrawables[1].setBounds(i8, i9, intrinsicWidth3 + i8, intrinsicHeight3 + i9);
+                    int i10 = (width - intrinsicWidth3) / 2;
+                    int i11 = (width - intrinsicHeight3) / 2;
+                    Theme.avatarDrawables[1].setBounds(i10, i11, intrinsicWidth3 + i10, intrinsicHeight3 + i11);
                     Theme.avatarDrawables[1].draw(canvas);
                 }
             }
             if (this.textLayout != null) {
-                float f4 = width;
-                float dp2 = f4 / AndroidUtilities.dp(50.0f);
-                float f5 = f4 / 2.0f;
-                canvas.scale(dp2, dp2, f5, f5);
-                canvas.translate(((f4 - this.textWidth) / 2.0f) - this.textLeft, (f4 - this.textHeight) / 2.0f);
+                float f5 = width;
+                float dp2 = f5 / AndroidUtilities.dp(50.0f);
+                float f6 = f5 / 2.0f;
+                canvas.scale(dp2, dp2, f6, f6);
+                canvas.translate(((f5 - this.textWidth) / 2.0f) - this.textLeft, (f5 - this.textHeight) / 2.0f);
                 this.textLayout.draw(canvas);
             }
         }

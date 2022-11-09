@@ -1283,7 +1283,7 @@ public class ThemeEditorView {
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
                 View textColorThemeCell;
                 if (i == 0) {
                     textColorThemeCell = new TextColorThemeCell(this.context);
@@ -1365,7 +1365,7 @@ public class ThemeEditorView {
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
                 View textColorThemeCell;
                 if (i == 0) {
                     textColorThemeCell = new TextColorThemeCell(this.context);

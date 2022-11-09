@@ -5,6 +5,7 @@ import android.util.SparseIntArray;
 import java.util.ArrayList;
 /* loaded from: classes.dex */
 public class DispatchQueuePoolBackground {
+    public static final String THREAD_PREFIX = "DispatchQueuePoolThreadSafety_";
     private static DispatchQueuePoolBackground backgroundQueue;
     static ArrayList<Runnable> updateTaskCollection;
     private boolean cleanupScheduled;
@@ -66,7 +67,7 @@ public class DispatchQueuePoolBackground {
                 if (!this.busyQueues.isEmpty() && (this.totalTasksCount / 2 <= this.busyQueues.size() || (this.queues.isEmpty() && this.createdCount >= this.maxCount))) {
                     remove = this.busyQueues.remove(0);
                 } else if (this.queues.isEmpty()) {
-                    remove = new DispatchQueue("DispatchQueuePoolThreadSafety" + this.guid + "_" + Utilities.random.nextInt());
+                    remove = new DispatchQueue("DispatchQueuePoolThreadSafety_" + this.guid + "_" + Utilities.random.nextInt());
                     remove.setPriority(10);
                     this.createdCount = this.createdCount + 1;
                 } else {
@@ -114,6 +115,10 @@ public class DispatchQueuePoolBackground {
     }
 
     public static void execute(Runnable runnable) {
+        execute(runnable, false);
+    }
+
+    public static void execute(Runnable runnable, boolean z) {
         if (BuildVars.DEBUG_PRIVATE_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
             throw new RuntimeException("wrong thread");
         }
@@ -124,9 +129,17 @@ public class DispatchQueuePoolBackground {
             } else {
                 updateTaskCollection = new ArrayList<>(100);
             }
-            AndroidUtilities.runOnUIThread(finishCollectUpdateRunnable);
+            if (!z) {
+                AndroidUtilities.runOnUIThread(finishCollectUpdateRunnable);
+            }
         }
         updateTaskCollection.add(runnable);
+        if (!z) {
+            return;
+        }
+        Runnable runnable2 = finishCollectUpdateRunnable;
+        AndroidUtilities.cancelRunOnUIThread(runnable2);
+        runnable2.run();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -139,7 +152,7 @@ public class DispatchQueuePoolBackground {
         final ArrayList<Runnable> arrayList2 = updateTaskCollection;
         updateTaskCollection = null;
         if (backgroundQueue == null) {
-            backgroundQueue = new DispatchQueuePoolBackground(Math.max(1, Runtime.getRuntime().availableProcessors() - 2));
+            backgroundQueue = new DispatchQueuePoolBackground(Math.max(1, Runtime.getRuntime().availableProcessors()));
         }
         Utilities.globalQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.DispatchQueuePoolBackground$$ExternalSyntheticLambda0
             @Override // java.lang.Runnable

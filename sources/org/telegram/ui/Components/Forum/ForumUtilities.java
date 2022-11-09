@@ -1,9 +1,9 @@
 package org.telegram.ui.Components.Forum;
 
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
-import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import java.util.ArrayList;
@@ -74,6 +74,16 @@ public class ForumUtilities {
         return combinedDrawable;
     }
 
+    public static Drawable createSmallTopicDrawable(String str, int i) {
+        ForumBubbleDrawable forumBubbleDrawable = new ForumBubbleDrawable(i);
+        LetterDrawable letterDrawable = new LetterDrawable(null, 2);
+        String upperCase = str.trim().toUpperCase();
+        letterDrawable.setTitle(upperCase.length() >= 1 ? upperCase.substring(0, 1) : "");
+        CombinedDrawable combinedDrawable = new CombinedDrawable(forumBubbleDrawable, letterDrawable, 0, 0);
+        combinedDrawable.setFullsize(true);
+        return combinedDrawable;
+    }
+
     public static void openTopic(BaseFragment baseFragment, long j, TLRPC$TL_forumTopic tLRPC$TL_forumTopic, int i) {
         TLRPC$TL_forumTopic tLRPC$TL_forumTopic2;
         TLRPC$TL_forumTopic findTopic;
@@ -85,6 +95,8 @@ public class ForumUtilities {
         bundle.putLong("chat_id", j);
         if (i != 0) {
             bundle.putInt("message_id", i);
+        } else if (tLRPC$TL_forumTopic.read_inbox_max_id == 0) {
+            bundle.putInt("message_id", tLRPC$TL_forumTopic.id);
         }
         bundle.putInt("unread_count", tLRPC$TL_forumTopic.unread_count);
         bundle.putBoolean("historyPreloaded", false);
@@ -108,18 +120,19 @@ public class ForumUtilities {
         baseFragment.presentFragment(chatActivity);
     }
 
-    public static CharSequence getTopicSpannedName(TLRPC$ForumTopic tLRPC$ForumTopic, TextPaint textPaint) {
-        return getTopicSpannedName(tLRPC$ForumTopic, textPaint, null);
+    public static CharSequence getTopicSpannedName(TLRPC$ForumTopic tLRPC$ForumTopic, Paint paint) {
+        return getTopicSpannedName(tLRPC$ForumTopic, paint, null);
     }
 
-    public static CharSequence getTopicSpannedName(TLRPC$ForumTopic tLRPC$ForumTopic, TextPaint textPaint, ForumBubbleDrawable[] forumBubbleDrawableArr) {
+    public static CharSequence getTopicSpannedName(TLRPC$ForumTopic tLRPC$ForumTopic, Paint paint, ForumBubbleDrawable[] forumBubbleDrawableArr) {
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
         if (tLRPC$ForumTopic instanceof TLRPC$TL_forumTopic) {
             TLRPC$TL_forumTopic tLRPC$TL_forumTopic = (TLRPC$TL_forumTopic) tLRPC$ForumTopic;
             if (tLRPC$TL_forumTopic.icon_emoji_id != 0) {
                 spannableStringBuilder.append((CharSequence) " ");
-                AnimatedEmojiSpan animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$TL_forumTopic.icon_emoji_id, 0.95f, textPaint == null ? null : textPaint.getFontMetricsInt());
+                AnimatedEmojiSpan animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$TL_forumTopic.icon_emoji_id, 0.95f, paint == null ? null : paint.getFontMetricsInt());
                 spannableStringBuilder.setSpan(animatedEmojiSpan, 0, 1, 33);
+                animatedEmojiSpan.top = true;
                 animatedEmojiSpan.cacheType = 7;
             } else {
                 spannableStringBuilder.append((CharSequence) " ");
@@ -134,9 +147,9 @@ public class ForumUtilities {
                         ((LetterDrawable) combinedDrawable.getIcon()).scale = 0.7f;
                     }
                 }
-                if (textPaint != null) {
+                if (paint != null) {
                     ColoredImageSpan coloredImageSpan = new ColoredImageSpan(createTopicDrawable);
-                    coloredImageSpan.setSize((int) (Math.abs(textPaint.getFontMetrics().descent) + Math.abs(textPaint.getFontMetrics().ascent)));
+                    coloredImageSpan.setSize((int) (Math.abs(paint.getFontMetrics().descent) + Math.abs(paint.getFontMetrics().ascent)));
                     spannableStringBuilder.setSpan(coloredImageSpan, 0, 1, 33);
                 } else {
                     spannableStringBuilder.setSpan(new ImageSpan(createTopicDrawable), 0, 1, 33);

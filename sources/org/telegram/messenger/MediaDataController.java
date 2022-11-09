@@ -13,6 +13,7 @@ import android.text.SpannedString;
 import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.URLSpan;
+import android.util.Pair;
 import android.util.SparseArray;
 import androidx.collection.LongSparseArray;
 import androidx.core.content.pm.ShortcutManagerCompat;
@@ -1204,6 +1205,9 @@ public class MediaDataController extends BaseController {
 
     private void preloadImage(ImageLocation imageLocation, String str, boolean z) {
         final ImageReceiver imageReceiver = new ImageReceiver();
+        imageReceiver.setAllowStartAnimation(false);
+        imageReceiver.setAllowStartLottieAnimation(false);
+        imageReceiver.setAllowDecodeSingleFrame(false);
         imageReceiver.setDelegate(new ImageReceiver.ImageReceiverDelegate() { // from class: org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda159
             @Override // org.telegram.messenger.ImageReceiver.ImageReceiverDelegate
             public final void didSetImage(ImageReceiver imageReceiver2, boolean z2, boolean z3, boolean z4) {
@@ -1228,20 +1232,13 @@ public class MediaDataController extends BaseController {
                 lottieAnimation.checkCache(new Runnable() { // from class: org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda2
                     @Override // java.lang.Runnable
                     public final void run() {
-                        MediaDataController.lambda$preloadImage$15(ImageReceiver.this);
+                        ImageReceiver.this.setDelegate(null);
                     }
                 });
-                return;
+            } else {
+                imageReceiver.setDelegate(null);
             }
-            imageReceiver.clearImage();
-            imageReceiver.setDelegate(null);
         }
-    }
-
-    /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ void lambda$preloadImage$15(ImageReceiver imageReceiver) {
-        imageReceiver.clearImage();
-        imageReceiver.setDelegate(null);
     }
 
     private void putReactionsToCache(List<TLRPC$TL_availableReaction> list, final int i, final int i2) {
@@ -7770,6 +7767,18 @@ public class MediaDataController extends BaseController {
             return null;
         }
         return sparseArray.get(i);
+    }
+
+    public Pair<Integer, TLRPC$DraftMessage> getOneThreadDraft(long j) {
+        SparseArray<TLRPC$DraftMessage> sparseArray = this.drafts.get(j);
+        if (sparseArray != null && sparseArray.size() > 0) {
+            for (int i = 0; i < sparseArray.size(); i++) {
+                if (sparseArray.keyAt(i) != 0) {
+                    return new Pair<>(Integer.valueOf(sparseArray.keyAt(i)), sparseArray.valueAt(i));
+                }
+            }
+        }
+        return null;
     }
 
     public TLRPC$Message getDraftMessage(long j, int i) {

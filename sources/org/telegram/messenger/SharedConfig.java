@@ -278,19 +278,19 @@ public class SharedConfig {
         return i;
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:38:0x016a A[Catch: Exception -> 0x0188, all -> 0x03fc, TryCatch #1 {Exception -> 0x0188, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:36:0x0164), top: B:89:0x011b, outer: #3 }] */
-    /* JADX WARN: Removed duplicated region for block: B:40:0x016e A[Catch: Exception -> 0x0188, all -> 0x03fc, TryCatch #1 {Exception -> 0x0188, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:36:0x0164), top: B:89:0x011b, outer: #3 }] */
-    /* JADX WARN: Removed duplicated region for block: B:65:0x0232  */
-    /* JADX WARN: Removed duplicated region for block: B:66:0x0235  */
-    /* JADX WARN: Removed duplicated region for block: B:69:0x0245  */
-    /* JADX WARN: Removed duplicated region for block: B:70:0x0247  */
+    /* JADX WARN: Removed duplicated region for block: B:38:0x016a A[Catch: Exception -> 0x018c, all -> 0x0400, TryCatch #2 {Exception -> 0x018c, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:49:0x0184, B:36:0x0164), top: B:92:0x011b, outer: #1 }] */
+    /* JADX WARN: Removed duplicated region for block: B:40:0x016e A[Catch: Exception -> 0x018c, all -> 0x0400, TryCatch #2 {Exception -> 0x018c, blocks: (B:22:0x011b, B:24:0x0123, B:26:0x0133, B:27:0x0147, B:38:0x016a, B:40:0x016e, B:41:0x0170, B:43:0x0174, B:45:0x017a, B:47:0x0180, B:49:0x0184, B:36:0x0164), top: B:92:0x011b, outer: #1 }] */
+    /* JADX WARN: Removed duplicated region for block: B:67:0x0236  */
+    /* JADX WARN: Removed duplicated region for block: B:68:0x0239  */
+    /* JADX WARN: Removed duplicated region for block: B:71:0x0249  */
+    /* JADX WARN: Removed duplicated region for block: B:72:0x024b  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public static void loadConfig() {
         /*
-            Method dump skipped, instructions count: 1023
+            Method dump skipped, instructions count: 1027
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SharedConfig.loadConfig():void");

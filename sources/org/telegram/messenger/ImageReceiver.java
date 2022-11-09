@@ -1613,7 +1613,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     if (j == 0) {
                         j = System.currentTimeMillis();
                     }
-                    ((SvgHelper.SvgDrawable) drawable).drawInternal(canvas, true, j, backgroundThreadDrawHolder.imageX, backgroundThreadDrawHolder.imageY, backgroundThreadDrawHolder.imageW, backgroundThreadDrawHolder.imageH);
+                    ((SvgHelper.SvgDrawable) drawable).drawInternal(canvas, true, backgroundThreadDrawHolder.threadIndex, j, backgroundThreadDrawHolder.imageX, backgroundThreadDrawHolder.imageY, backgroundThreadDrawHolder.imageW, backgroundThreadDrawHolder.imageH);
                     return;
                 }
                 drawable.draw(canvas);
@@ -1628,10 +1628,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     private void drawBitmapDrawable(Canvas canvas, BitmapDrawable bitmapDrawable, BackgroundThreadDrawHolder backgroundThreadDrawHolder, int i) {
         if (backgroundThreadDrawHolder != null) {
             if (bitmapDrawable instanceof RLottieDrawable) {
-                ((RLottieDrawable) bitmapDrawable).drawInBackground(canvas, backgroundThreadDrawHolder.imageX, backgroundThreadDrawHolder.imageY, backgroundThreadDrawHolder.imageW, backgroundThreadDrawHolder.imageH, i, backgroundThreadDrawHolder.colorFilter);
+                ((RLottieDrawable) bitmapDrawable).drawInBackground(canvas, backgroundThreadDrawHolder.imageX, backgroundThreadDrawHolder.imageY, backgroundThreadDrawHolder.imageW, backgroundThreadDrawHolder.imageH, i, backgroundThreadDrawHolder.colorFilter, backgroundThreadDrawHolder.threadIndex);
                 return;
             } else if (bitmapDrawable instanceof AnimatedFileDrawable) {
-                ((AnimatedFileDrawable) bitmapDrawable).drawInBackground(canvas, backgroundThreadDrawHolder.imageX, backgroundThreadDrawHolder.imageY, backgroundThreadDrawHolder.imageW, backgroundThreadDrawHolder.imageH, i, backgroundThreadDrawHolder.colorFilter);
+                ((AnimatedFileDrawable) bitmapDrawable).drawInBackground(canvas, backgroundThreadDrawHolder.imageX, backgroundThreadDrawHolder.imageY, backgroundThreadDrawHolder.imageW, backgroundThreadDrawHolder.imageH, i, backgroundThreadDrawHolder.colorFilter, backgroundThreadDrawHolder.threadIndex);
                 return;
             } else {
                 Bitmap bitmap = bitmapDrawable.getBitmap();
@@ -1653,9 +1653,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         }
         bitmapDrawable.setAlpha(i);
         if (bitmapDrawable instanceof RLottieDrawable) {
-            ((RLottieDrawable) bitmapDrawable).drawInternal(canvas, false, this.currentTime);
+            ((RLottieDrawable) bitmapDrawable).drawInternal(canvas, false, this.currentTime, 0);
         } else if (bitmapDrawable instanceof AnimatedFileDrawable) {
-            ((AnimatedFileDrawable) bitmapDrawable).drawInternal(canvas, false, this.currentTime);
+            ((AnimatedFileDrawable) bitmapDrawable).drawInternal(canvas, false, this.currentTime, 0);
         } else {
             bitmapDrawable.draw(canvas);
         }
@@ -2840,15 +2840,16 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         return this.fileLoadingPriority;
     }
 
-    public BackgroundThreadDrawHolder setDrawInBackgroundThread(BackgroundThreadDrawHolder backgroundThreadDrawHolder) {
+    public BackgroundThreadDrawHolder setDrawInBackgroundThread(BackgroundThreadDrawHolder backgroundThreadDrawHolder, int i) {
         if (backgroundThreadDrawHolder == null) {
             backgroundThreadDrawHolder = new BackgroundThreadDrawHolder();
         }
+        backgroundThreadDrawHolder.threadIndex = i;
         backgroundThreadDrawHolder.animation = getAnimation();
         backgroundThreadDrawHolder.lottieDrawable = getLottieAnimation();
         boolean z = false;
-        for (int i = 0; i < 4; i++) {
-            backgroundThreadDrawHolder.roundRadius[i] = this.roundRadius[i];
+        for (int i2 = 0; i2 < 4; i2++) {
+            backgroundThreadDrawHolder.roundRadius[i2] = this.roundRadius[i2];
         }
         backgroundThreadDrawHolder.mediaDrawable = this.currentMediaDrawable;
         backgroundThreadDrawHolder.mediaShader = this.mediaShader;
@@ -2900,6 +2901,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         private float previousAlpha;
         private Path roundPath;
         private Drawable staticThumbDrawable;
+        public int threadIndex;
         private Drawable thumbDrawable;
         private BitmapShader thumbShader;
         public long time;

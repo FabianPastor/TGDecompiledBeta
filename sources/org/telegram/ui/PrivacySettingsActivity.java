@@ -1074,7 +1074,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
             View textSettingsCell;
             if (i == 0) {
                 textSettingsCell = new TextSettingsCell(this.mContext);
@@ -1280,6 +1280,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                                         if (!PrivacySettingsActivity.this.getUserConfig().isPremium()) {
                                             valueImageView.setVisibility(0);
                                             valueImageView.setImageResource(R.drawable.msg_mini_premiumlock);
+                                            valueImageView.setTranslationY(AndroidUtilities.dp(1.0f));
                                             valueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteValueText"), PorterDuff.Mode.MULTIPLY));
                                         } else {
                                             valueImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));

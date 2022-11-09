@@ -849,6 +849,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 }
                 str = string;
             } else {
+                chatActivity2.getThreadMessage().getRepliesCount();
                 str = LocaleController.formatString("TopicProfileStatus", R.string.TopicProfileStatus, currentChat.title);
             }
         } else {

@@ -146,17 +146,17 @@ public class HintView extends FrameLayout {
             int i6 = this.currentType;
             if (i6 == 0) {
                 ImageReceiver photoImage = chatMessageCell.getPhotoImage();
-                i5 = (int) (i5 + photoImage.getImageY());
+                dp = (int) (i5 + photoImage.getImageY());
                 int imageHeight = (int) photoImage.getImageHeight();
-                int i7 = i5 + imageHeight;
+                int i7 = dp + imageHeight;
                 int measuredHeight = view.getMeasuredHeight();
-                if (i5 <= getMeasuredHeight() + AndroidUtilities.dp(10.0f) || i7 > measuredHeight + (imageHeight / 4)) {
+                if (dp <= getMeasuredHeight() + AndroidUtilities.dp(10.0f) || i7 > measuredHeight + (imageHeight / 4)) {
                     return false;
                 }
                 forwardNameCenterX = chatMessageCell.getNoSoundIconCenterX();
             } else if (i6 == 5) {
                 Integer num = (Integer) obj;
-                i5 += i2;
+                dp = i5 + i2;
                 this.shownY = i2;
                 if (num.intValue() == -1) {
                     this.textView.setText(LocaleController.getString("PollSelectOption", R.string.PollSelectOption));
@@ -184,19 +184,18 @@ public class HintView extends FrameLayout {
                 measure(View.MeasureSpec.makeMeasureSpec(1000, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(1000, Integer.MIN_VALUE));
                 TLRPC$User currentUser = chatMessageCell.getCurrentUser();
                 if (currentUser != null && currentUser.id == 0) {
-                    dp = (chatMessageCell.getMeasuredHeight() - Math.max(0, chatMessageCell.getBottom() - view.getMeasuredHeight())) - AndroidUtilities.dp(50.0f);
+                    dp = i5 + ((chatMessageCell.getMeasuredHeight() - Math.max(0, chatMessageCell.getBottom() - view.getMeasuredHeight())) - AndroidUtilities.dp(50.0f));
                 } else {
-                    i5 += AndroidUtilities.dp(22.0f);
+                    dp = i5 + AndroidUtilities.dp(22.0f);
                     if (!messageObject.isOutOwner() && chatMessageCell.isDrawNameLayout()) {
-                        dp = AndroidUtilities.dp(20.0f);
+                        dp += AndroidUtilities.dp(20.0f);
                     }
-                    if (this.isTopArrow && i5 <= getMeasuredHeight() + AndroidUtilities.dp(10.0f)) {
-                        return false;
+                    if (!messageObject.shouldDrawWithoutBackground() && chatMessageCell.isDrawTopic()) {
+                        dp = (int) (dp + AndroidUtilities.dp(5.0f) + chatMessageCell.getDrawTopicHeight());
                     }
-                    forwardNameCenterX = chatMessageCell.getForwardNameCenterX();
                 }
-                i5 += dp;
-                if (this.isTopArrow) {
+                if (!this.isTopArrow && dp <= getMeasuredHeight() + AndroidUtilities.dp(10.0f)) {
+                    return false;
                 }
                 forwardNameCenterX = chatMessageCell.getForwardNameCenterX();
             }
@@ -208,7 +207,7 @@ public class HintView extends FrameLayout {
                 setTranslationY(f + dp2);
             } else {
                 float f2 = this.extraTranslationY;
-                float measuredHeight2 = i5 - getMeasuredHeight();
+                float measuredHeight2 = dp - getMeasuredHeight();
                 this.translationY = measuredHeight2;
                 setTranslationY(f2 + measuredHeight2);
             }

@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimatedFileDrawableStream;
 import org.telegram.messenger.DispatchQueue;
+import org.telegram.messenger.DispatchQueuePoolBackground;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.utils.BitmapsCache;
@@ -31,7 +32,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     private boolean applyTransformation;
     private Bitmap backgroundBitmap;
     private int backgroundBitmapTime;
-    private Paint backgroundPaint;
+    private Paint[] backgroundPaint;
     private BitmapShader backgroundShader;
     BitmapsCache bitmapsCache;
     Runnable cacheGenRunnable;
@@ -46,7 +47,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     private boolean destroyWhenDone;
     private final TLRPC$Document document;
     private final RectF dstRect;
-    private RectF dstRectBackground;
+    private RectF[] dstRectBackground;
     private float endTime;
     private boolean forceDecodeAfterNextFrame;
     boolean generatingCache;
@@ -153,7 +154,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
                 return;
             }
             AnimatedFileDrawable animatedFileDrawable = AnimatedFileDrawable.this;
-            if (animatedFileDrawable.generatingCache) {
+            if (animatedFileDrawable.generatingCache || animatedFileDrawable.cacheGenRunnable != null) {
                 return;
             }
             animatedFileDrawable.startTime = (float) System.currentTimeMillis();
@@ -163,6 +164,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             AnimatedFileDrawable animatedFileDrawable2 = AnimatedFileDrawable.this;
             animatedFileDrawable2.generatingCache = true;
             animatedFileDrawable2.loadFrameTask = null;
+            BitmapsCache.incrementTaskCounter();
             DispatchQueue dispatchQueue = RLottieDrawable.lottieCacheGenerateQueue;
             AnimatedFileDrawable animatedFileDrawable3 = AnimatedFileDrawable.this;
             Runnable runnable = new Runnable() { // from class: org.telegram.ui.Components.AnimatedFileDrawable$2$$ExternalSyntheticLambda0
@@ -188,6 +190,10 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
 
         /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$run$0() {
+            if (AnimatedFileDrawable.this.cacheGenRunnable != null) {
+                BitmapsCache.decrementTaskCounter();
+                AnimatedFileDrawable.this.cacheGenRunnable = null;
+            }
             AnimatedFileDrawable animatedFileDrawable = AnimatedFileDrawable.this;
             animatedFileDrawable.generatingCache = false;
             animatedFileDrawable.scheduleNextGetFrame();
@@ -290,7 +296,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         this(file, z, j, tLRPC$Document, imageLocation, obj, j2, i, z2, 0, 0, cacheOptions);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:40:0x0154  */
+    /* JADX WARN: Removed duplicated region for block: B:40:0x015d  */
     /* JADX WARN: Removed duplicated region for block: B:42:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -298,7 +304,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     */
     public AnimatedFileDrawable(java.io.File r18, boolean r19, long r20, org.telegram.tgnet.TLRPC$Document r22, org.telegram.messenger.ImageLocation r23, java.lang.Object r24, long r25, int r27, boolean r28, int r29, int r30, org.telegram.messenger.utils.BitmapsCache.CacheOptions r31) {
         /*
-            Method dump skipped, instructions count: 344
+            Method dump skipped, instructions count: 353
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedFileDrawable.<init>(java.io.File, boolean, long, org.telegram.tgnet.TLRPC$Document, org.telegram.messenger.ImageLocation, java.lang.Object, long, int, boolean, int, int, org.telegram.messenger.utils.BitmapsCache$CacheOptions):void");
@@ -471,9 +477,10 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         }
         this.isRunning = false;
         this.isRecycled = true;
-        Runnable runnable = this.cacheGenRunnable;
-        if (runnable != null) {
-            RLottieDrawable.lottieCacheGenerateQueue.cancelRunnable(runnable);
+        if (this.cacheGenRunnable != null) {
+            BitmapsCache.decrementTaskCounter();
+            RLottieDrawable.lottieCacheGenerateQueue.cancelRunnable(this.cacheGenRunnable);
+            this.cacheGenRunnable = null;
         }
         if (this.loadFrameTask == null) {
             if (this.nativePtr != 0) {
@@ -572,7 +579,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
 
     /* JADX INFO: Access modifiers changed from: private */
     public void scheduleNextGetFrame() {
-        if (this.loadFrameTask != null || !canLoadFrames() || this.destroyWhenDone) {
+        if (this.loadFrameTask != null || this.nextRenderingBitmap != null || !canLoadFrames() || this.destroyWhenDone) {
             return;
         }
         if (!this.isRunning) {
@@ -593,19 +600,25 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             j = Math.min(i, Math.max(0L, i - (System.currentTimeMillis() - this.lastFrameDecodeTime)));
         }
         if (this.useSharedQueue) {
+            if (this.limitFps) {
+                Runnable runnable = this.loadFrameRunnable;
+                this.loadFrameTask = runnable;
+                DispatchQueuePoolBackground.execute(runnable);
+                return;
+            }
             ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = executor;
-            Runnable runnable = this.loadFrameRunnable;
-            this.loadFrameTask = runnable;
-            scheduledThreadPoolExecutor.schedule(runnable, j, TimeUnit.MILLISECONDS);
+            Runnable runnable2 = this.loadFrameRunnable;
+            this.loadFrameTask = runnable2;
+            scheduledThreadPoolExecutor.schedule(runnable2, j, TimeUnit.MILLISECONDS);
             return;
         }
         if (this.decodeQueue == null) {
             this.decodeQueue = new DispatchQueue("decodeQueue" + this);
         }
         DispatchQueue dispatchQueue = this.decodeQueue;
-        Runnable runnable2 = this.loadFrameRunnable;
-        this.loadFrameTask = runnable2;
-        dispatchQueue.postRunnable(runnable2, j);
+        Runnable runnable3 = this.loadFrameRunnable;
+        this.loadFrameTask = runnable3;
+        dispatchQueue.postRunnable(runnable3, j);
     }
 
     public boolean isLoadingStream() {
@@ -657,34 +670,34 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
 
     @Override // android.graphics.drawable.BitmapDrawable, android.graphics.drawable.Drawable
     public void draw(Canvas canvas) {
-        drawInternal(canvas, false, System.currentTimeMillis());
+        drawInternal(canvas, false, System.currentTimeMillis(), 0);
     }
 
-    public void drawInBackground(Canvas canvas, float f, float f2, float f3, float f4, int i, ColorFilter colorFilter) {
-        if (this.dstRectBackground == null) {
-            this.dstRectBackground = new RectF();
-            Paint paint = new Paint();
-            this.backgroundPaint = paint;
-            paint.setFilterBitmap(true);
+    public void drawInBackground(Canvas canvas, float f, float f2, float f3, float f4, int i, ColorFilter colorFilter, int i2) {
+        RectF[] rectFArr = this.dstRectBackground;
+        if (rectFArr[i2] == null) {
+            rectFArr[i2] = new RectF();
+            this.backgroundPaint[i2] = new Paint();
+            this.backgroundPaint[i2].setFilterBitmap(true);
         }
-        this.backgroundPaint.setAlpha(i);
-        this.backgroundPaint.setColorFilter(colorFilter);
-        this.dstRectBackground.set(f, f2, f3 + f, f4 + f2);
-        drawInternal(canvas, true, 0L);
+        this.backgroundPaint[i2].setAlpha(i);
+        this.backgroundPaint[i2].setColorFilter(colorFilter);
+        this.dstRectBackground[i2].set(f, f2, f3 + f, f4 + f2);
+        drawInternal(canvas, true, 0L, i2);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:41:0x00af  */
-    /* JADX WARN: Removed duplicated region for block: B:65:0x015f  */
+    /* JADX WARN: Removed duplicated region for block: B:41:0x00b3  */
+    /* JADX WARN: Removed duplicated region for block: B:65:0x0163  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void drawInternal(android.graphics.Canvas r18, boolean r19, long r20) {
+    public void drawInternal(android.graphics.Canvas r18, boolean r19, long r20, int r22) {
         /*
-            Method dump skipped, instructions count: 423
+            Method dump skipped, instructions count: 427
             To view this dump add '--comments-level debug' option
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedFileDrawable.drawInternal(android.graphics.Canvas, boolean, long):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedFileDrawable.drawInternal(android.graphics.Canvas, boolean, long, int):void");
     }
 
     public long getLastFrameTimestamp() {
@@ -905,29 +918,6 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         return 1;
     }
 
-    @Override // org.telegram.messenger.utils.BitmapsCache.Cacheable
-    public Bitmap getFirstFrame(Bitmap bitmap) {
-        Canvas canvas = new Canvas(bitmap);
-        if (this.generatingCacheBitmap == null) {
-            int[] iArr = this.metaData;
-            this.generatingCacheBitmap = Bitmap.createBitmap(iArr[0], iArr[1], Bitmap.Config.ARGB_8888);
-        }
-        long createDecoder = createDecoder(this.path.getAbsolutePath(), this.metaData, this.currentAccount, this.streamFileSize, this.stream, false);
-        if (createDecoder == 0) {
-            return bitmap;
-        }
-        Bitmap bitmap2 = this.generatingCacheBitmap;
-        getVideoFrame(createDecoder, bitmap2, this.metaData, bitmap2.getRowBytes(), false, this.startTime, this.endTime);
-        destroyDecoder(createDecoder);
-        bitmap.eraseColor(0);
-        canvas.save();
-        float width = this.renderingWidth / this.generatingCacheBitmap.getWidth();
-        canvas.scale(width, width);
-        canvas.drawBitmap(this.generatingCacheBitmap, 0.0f, 0.0f, (Paint) null);
-        canvas.restore();
-        return bitmap;
-    }
-
     public boolean canLoadFrames() {
         return this.precache ? this.bitmapsCache != null : this.nativePtr != 0 || !this.decoderCreated;
     }
@@ -938,11 +928,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             Bitmap bitmap2 = this.renderingBitmap;
             if (bitmap2 == null && this.nextRenderingBitmap == null) {
                 scheduleNextGetFrame();
-            } else if (this.nextRenderingBitmap == null) {
-            } else {
-                if (bitmap2 != null && (Math.abs(j - this.lastFrameTime) < this.invalidateAfter || this.skipFrameUpdate)) {
-                    return;
-                }
+            } else if (this.nextRenderingBitmap != null && (bitmap2 == null || (Math.abs(j - this.lastFrameTime) >= this.invalidateAfter && !this.skipFrameUpdate))) {
                 if (this.precache) {
                     this.backgroundBitmap = this.renderingBitmap;
                 }
@@ -953,6 +939,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
                 this.nextRenderingBitmapTime = 0;
                 this.nextRenderingShader = null;
                 this.lastFrameTime = j;
+                scheduleNextGetFrame();
+            } else {
+                invalidateInternal();
             }
         } else if (this.isRunning || !this.decodeSingleFrame || Math.abs(j - this.lastFrameTime) < this.invalidateAfter || (bitmap = this.nextRenderingBitmap) == null) {
         } else {
@@ -966,6 +955,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             this.nextRenderingBitmapTime = 0;
             this.nextRenderingShader = null;
             this.lastFrameTime = j;
+            scheduleNextGetFrame();
         }
     }
 }

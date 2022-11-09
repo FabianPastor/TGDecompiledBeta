@@ -37,8 +37,10 @@ import org.telegram.tgnet.TLRPC$Vector;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AnimatedEmojiSpan;
+import org.telegram.ui.Components.Premium.PremiumLockIconView;
 /* loaded from: classes3.dex */
 public class AnimatedEmojiDrawable extends Drawable {
+    private static HashMap<Long, Integer> dominantColors;
     private static HashMap<Integer, EmojiDocumentFetcher> fetchers;
     private static HashMap<Integer, HashMap<Long, AnimatedEmojiDrawable>> globalEmojiCache;
     private float alpha = 1.0f;
@@ -689,6 +691,31 @@ public class AnimatedEmojiDrawable extends Drawable {
 
     public ImageReceiver getImageReceiver() {
         return this.imageReceiver;
+    }
+
+    public static int getDominantColor(AnimatedEmojiDrawable animatedEmojiDrawable) {
+        if (animatedEmojiDrawable == null) {
+            return 0;
+        }
+        long documentId = animatedEmojiDrawable.getDocumentId();
+        if (documentId == 0) {
+            return 0;
+        }
+        if (dominantColors == null) {
+            dominantColors = new HashMap<>();
+        }
+        Integer num = dominantColors.get(Long.valueOf(documentId));
+        if (num == null && animatedEmojiDrawable.getImageReceiver() != null && animatedEmojiDrawable.getImageReceiver().getBitmap() != null) {
+            HashMap<Long, Integer> hashMap = dominantColors;
+            Long valueOf = Long.valueOf(documentId);
+            Integer valueOf2 = Integer.valueOf(PremiumLockIconView.getDominantColor(animatedEmojiDrawable.getImageReceiver().getBitmap()));
+            hashMap.put(valueOf, valueOf2);
+            num = valueOf2;
+        }
+        if (num != null) {
+            return num.intValue();
+        }
+        return 0;
     }
 
     /* loaded from: classes3.dex */

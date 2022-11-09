@@ -86,6 +86,7 @@ import org.telegram.tgnet.TLRPC$TL_documentAttributeVideo;
 import org.telegram.tgnet.TLRPC$TL_documentEmpty;
 import org.telegram.tgnet.TLRPC$TL_documentEncrypted;
 import org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable;
+import org.telegram.tgnet.TLRPC$TL_forumTopic;
 import org.telegram.tgnet.TLRPC$TL_game;
 import org.telegram.tgnet.TLRPC$TL_inputStickerSetEmpty;
 import org.telegram.tgnet.TLRPC$TL_inputStickerSetShortName;
@@ -300,6 +301,7 @@ public class MessageObject {
     public boolean reactionsChanged;
     public long reactionsLastCheckTime;
     public MessageObject replyMessageObject;
+    public TLRPC$TL_forumTopic replyToForumTopic;
     public boolean resendAsIs;
     public boolean scheduled;
     public SendAnimationData sendAnimationData;
@@ -1304,8 +1306,11 @@ public class MessageObject {
         MessageObject messageObject = this.replyMessageObject;
         if (messageObject != null) {
             TLRPC$Message tLRPC$Message = messageObject.messageOwner;
-            if (!(tLRPC$Message instanceof TLRPC$TL_messageEmpty) && !(tLRPC$Message.action instanceof TLRPC$TL_messageActionHistoryClear)) {
-                return true;
+            if (!(tLRPC$Message instanceof TLRPC$TL_messageEmpty)) {
+                TLRPC$MessageAction tLRPC$MessageAction = tLRPC$Message.action;
+                if (!(tLRPC$MessageAction instanceof TLRPC$TL_messageActionHistoryClear) && !(tLRPC$MessageAction instanceof TLRPC$TL_messageActionTopicCreate)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -2017,8 +2022,8 @@ public class MessageObject {
     /* JADX WARN: Removed duplicated region for block: B:250:0x069f  */
     /* JADX WARN: Removed duplicated region for block: B:280:0x076c  */
     /* JADX WARN: Removed duplicated region for block: B:284:0x07a6  */
-    /* JADX WARN: Removed duplicated region for block: B:537:0x0ebc  */
-    /* JADX WARN: Removed duplicated region for block: B:641:0x1148  */
+    /* JADX WARN: Removed duplicated region for block: B:537:0x0eba  */
+    /* JADX WARN: Removed duplicated region for block: B:641:0x1146  */
     /* JADX WARN: Removed duplicated region for block: B:661:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -2026,7 +2031,7 @@ public class MessageObject {
     */
     private void updateMessageText(java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$User> r23, java.util.AbstractMap<java.lang.Long, org.telegram.tgnet.TLRPC$Chat> r24, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$User> r25, androidx.collection.LongSparseArray<org.telegram.tgnet.TLRPC$Chat> r26) {
         /*
-            Method dump skipped, instructions count: 4427
+            Method dump skipped, instructions count: 4425
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.updateMessageText(java.util.AbstractMap, java.util.AbstractMap, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray):void");
@@ -3022,6 +3027,10 @@ public class MessageObject {
     }
 
     public static Spannable replaceAnimatedEmoji(CharSequence charSequence, ArrayList<TLRPC$MessageEntity> arrayList, Paint.FontMetricsInt fontMetricsInt) {
+        return replaceAnimatedEmoji(charSequence, arrayList, fontMetricsInt, false);
+    }
+
+    public static Spannable replaceAnimatedEmoji(CharSequence charSequence, ArrayList<TLRPC$MessageEntity> arrayList, Paint.FontMetricsInt fontMetricsInt, boolean z) {
         AnimatedEmojiSpan animatedEmojiSpan;
         Spannable spannableString = charSequence instanceof Spannable ? (Spannable) charSequence : new SpannableString(charSequence);
         if (arrayList == null) {
@@ -3056,6 +3065,7 @@ public class MessageObject {
                     } else {
                         animatedEmojiSpan = new AnimatedEmojiSpan(tLRPC$TL_messageEntityCustomEmoji.document_id, fontMetricsInt);
                     }
+                    animatedEmojiSpan.top = z;
                     int i4 = tLRPC$MessageEntity.offset;
                     spannableString.setSpan(animatedEmojiSpan, i4, tLRPC$MessageEntity.length + i4, 33);
                 }
@@ -3384,6 +3394,16 @@ public class MessageObject {
         }
         if (tLRPC$Peer != null && tLRPC$Peer2 != null) {
             return (!(tLRPC$Peer instanceof TLRPC$TL_peerChat) || !(tLRPC$Peer2 instanceof TLRPC$TL_peerChat)) ? (!(tLRPC$Peer instanceof TLRPC$TL_peerChannel) || !(tLRPC$Peer2 instanceof TLRPC$TL_peerChannel)) ? (tLRPC$Peer instanceof TLRPC$TL_peerUser) && (tLRPC$Peer2 instanceof TLRPC$TL_peerUser) && tLRPC$Peer.user_id == tLRPC$Peer2.user_id : tLRPC$Peer.channel_id == tLRPC$Peer2.channel_id : tLRPC$Peer.chat_id == tLRPC$Peer2.chat_id;
+        }
+        return false;
+    }
+
+    public static boolean peersEqual(TLRPC$Chat tLRPC$Chat, TLRPC$Peer tLRPC$Peer) {
+        if (tLRPC$Chat == null && tLRPC$Peer == null) {
+            return true;
+        }
+        if (tLRPC$Chat != null && tLRPC$Peer != null) {
+            return (!ChatObject.isChannel(tLRPC$Chat) || !(tLRPC$Peer instanceof TLRPC$TL_peerChannel)) ? !ChatObject.isChannel(tLRPC$Chat) && (tLRPC$Peer instanceof TLRPC$TL_peerChat) && tLRPC$Chat.id == tLRPC$Peer.chat_id : tLRPC$Chat.id == tLRPC$Peer.channel_id;
         }
         return false;
     }

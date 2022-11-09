@@ -20,6 +20,8 @@ public class LoadingDrawable extends Drawable {
     private RectF[] rects;
     private Theme.ResourcesProvider resourcesProvider;
     private long start = -1;
+    public String colorKey1 = "dialogBackground";
+    public String colorKey2 = "dialogBackgroundGray";
     public Paint paint = new Paint(1);
     private Path path = new Path();
 
@@ -39,8 +41,8 @@ public class LoadingDrawable extends Drawable {
             return;
         }
         int min = Math.min(AndroidUtilities.dp(400.0f), bounds.width());
-        int color = Theme.getColor("dialogBackground", this.resourcesProvider);
-        int color2 = Theme.getColor("dialogBackgroundGray", this.resourcesProvider);
+        int color = Theme.getColor(this.colorKey1, this.resourcesProvider);
+        int color2 = Theme.getColor(this.colorKey2, this.resourcesProvider);
         int i = 0;
         if (this.gradient == null || min != this.gradientWidth || color != this.gradientColor1 || color2 != this.gradientColor2) {
             this.gradientWidth = min;

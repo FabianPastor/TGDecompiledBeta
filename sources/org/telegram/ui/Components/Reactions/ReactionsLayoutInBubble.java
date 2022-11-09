@@ -39,7 +39,7 @@ import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
-import org.telegram.ui.Components.AvatarsDarawable;
+import org.telegram.ui.Components.AvatarsDrawable;
 import org.telegram.ui.Components.CounterView;
 /* loaded from: classes3.dex */
 public class ReactionsLayoutInBubble {
@@ -223,10 +223,10 @@ public class ReactionsLayoutInBubble {
                 reactionButton.height = AndroidUtilities.dp(14.0f);
             } else {
                 reactionButton.width = AndroidUtilities.dp(8.0f) + AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(4.0f);
-                if (reactionButton.avatarsDarawable != null && reactionButton.users.size() > 0) {
+                if (reactionButton.avatarsDrawable != null && reactionButton.users.size() > 0) {
                     reactionButton.users.size();
                     reactionButton.width = (int) (reactionButton.width + AndroidUtilities.dp(2.0f) + (AndroidUtilities.dp(20.0f) * 1) + ((reactionButton.users.size() > 1 ? reactionButton.users.size() - 1 : 0) * AndroidUtilities.dp(20.0f) * 0.8f) + AndroidUtilities.dp(1.0f));
-                    reactionButton.avatarsDarawable.height = AndroidUtilities.dp(26.0f);
+                    reactionButton.avatarsDrawable.height = AndroidUtilities.dp(26.0f);
                 } else {
                     reactionButton.width = (int) (reactionButton.width + reactionButton.counterDrawable.textPaint.measureText(reactionButton.countText) + AndroidUtilities.dp(8.0f));
                 }
@@ -369,7 +369,7 @@ public class ReactionsLayoutInBubble {
                 this.lastDrawingReactionButtonsTmp.remove(reactionButton.key);
                 int i3 = reactionButton.x;
                 int i4 = reactionButton2.x;
-                if (i3 != i4 || reactionButton.y != reactionButton2.y || reactionButton.width != reactionButton2.width || reactionButton.count != reactionButton2.count || reactionButton.choosen != reactionButton2.choosen || reactionButton.avatarsDarawable != null || reactionButton2.avatarsDarawable != null) {
+                if (i3 != i4 || reactionButton.y != reactionButton2.y || reactionButton.width != reactionButton2.width || reactionButton.count != reactionButton2.count || reactionButton.choosen != reactionButton2.choosen || reactionButton.avatarsDrawable != null || reactionButton2.avatarsDrawable != null) {
                     reactionButton.animateFromX = i4;
                     reactionButton.animateFromY = reactionButton2.y;
                     reactionButton.animateFromWidth = reactionButton2.width;
@@ -382,16 +382,16 @@ public class ReactionsLayoutInBubble {
                         reactionButton.counterDrawable.setCount(i6, false);
                         reactionButton.counterDrawable.setCount(reactionButton.count, true);
                     }
-                    AvatarsDarawable avatarsDarawable = reactionButton.avatarsDarawable;
-                    if (avatarsDarawable != null || reactionButton2.avatarsDarawable != null) {
-                        if (avatarsDarawable == null) {
+                    AvatarsDrawable avatarsDrawable = reactionButton.avatarsDrawable;
+                    if (avatarsDrawable != null || reactionButton2.avatarsDrawable != null) {
+                        if (avatarsDrawable == null) {
                             reactionButton.setUsers(new ArrayList<>());
                         }
-                        if (reactionButton2.avatarsDarawable == null) {
+                        if (reactionButton2.avatarsDrawable == null) {
                             reactionButton2.setUsers(new ArrayList<>());
                         }
                         if (!equalsUsersList(reactionButton2.users, reactionButton.users)) {
-                            reactionButton.avatarsDarawable.animateFromState(reactionButton2.avatarsDarawable, this.currentAccount, false);
+                            reactionButton.avatarsDrawable.animateFromState(reactionButton2.avatarsDrawable, this.currentAccount, false);
                         }
                     }
                 } else {
@@ -485,7 +485,7 @@ public class ReactionsLayoutInBubble {
         public int animateFromY;
         AnimatedEmojiDrawable animatedEmojiDrawable;
         public int animationType;
-        AvatarsDarawable avatarsDarawable;
+        AvatarsDrawable avatarsDrawable;
         int backgroundColor;
         public boolean choosen;
         public int choosenOrder;
@@ -653,14 +653,14 @@ public class ReactionsLayoutInBubble {
                 this.counterDrawable.draw(canvas);
                 canvas.restore();
             }
-            if (this.avatarsDarawable == null) {
+            if (this.avatarsDrawable == null) {
                 return;
             }
             canvas.save();
             canvas.translate(AndroidUtilities.dp(10.0f) + AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(2.0f), 0.0f);
-            this.avatarsDarawable.setAlpha(f2);
-            this.avatarsDarawable.setTransitionProgress(f);
-            this.avatarsDarawable.onDraw(canvas);
+            this.avatarsDrawable.setAlpha(f2);
+            this.avatarsDrawable.setTransitionProgress(f);
+            this.avatarsDrawable.onDraw(canvas);
             canvas.restore();
         }
 
@@ -716,24 +716,24 @@ public class ReactionsLayoutInBubble {
             this.users = arrayList;
             if (arrayList != null) {
                 Collections.sort(arrayList, ReactionsLayoutInBubble.usersComparator);
-                if (this.avatarsDarawable == null) {
-                    AvatarsDarawable avatarsDarawable = new AvatarsDarawable(ReactionsLayoutInBubble.this.parentView, false);
-                    this.avatarsDarawable = avatarsDarawable;
-                    avatarsDarawable.transitionDuration = 250L;
+                if (this.avatarsDrawable == null) {
+                    AvatarsDrawable avatarsDrawable = new AvatarsDrawable(ReactionsLayoutInBubble.this.parentView, false);
+                    this.avatarsDrawable = avatarsDrawable;
+                    avatarsDrawable.transitionDuration = 250L;
                     Interpolator interpolator = ChatListItemAnimator.DEFAULT_INTERPOLATOR;
-                    avatarsDarawable.setSize(AndroidUtilities.dp(20.0f));
-                    this.avatarsDarawable.width = AndroidUtilities.dp(100.0f);
-                    AvatarsDarawable avatarsDarawable2 = this.avatarsDarawable;
-                    avatarsDarawable2.height = this.height;
-                    avatarsDarawable2.setAvatarsTextSize(AndroidUtilities.dp(22.0f));
+                    avatarsDrawable.setSize(AndroidUtilities.dp(20.0f));
+                    this.avatarsDrawable.width = AndroidUtilities.dp(100.0f);
+                    AvatarsDrawable avatarsDrawable2 = this.avatarsDrawable;
+                    avatarsDrawable2.height = this.height;
+                    avatarsDrawable2.setAvatarsTextSize(AndroidUtilities.dp(22.0f));
                     if (ReactionsLayoutInBubble.this.attached) {
-                        this.avatarsDarawable.onAttachedToWindow();
+                        this.avatarsDrawable.onAttachedToWindow();
                     }
                 }
                 for (int i = 0; i < arrayList.size() && i != 3; i++) {
-                    this.avatarsDarawable.setObject(i, ReactionsLayoutInBubble.this.currentAccount, arrayList.get(i));
+                    this.avatarsDrawable.setObject(i, ReactionsLayoutInBubble.this.currentAccount, arrayList.get(i));
                 }
-                this.avatarsDarawable.commitTransition(false);
+                this.avatarsDrawable.commitTransition(false);
             }
         }
 
@@ -742,9 +742,9 @@ public class ReactionsLayoutInBubble {
             if (imageReceiver != null) {
                 imageReceiver.onAttachedToWindow();
             }
-            AvatarsDarawable avatarsDarawable = this.avatarsDarawable;
-            if (avatarsDarawable != null) {
-                avatarsDarawable.onAttachedToWindow();
+            AvatarsDrawable avatarsDrawable = this.avatarsDrawable;
+            if (avatarsDrawable != null) {
+                avatarsDrawable.onAttachedToWindow();
             }
             AnimatedEmojiDrawable animatedEmojiDrawable = this.animatedEmojiDrawable;
             if (animatedEmojiDrawable != null) {
@@ -757,9 +757,9 @@ public class ReactionsLayoutInBubble {
             if (imageReceiver != null) {
                 imageReceiver.onDetachedFromWindow();
             }
-            AvatarsDarawable avatarsDarawable = this.avatarsDarawable;
-            if (avatarsDarawable != null) {
-                avatarsDarawable.onDetachedFromWindow();
+            AvatarsDrawable avatarsDrawable = this.avatarsDrawable;
+            if (avatarsDrawable != null) {
+                avatarsDrawable.onDetachedFromWindow();
             }
             AnimatedEmojiDrawable animatedEmojiDrawable = this.animatedEmojiDrawable;
             if (animatedEmojiDrawable != null) {

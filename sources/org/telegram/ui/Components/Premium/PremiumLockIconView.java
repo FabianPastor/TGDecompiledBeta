@@ -181,7 +181,7 @@ public class PremiumLockIconView extends ImageView {
         for (int i5 = 0; i5 < 10; i5++) {
             for (int i6 = 0; i6 < 10; i6++) {
                 int pixel = bitmap.getPixel((int) (i5 * width), (int) (i6 * height));
-                if (pixel != 0) {
+                if (Color.alpha(pixel) > 200) {
                     i2 += Color.red(pixel);
                     i3 += Color.green(pixel);
                     i4 += Color.blue(pixel);

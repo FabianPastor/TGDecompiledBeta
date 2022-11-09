@@ -318,9 +318,6 @@ public abstract class TLRPC$Update extends TLObject {
             case -219423922:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateGroupCallParticipants();
                 break;
-            case -158027602:
-                tLRPC$TL_updateTheme = new TLRPC$TL_updateChannelPinnedTopic();
-                break;
             case -124097970:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateChat();
                 break;
@@ -336,6 +333,9 @@ public abstract class TLRPC$Update extends TLObject {
                         abstractSerializedData2.writeInt32(constructor);
                     }
                 };
+                break;
+            case -31881726:
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChannelPinnedTopics();
                 break;
             case 8703322:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateTranscribedAudio();
@@ -379,6 +379,9 @@ public abstract class TLRPC$Update extends TLObject {
                         abstractSerializedData2.writeInt32(constructor);
                     }
                 };
+                break;
+            case 422509539:
+                tLRPC$TL_updateTheme = new TLRPC$TL_updateChannelPinnedTopic();
                 break;
             case 422972864:
                 tLRPC$TL_updateTheme = new TLRPC$TL_updateFolderPeers();

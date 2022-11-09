@@ -1798,7 +1798,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
             View imageViewEmoji;
             if (i == this.VIEW_TYPE_SEARCH) {
                 imageViewEmoji = new View(this, SelectAnimatedEmojiDialog.this.getContext()) { // from class: org.telegram.ui.SelectAnimatedEmojiDialog.SearchAdapter.1
@@ -1999,7 +1999,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1822onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextView textView;
             if (i == this.VIEW_TYPE_HEADER) {
                 SelectAnimatedEmojiDialog selectAnimatedEmojiDialog = SelectAnimatedEmojiDialog.this;
@@ -2459,7 +2459,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
     public class ImageViewEmoji extends FrameLayout {
         public boolean attached;
         ValueAnimator backAnimator;
-        public ImageReceiver.BackgroundThreadDrawHolder backgroundThreadDrawHolder;
+        public ImageReceiver.BackgroundThreadDrawHolder[] backgroundThreadDrawHolder;
         public float bigReactionSelectedProgress;
         public TLRPC$Document document;
         public Drawable drawable;
@@ -2485,6 +2485,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             super(context);
             this.empty = false;
             this.notDraw = false;
+            this.backgroundThreadDrawHolder = new ImageReceiver.BackgroundThreadDrawHolder[2];
             this.invalidateHolder = new AnimatedEmojiSpan.InvalidateHolder() { // from class: org.telegram.ui.SelectAnimatedEmojiDialog.ImageViewEmoji.1
                 @Override // org.telegram.ui.Components.AnimatedEmojiSpan.InvalidateHolder
                 public void invalidate() {
@@ -3605,9 +3606,10 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                                 } else {
                                     imageReceiver.setRoundRadius(0);
                                 }
-                                ImageReceiver.BackgroundThreadDrawHolder drawInBackgroundThread = imageReceiver.setDrawInBackgroundThread(imageViewEmoji.backgroundThreadDrawHolder);
-                                imageViewEmoji.backgroundThreadDrawHolder = drawInBackgroundThread;
-                                drawInBackgroundThread.time = j;
+                                ImageReceiver.BackgroundThreadDrawHolder[] backgroundThreadDrawHolderArr = imageViewEmoji.backgroundThreadDrawHolder;
+                                int i3 = this.threadIndex;
+                                backgroundThreadDrawHolderArr[i3] = imageReceiver.setDrawInBackgroundThread(backgroundThreadDrawHolderArr[i3], i3);
+                                imageViewEmoji.backgroundThreadDrawHolder[this.threadIndex].time = j;
                                 imageViewEmoji.imageReceiverToDraw = imageReceiver;
                                 imageViewEmoji.update(j);
                                 imageViewEmoji.getWidth();
@@ -3622,7 +3624,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                                     rect2.set(Math.round(rect2.centerX() - ((rect2.width() / 2.0f) * 0.86f)), Math.round(rect2.centerY() - ((rect2.height() / 2.0f) * 0.86f)), Math.round(rect2.centerX() + ((rect2.width() / 2.0f) * 0.86f)), Math.round(rect2.centerY() + ((rect2.height() / 2.0f) * 0.86f)));
                                 }
                                 rect2.offset((imageViewEmoji.getLeft() + ((int) imageViewEmoji.getTranslationX())) - this.startOffset, 0);
-                                imageViewEmoji.backgroundThreadDrawHolder.setBounds(rect2);
+                                imageViewEmoji.backgroundThreadDrawHolder[this.threadIndex].setBounds(rect2);
                                 imageViewEmoji.skewAlpha = 1.0f;
                                 imageViewEmoji.skewIndex = i;
                                 this.drawInBackgroundViews.add(imageViewEmoji);
@@ -3648,7 +3650,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                         } else {
                             ImageReceiver imageReceiver = imageViewEmoji.imageReceiverToDraw;
                             if (imageReceiver != null) {
-                                imageReceiver.draw(canvas, imageViewEmoji.backgroundThreadDrawHolder);
+                                imageReceiver.draw(canvas, imageViewEmoji.backgroundThreadDrawHolder[this.threadIndex]);
                             }
                         }
                     }
@@ -3767,9 +3769,10 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             public void onFrameReady() {
                 super.onFrameReady();
                 for (int i = 0; i < this.drawInBackgroundViews.size(); i++) {
-                    ImageReceiver.BackgroundThreadDrawHolder backgroundThreadDrawHolder = this.drawInBackgroundViews.get(i).backgroundThreadDrawHolder;
-                    if (backgroundThreadDrawHolder != null) {
-                        backgroundThreadDrawHolder.release();
+                    ImageReceiver.BackgroundThreadDrawHolder[] backgroundThreadDrawHolderArr = this.drawInBackgroundViews.get(i).backgroundThreadDrawHolder;
+                    int i2 = this.threadIndex;
+                    if (backgroundThreadDrawHolderArr[i2] != null) {
+                        backgroundThreadDrawHolderArr[i2].release();
                     }
                 }
                 SelectAnimatedEmojiDialog.this.emojiGridView.invalidate();

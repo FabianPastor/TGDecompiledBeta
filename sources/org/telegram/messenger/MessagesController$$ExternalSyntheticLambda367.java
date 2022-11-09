@@ -12,6 +12,6 @@ public final /* synthetic */ class MessagesController$$ExternalSyntheticLambda36
 
     @Override // org.telegram.tgnet.RequestDelegate
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        MessagesController.lambda$markMentionMessageAsRead$196(tLObject, tLRPC$TL_error);
+        MessagesController.lambda$markMessageContentAsRead$196(tLObject, tLRPC$TL_error);
     }
 }

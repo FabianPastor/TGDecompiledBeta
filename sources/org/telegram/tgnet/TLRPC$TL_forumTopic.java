@@ -14,9 +14,11 @@ public class TLRPC$TL_forumTopic extends TLRPC$ForumTopic {
     public int icon_color;
     public long icon_emoji_id;
     public int id;
+    public boolean isShort;
     public boolean my;
     public TLRPC$PeerNotifySettings notify_settings;
     public boolean pinned;
+    public int pinnedOrder;
     public int read_inbox_max_id;
     public int read_outbox_max_id;
     public String searchQuery;
@@ -51,10 +53,11 @@ public class TLRPC$TL_forumTopic extends TLRPC$ForumTopic {
         boolean z2 = false;
         this.my = (readInt32 & 2) != 0;
         this.closed = (readInt32 & 4) != 0;
-        if ((readInt32 & 8) != 0) {
+        this.pinned = (readInt32 & 8) != 0;
+        if ((readInt32 & 32) != 0) {
             z2 = true;
         }
-        this.pinned = z2;
+        this.isShort = z2;
         this.id = abstractSerializedData.readInt32(z);
         this.date = abstractSerializedData.readInt32(z);
         this.title = abstractSerializedData.readString(z);
@@ -84,7 +87,9 @@ public class TLRPC$TL_forumTopic extends TLRPC$ForumTopic {
         this.flags = i2;
         int i3 = this.pinned ? i2 | 8 : i2 & (-9);
         this.flags = i3;
-        abstractSerializedData.writeInt32(i3);
+        int i4 = this.isShort ? i3 | 32 : i3 & (-33);
+        this.flags = i4;
+        abstractSerializedData.writeInt32(i4);
         abstractSerializedData.writeInt32(this.id);
         abstractSerializedData.writeInt32(this.date);
         abstractSerializedData.writeString(this.title);
