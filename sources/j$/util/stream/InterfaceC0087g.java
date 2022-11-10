@@ -10,18 +10,18 @@ public interface InterfaceCLASSNAMEg extends AutoCloseable {
     boolean isParallel();
 
     /* renamed from: iterator */
-    Iterator mo307iterator();
+    Iterator moNUMiterator();
 
     InterfaceCLASSNAMEg onClose(Runnable runnable);
 
     /* renamed from: parallel */
-    InterfaceCLASSNAMEg mo308parallel();
+    InterfaceCLASSNAMEg moNUMparallel();
 
     /* renamed from: sequential */
-    InterfaceCLASSNAMEg mo309sequential();
+    InterfaceCLASSNAMEg moNUMsequential();
 
     /* renamed from: spliterator */
-    j$.util.u mo310spliterator();
+    j$.util.u moNUMspliterator();
 
     InterfaceCLASSNAMEg unordered();
 }

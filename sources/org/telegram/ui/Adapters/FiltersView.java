@@ -588,7 +588,7 @@ public class FiltersView extends RecyclerListView {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder  reason: collision with other method in class */
-        public ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public ViewHolder moNUMonCreateViewHolder(ViewGroup viewGroup, int i) {
             ViewHolder viewHolder = new ViewHolder(FiltersView.this, new FilterView(viewGroup.getContext(), ((RecyclerListView) FiltersView.this).resourcesProvider));
             RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(-2, AndroidUtilities.dp(32.0f));
             ((ViewGroup.MarginLayoutParams) layoutParams).topMargin = AndroidUtilities.dp(6.0f);
@@ -777,8 +777,9 @@ public class FiltersView extends RecyclerListView {
         return super.onTouchEvent(motionEvent);
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes3.dex */
-    private static class UpdateCallback implements ListUpdateCallback {
+    public static class UpdateCallback implements ListUpdateCallback {
         final RecyclerView.Adapter adapter;
         boolean changed;
 

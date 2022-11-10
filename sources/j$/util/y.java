@@ -62,7 +62,7 @@ class y implements p.a, j$.util.function.l, Iterator {
 
     @Override // j$.util.p.a, java.util.Iterator
     /* renamed from: next */
-    public Integer mo313next() {
+    public Integer moNUMnext() {
         if (!N.a) {
             return Integer.valueOf(nextInt());
         }

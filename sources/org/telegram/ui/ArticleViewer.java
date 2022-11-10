@@ -1895,8 +1895,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 TLRPC$TL_pageBlockParagraph tLRPC$TL_pageBlockParagraph = new TLRPC$TL_pageBlockParagraph();
                 tLRPC$TL_pageBlockParagraph.text = tLRPC$TL_textAnchor.text;
                 int typeForBlock = this.adapter[0].getTypeForBlock(tLRPC$TL_pageBlockParagraph);
-                RecyclerView.ViewHolder mo1805onCreateViewHolder = this.adapter[0].mo1805onCreateViewHolder(null, typeForBlock);
-                this.adapter[0].bindBlockToHolder(typeForBlock, mo1805onCreateViewHolder, tLRPC$TL_pageBlockParagraph, 0, 0);
+                RecyclerView.ViewHolder moNUMonCreateViewHolder = this.adapter[0].moNUMonCreateViewHolder(null, typeForBlock);
+                this.adapter[0].bindBlockToHolder(typeForBlock, moNUMonCreateViewHolder, tLRPC$TL_pageBlockParagraph, 0, 0);
                 BottomSheet.Builder builder = new BottomSheet.Builder(this.parentActivity);
                 builder.setApplyTopPadding(false);
                 builder.setApplyBottomPadding(false);
@@ -1927,8 +1927,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 textView.setTextColor(getTextColor());
                 textView.setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
                 linearLayout.addView(textView, new LinearLayout.LayoutParams(-1, AndroidUtilities.dp(48.0f) + 1));
-                mo1805onCreateViewHolder.itemView.setTag("bottomSheet");
-                linearLayout.addView(mo1805onCreateViewHolder.itemView, LayoutHelper.createLinear(-1, -2, 0.0f, 7.0f, 0.0f, 0.0f));
+                moNUMonCreateViewHolder.itemView.setTag("bottomSheet");
+                linearLayout.addView(moNUMonCreateViewHolder.itemView, LayoutHelper.createLinear(-1, -2, 0.0f, 7.0f, 0.0f, 0.0f));
                 TextSelectionHelper<Cell>.TextSelectionOverlay overlayView = this.textSelectionHelperBottomSheet.getOverlayView(this.parentActivity);
                 FrameLayout frameLayout = new FrameLayout(this.parentActivity) { // from class: org.telegram.ui.ArticleViewer.5
                     @Override // android.view.ViewGroup, android.view.View
@@ -1992,9 +1992,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (num3 != null) {
                     if (num3.intValue() == -1) {
                         int typeForBlock2 = this.adapter[0].getTypeForBlock(tLRPC$PageBlock);
-                        RecyclerView.ViewHolder mo1805onCreateViewHolder2 = this.adapter[0].mo1805onCreateViewHolder(null, typeForBlock2);
-                        this.adapter[0].bindBlockToHolder(typeForBlock2, mo1805onCreateViewHolder2, tLRPC$PageBlock, 0, 0);
-                        mo1805onCreateViewHolder2.itemView.measure(View.MeasureSpec.makeMeasureSpec(this.listView[0].getMeasuredWidth(), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
+                        RecyclerView.ViewHolder moNUMonCreateViewHolder2 = this.adapter[0].moNUMonCreateViewHolder(null, typeForBlock2);
+                        this.adapter[0].bindBlockToHolder(typeForBlock2, moNUMonCreateViewHolder2, tLRPC$PageBlock, 0, 0);
+                        moNUMonCreateViewHolder2.itemView.measure(View.MeasureSpec.makeMeasureSpec(this.listView[0].getMeasuredWidth(), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
                         Integer num4 = (Integer) this.adapter[0].anchorsOffset.get(lowerCase);
                         if (num4.intValue() != -1) {
                             num = num4;
@@ -5374,7 +5374,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder moNUMonCreateViewHolder(ViewGroup viewGroup, int i) {
             TextView textView;
             View blockVideoCell;
             if (i != 90) {
@@ -7903,7 +7903,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             RecyclerView.Adapter adapter = new RecyclerView.Adapter(ArticleViewer.this) { // from class: org.telegram.ui.ArticleViewer.BlockCollageCell.5
                 @Override // androidx.recyclerview.widget.RecyclerView.Adapter
                 /* renamed from: onCreateViewHolder */
-                public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
+                public RecyclerView.ViewHolder moNUMonCreateViewHolder(ViewGroup viewGroup, int i) {
                     View blockPhotoCell;
                     if (i == 0) {
                         BlockCollageCell blockCollageCell = BlockCollageCell.this;
@@ -8172,7 +8172,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 /* JADX WARN: Multi-variable type inference failed */
                 @Override // androidx.viewpager.widget.PagerAdapter
                 /* renamed from: instantiateItem */
-                public Object mo1615instantiateItem(ViewGroup viewGroup, int i) {
+                public Object moNUMinstantiateItem(ViewGroup viewGroup, int i) {
                     BlockVideoCell blockVideoCell;
                     TLRPC$PageBlock tLRPC$PageBlock = BlockSlideshowCell.this.currentBlock.items.get(i);
                     if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockPhoto) {
@@ -8384,9 +8384,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (this.currentBlock.blockItem != null) {
                     int typeForBlock = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
                     this.currentBlockType = typeForBlock;
-                    RecyclerView.ViewHolder mo1805onCreateViewHolder = this.parentAdapter.mo1805onCreateViewHolder(this, typeForBlock);
-                    this.blockLayout = mo1805onCreateViewHolder;
-                    addView(mo1805onCreateViewHolder.itemView);
+                    RecyclerView.ViewHolder moNUMonCreateViewHolder = this.parentAdapter.moNUMonCreateViewHolder(this, typeForBlock);
+                    this.blockLayout = moNUMonCreateViewHolder;
+                    addView(moNUMonCreateViewHolder.itemView);
                 }
             }
             if (this.currentBlock.blockItem != null) {
@@ -8535,9 +8535,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (this.currentBlock.blockItem != null) {
                     int typeForBlock = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
                     this.currentBlockType = typeForBlock;
-                    RecyclerView.ViewHolder mo1805onCreateViewHolder = this.parentAdapter.mo1805onCreateViewHolder(this, typeForBlock);
-                    this.blockLayout = mo1805onCreateViewHolder;
-                    addView(mo1805onCreateViewHolder.itemView);
+                    RecyclerView.ViewHolder moNUMonCreateViewHolder = this.parentAdapter.moNUMonCreateViewHolder(this, typeForBlock);
+                    this.blockLayout = moNUMonCreateViewHolder;
+                    addView(moNUMonCreateViewHolder.itemView);
                 }
             }
             if (this.currentBlock.blockItem != null) {
@@ -10057,7 +10057,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             this.imageView.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(39.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(39.0f), NUM));
             TLRPC$TL_pageBlockChannel tLRPC$TL_pageBlockChannel = this.currentBlock;
             if (tLRPC$TL_pageBlockChannel != null) {
-                this.textLayout = ArticleViewer.this.createLayoutForText(this, tLRPC$TL_pageBlockChannel.channel.title, null, (size - AndroidUtilities.dp(52.0f)) - this.buttonWidth, this.textY, this.currentBlock, StaticLayoutEx.ALIGN_LEFT(), this.parentAdapter);
+                this.textLayout = ArticleViewer.this.createLayoutForText(this, tLRPC$TL_pageBlockChannel.channel.title, null, (size - AndroidUtilities.dp(52.0f)) - this.buttonWidth, this.textY, this.currentBlock, StaticLayoutEx.ALIGN_LEFT(), 1, this.parentAdapter);
                 if (this.parentAdapter.isRtl) {
                     this.textX2 = this.textX;
                 } else {

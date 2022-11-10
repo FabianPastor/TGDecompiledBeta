@@ -37,13 +37,13 @@ final class CLASSNAMEq0 extends CountedCompleter {
 
     @Override // java.util.concurrent.CountedCompleter
     public final void compute() {
-        j$.util.u mo326trySplit;
+        j$.util.u moNUMtrySplit;
         j$.util.u uVar = this.b;
         long j = this.c;
         boolean z = false;
         CLASSNAMEq0 CLASSNAMEq0 = this;
-        while (uVar.estimateSize() > j && (mo326trySplit = uVar.mo326trySplit()) != null) {
-            CLASSNAMEq0 CLASSNAMEq02 = new CLASSNAMEq0(CLASSNAMEq0, mo326trySplit, CLASSNAMEq0.f);
+        while (uVar.estimateSize() > j && (moNUMtrySplit = uVar.moNUMtrySplit()) != null) {
+            CLASSNAMEq0 CLASSNAMEq02 = new CLASSNAMEq0(CLASSNAMEq0, moNUMtrySplit, CLASSNAMEq0.f);
             CLASSNAMEq0 CLASSNAMEq03 = new CLASSNAMEq0(CLASSNAMEq0, uVar, CLASSNAMEq02);
             CLASSNAMEq0.addToPendingCount(1);
             CLASSNAMEq03.addToPendingCount(1);
@@ -57,7 +57,7 @@ final class CLASSNAMEq0 extends CountedCompleter {
                 }
             }
             if (z) {
-                uVar = mo326trySplit;
+                uVar = moNUMtrySplit;
                 CLASSNAMEq0 = CLASSNAMEq02;
                 CLASSNAMEq02 = CLASSNAMEq03;
             } else {
@@ -74,7 +74,7 @@ final class CLASSNAMEq0 extends CountedCompleter {
             abstractCLASSNAMEc.getClass();
             t0.getClass();
             abstractCLASSNAMEc.n0(abstractCLASSNAMEc.v0(t0), uVar);
-            CLASSNAMEq0.g = t0.mo291a();
+            CLASSNAMEq0.g = t0.moNUMa();
             CLASSNAMEq0.b = null;
         }
         CLASSNAMEq0.tryComplete();

@@ -395,6 +395,7 @@
     <string name="Alert">Show notifications</string>
     <string name="AlertClearHistory">Clear History</string>
     <string name="AllAccounts">All Accounts</string>
+    <string name="AllChats">All Chats</string>
     <string name="AllMedia">All media</string>
     <string name="AllNMedia_few">All %1$d media</string>
     <string name="AllNMedia_many">All %1$d media</string>

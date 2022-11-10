@@ -9,7 +9,7 @@ public interface r extends p {
 
     @Override // java.util.Iterator
     /* renamed from: next */
-    Long mo315next();
+    Long moNUMnext();
 
     long nextLong();
 }

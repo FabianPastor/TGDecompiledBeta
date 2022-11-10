@@ -29,8 +29,9 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
         void didSelectAlbum(MediaController.AlbumEntry albumEntry);
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes3.dex */
-    private class AlbumView extends FrameLayout {
+    public class AlbumView extends FrameLayout {
         private TextView countTextView;
         private BackupImageView imageView;
         private TextView nameTextView;

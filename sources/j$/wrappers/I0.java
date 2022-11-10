@@ -31,7 +31,7 @@ public final /* synthetic */ class I0 implements BaseStream {
 
     @Override // java.util.stream.BaseStream
     public /* synthetic */ Iterator iterator() {
-        return this.a.mo307iterator();
+        return this.a.moNUMiterator();
     }
 
     @Override // java.util.stream.BaseStream
@@ -41,17 +41,17 @@ public final /* synthetic */ class I0 implements BaseStream {
 
     @Override // java.util.stream.BaseStream
     public /* synthetic */ BaseStream parallel() {
-        return n0(this.a.mo308parallel());
+        return n0(this.a.moNUMparallel());
     }
 
     @Override // java.util.stream.BaseStream
     public /* synthetic */ BaseStream sequential() {
-        return n0(this.a.mo309sequential());
+        return n0(this.a.moNUMsequential());
     }
 
     @Override // java.util.stream.BaseStream
     public /* synthetic */ Spliterator spliterator() {
-        return CLASSNAMEh.a(this.a.mo310spliterator());
+        return CLASSNAMEh.a(this.a.moNUMspliterator());
     }
 
     @Override // java.util.stream.BaseStream

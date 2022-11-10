@@ -41,13 +41,13 @@ public final /* synthetic */ class CLASSNAMEc implements p.a {
 
     @Override // j$.util.p.a, java.util.Iterator
     /* renamed from: next */
-    public /* synthetic */ Integer mo313next() {
+    public /* synthetic */ Integer moNUMnext() {
         return this.a.next();
     }
 
     @Override // j$.util.p.a, java.util.Iterator
     /* renamed from: next  reason: collision with other method in class */
-    public /* synthetic */ Object mo313next() {
+    public /* synthetic */ Object moNUMnext() {
         return this.a.next();
     }
 

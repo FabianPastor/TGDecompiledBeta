@@ -556,6 +556,12 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
                 super.onLayout(z, i5, i6, i7, i8);
                 TopicsFragment.this.checkForLoadMore();
             }
+
+            /* JADX INFO: Access modifiers changed from: protected */
+            @Override // org.telegram.ui.Components.RecyclerListView
+            public boolean emptyViewIsVisible() {
+                return super.emptyViewIsVisible();
+            }
         };
         AnonymousClass6 anonymousClass6 = new AnonymousClass6();
         anonymousClass6.setSupportsChangeAnimations(false);
@@ -571,10 +577,9 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             }
         });
         this.recyclerListView.setAnimateEmptyView(true, 0);
-        RecyclerListView recyclerListView2 = this.recyclerListView;
-        RecyclerItemsEnterAnimator recyclerItemsEnterAnimator = new RecyclerItemsEnterAnimator(recyclerListView2, true);
+        RecyclerItemsEnterAnimator recyclerItemsEnterAnimator = new RecyclerItemsEnterAnimator(this.recyclerListView, true);
         this.itemsEnterAnimator = recyclerItemsEnterAnimator;
-        recyclerListView2.setItemsEnterAnimator(recyclerItemsEnterAnimator);
+        this.recyclerListView.setItemsEnterAnimator(recyclerItemsEnterAnimator);
         this.recyclerListView.setOnItemClickListener(new RecyclerListView.OnItemClickListener() { // from class: org.telegram.ui.TopicsFragment$$ExternalSyntheticLambda15
             @Override // org.telegram.ui.Components.RecyclerListView.OnItemClickListener
             public final void onItemClick(View view, int i5) {
@@ -606,10 +611,10 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
                 TopicsFragment.this.contentView.invalidateBlur();
             }
         });
-        RecyclerListView recyclerListView3 = this.recyclerListView;
+        RecyclerListView recyclerListView2 = this.recyclerListView;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         this.layoutManager = linearLayoutManager;
-        recyclerListView3.setLayoutManager(linearLayoutManager);
+        recyclerListView2.setLayoutManager(linearLayoutManager);
         this.recyclerListView.setAdapter(this.adapter);
         this.recyclerListView.setClipToPadding(false);
         this.recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() { // from class: org.telegram.ui.TopicsFragment.9
@@ -1481,6 +1486,10 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
         if (this.topicsEmptyView != null && this.forumTopics.size() == 0) {
             this.topicsEmptyView.showProgress(this.loadingTopics, this.fragmentBeginToShow);
         }
+        RecyclerListView recyclerListView = this.recyclerListView;
+        if (recyclerListView != null) {
+            recyclerListView.checkIfEmpty();
+        }
         updateCreateTopicButton(true);
     }
 
@@ -1780,7 +1789,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
         @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
             int adapterPosition = viewHolder.getAdapterPosition();
-            if (adapterPosition < 0 || adapterPosition >= TopicsFragment.this.forumTopics.size() || !TopicsFragment.this.forumTopics.get(adapterPosition).topic.pinned) {
+            if (adapterPosition < 0 || adapterPosition >= TopicsFragment.this.forumTopics.size() || TopicsFragment.this.forumTopics.get(adapterPosition).topic == null || !TopicsFragment.this.forumTopics.get(adapterPosition).topic.pinned) {
                 return ItemTouchHelper.Callback.makeMovementFlags(0, 0);
             }
             return ItemTouchHelper.Callback.makeMovementFlags(3, 0);
@@ -1789,7 +1798,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
         @Override // androidx.recyclerview.widget.ItemTouchHelper.Callback
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder2) {
             int adapterPosition;
-            if (viewHolder.getItemViewType() == viewHolder2.getItemViewType() && (adapterPosition = viewHolder2.getAdapterPosition()) >= 0 && adapterPosition < TopicsFragment.this.forumTopics.size() && TopicsFragment.this.forumTopics.get(adapterPosition).topic.pinned) {
+            if (viewHolder.getItemViewType() == viewHolder2.getItemViewType() && (adapterPosition = viewHolder2.getAdapterPosition()) >= 0 && adapterPosition < TopicsFragment.this.forumTopics.size() && TopicsFragment.this.forumTopics.get(adapterPosition).topic != null && TopicsFragment.this.forumTopics.get(adapterPosition).topic.pinned) {
                 TopicsFragment.this.adapter.swapElements(viewHolder.getAdapterPosition(), viewHolder2.getAdapterPosition());
                 return true;
             }
@@ -1948,15 +1957,22 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             for (int i = 0; i < topics.size(); i++) {
                 HashSet<Integer> hashSet = this.excludeTopics;
                 if (hashSet == null || !hashSet.contains(Integer.valueOf(topics.get(i).id))) {
-                    this.forumTopics.add(new Item(this, topics.get(i)));
+                    this.forumTopics.add(new Item(this, 0, topics.get(i)));
                 }
             }
+            DefaultItemAnimator defaultItemAnimator = null;
             if (this.forumTopics.size() == 1 && this.forumTopics.get(0).topic.id == 1) {
                 this.forumTopics.clear();
+            } else if (!this.forumTopics.isEmpty() && !this.topicsController.endIsReached(this.chatId)) {
+                this.forumTopics.add(new Item(this, 1, null));
+            }
+            int size2 = this.forumTopics.size();
+            if (this.fragmentBeginToShow && z2 && size2 > size) {
+                this.itemsEnterAnimator.showItemsAnimated(size + 4);
+                z = false;
             }
             RecyclerListView recyclerListView = this.recyclerListView;
             if (recyclerListView != null) {
-                DefaultItemAnimator defaultItemAnimator = null;
                 if (recyclerListView.getItemAnimator() != (z ? this.itemAnimator : null)) {
                     RecyclerListView recyclerListView2 = this.recyclerListView;
                     if (z) {
@@ -1968,10 +1984,6 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             Adapter adapter = this.adapter;
             if (adapter != null) {
                 adapter.setItems(arrayList, this.forumTopics);
-            }
-            int size2 = this.forumTopics.size();
-            if (this.fragmentBeginToShow && z2 && size2 > size) {
-                this.itemsEnterAnimator.showItemsAnimated(size + 1);
             }
             if (this.scrollToTop && (linearLayoutManager = this.layoutManager) != null) {
                 linearLayoutManager.scrollToPosition(0);
@@ -2004,10 +2016,10 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
                 return;
             }
             updateTopicsList(false, true);
-            if (objArr.length <= 1 || !((Boolean) objArr[1]).booleanValue()) {
-                return;
+            if (objArr.length > 1 && ((Boolean) objArr[1]).booleanValue()) {
+                checkForLoadMore();
             }
-            checkForLoadMore();
+            checkLoading();
         } else if (i == NotificationCenter.updateInterfaces) {
             int intValue = ((Integer) objArr[0]).intValue();
             if (intValue == MessagesController.UPDATE_MASK_CHAT) {
@@ -2035,7 +2047,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             if (fragmentContextView == null) {
                 return;
             }
-            fragmentContextView.checkCall(true);
+            fragmentContextView.checkCall(!this.fragmentBeginToShow);
         } else if (i == NotificationCenter.notificationsSettingsUpdated) {
             updateTopicsList(false, false);
             updateChatInfo(true);
@@ -2088,51 +2100,69 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
     /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes3.dex */
     public class Adapter extends AdapterWithDiffUtils {
-        @Override // org.telegram.ui.Components.RecyclerListView.SelectionAdapter
-        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
-            return true;
-        }
-
         private Adapter() {
         }
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+        public int getItemViewType(int i) {
+            return TopicsFragment.this.forumTopics.get(i).viewType;
+        }
+
+        @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
-            return new RecyclerListView.Holder(new TopicDialogCell(null, viewGroup.getContext(), true, false));
+        public RecyclerView.ViewHolder moNUMonCreateViewHolder(ViewGroup viewGroup, int i) {
+            if (i == 0) {
+                return new RecyclerListView.Holder(new TopicDialogCell(null, viewGroup.getContext(), true, false));
+            }
+            FlickerLoadingView flickerLoadingView = new FlickerLoadingView(viewGroup.getContext());
+            flickerLoadingView.setViewType(24);
+            flickerLoadingView.setIsSingleCell(true);
+            flickerLoadingView.showDate(true);
+            return new RecyclerListView.Holder(flickerLoadingView);
         }
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            TLRPC$TL_forumTopic tLRPC$TL_forumTopic = TopicsFragment.this.forumTopics.get(i).topic;
-            int i2 = i + 1;
-            TLRPC$TL_forumTopic tLRPC$TL_forumTopic2 = i2 < TopicsFragment.this.forumTopics.size() ? TopicsFragment.this.forumTopics.get(i2).topic : null;
-            TopicDialogCell topicDialogCell = (TopicDialogCell) viewHolder.itemView;
-            TLRPC$Message tLRPC$Message = tLRPC$TL_forumTopic.topMessage;
-            TLRPC$TL_forumTopic tLRPC$TL_forumTopic3 = topicDialogCell.forumTopic;
-            boolean z = false;
-            int i3 = tLRPC$TL_forumTopic3 == null ? 0 : tLRPC$TL_forumTopic3.id;
-            int i4 = tLRPC$TL_forumTopic.id;
-            boolean z2 = i3 == i4 && topicDialogCell.position == i && TopicsFragment.this.animatedUpdateEnabled;
-            if (tLRPC$Message != null) {
-                topicDialogCell.setForumTopic(tLRPC$TL_forumTopic, -TopicsFragment.this.chatId, new MessageObject(((BaseFragment) TopicsFragment.this).currentAccount, tLRPC$Message, false, false), z2);
-                topicDialogCell.drawDivider = i != TopicsFragment.this.forumTopics.size() - 1;
-                boolean z3 = tLRPC$TL_forumTopic.pinned;
-                if (z3 && (tLRPC$TL_forumTopic2 == null || !tLRPC$TL_forumTopic2.pinned)) {
-                    z = true;
+            if (viewHolder.getItemViewType() == 0) {
+                TLRPC$TL_forumTopic tLRPC$TL_forumTopic = TopicsFragment.this.forumTopics.get(i).topic;
+                TLRPC$TL_forumTopic tLRPC$TL_forumTopic2 = null;
+                int i2 = i + 1;
+                if (i2 < TopicsFragment.this.forumTopics.size()) {
+                    tLRPC$TL_forumTopic2 = TopicsFragment.this.forumTopics.get(i2).topic;
                 }
-                topicDialogCell.fullSeparator = z;
-                topicDialogCell.setPinForced(z3);
-                topicDialogCell.position = i;
+                TLRPC$TL_forumTopic tLRPC$TL_forumTopic3 = tLRPC$TL_forumTopic2;
+                TopicDialogCell topicDialogCell = (TopicDialogCell) viewHolder.itemView;
+                TLRPC$Message tLRPC$Message = tLRPC$TL_forumTopic.topMessage;
+                TLRPC$TL_forumTopic tLRPC$TL_forumTopic4 = topicDialogCell.forumTopic;
+                boolean z = false;
+                int i3 = tLRPC$TL_forumTopic4 == null ? 0 : tLRPC$TL_forumTopic4.id;
+                int i4 = tLRPC$TL_forumTopic.id;
+                boolean z2 = i3 == i4 && topicDialogCell.position == i && TopicsFragment.this.animatedUpdateEnabled;
+                if (tLRPC$Message != null) {
+                    topicDialogCell.setForumTopic(tLRPC$TL_forumTopic, -TopicsFragment.this.chatId, new MessageObject(((BaseFragment) TopicsFragment.this).currentAccount, tLRPC$Message, false, false), z2);
+                    topicDialogCell.drawDivider = i != TopicsFragment.this.forumTopics.size() - 1;
+                    boolean z3 = tLRPC$TL_forumTopic.pinned;
+                    if (z3 && (tLRPC$TL_forumTopic3 == null || !tLRPC$TL_forumTopic3.pinned)) {
+                        z = true;
+                    }
+                    topicDialogCell.fullSeparator = z;
+                    topicDialogCell.setPinForced(z3);
+                    topicDialogCell.position = i;
+                }
+                topicDialogCell.setTopicIcon(tLRPC$TL_forumTopic);
+                topicDialogCell.setChecked(TopicsFragment.this.selectedTopics.contains(Integer.valueOf(i4)), z2);
+                topicDialogCell.onReorderStateChanged(TopicsFragment.this.reordering, true);
             }
-            topicDialogCell.setTopicIcon(tLRPC$TL_forumTopic);
-            topicDialogCell.setChecked(TopicsFragment.this.selectedTopics.contains(Integer.valueOf(i4)), z2);
-            topicDialogCell.onReorderStateChanged(TopicsFragment.this.reordering, true);
         }
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         public int getItemCount() {
             return TopicsFragment.this.forumTopics.size();
+        }
+
+        @Override // org.telegram.ui.Components.RecyclerListView.SelectionAdapter
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
+            return viewHolder.getItemViewType() == 0;
         }
 
         public void swapElements(int i, int i2) {
@@ -2642,7 +2672,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder moNUMonCreateViewHolder(ViewGroup viewGroup, int i) {
                 View graySectionCell;
                 if (i == 1) {
                     graySectionCell = new GraySectionCell(viewGroup.getContext());
@@ -2939,8 +2969,8 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
     public class Item extends AdapterWithDiffUtils.Item {
         TLRPC$TL_forumTopic topic;
 
-        public Item(TopicsFragment topicsFragment, TLRPC$TL_forumTopic tLRPC$TL_forumTopic) {
-            super(0, true);
+        public Item(TopicsFragment topicsFragment, int i, TLRPC$TL_forumTopic tLRPC$TL_forumTopic) {
+            super(i, true);
             this.topic = tLRPC$TL_forumTopic;
         }
 
@@ -2948,7 +2978,12 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             if (this == obj) {
                 return true;
             }
-            return obj != null && Item.class == obj.getClass() && this.topic.id == ((Item) obj).topic.id;
+            if (obj != null && Item.class == obj.getClass()) {
+                Item item = (Item) obj;
+                int i = this.viewType;
+                return i == item.viewType && i == 0 && this.topic.id == item.topic.id;
+            }
+            return false;
         }
     }
 

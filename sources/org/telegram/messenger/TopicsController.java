@@ -28,6 +28,7 @@ import org.telegram.tgnet.TLRPC$TL_channels_reorderPinnedForumTopics;
 import org.telegram.tgnet.TLRPC$TL_channels_updatePinnedForumTopic;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_forumTopic;
+import org.telegram.tgnet.TLRPC$TL_forumTopicDeleted;
 import org.telegram.tgnet.TLRPC$TL_message;
 import org.telegram.tgnet.TLRPC$TL_messageActionTopicCreate;
 import org.telegram.tgnet.TLRPC$TL_messageReplyHeader;
@@ -233,7 +234,7 @@ public class TopicsController extends BaseController {
             z2 = false;
             while (i3 < arrayList.size()) {
                 TLRPC$TL_forumTopic tLRPC$TL_forumTopic = arrayList2.get(i3);
-                if (!longSparseArray.containsKey(tLRPC$TL_forumTopic.id)) {
+                if (!(tLRPC$TL_forumTopic instanceof TLRPC$TL_forumTopicDeleted) && !longSparseArray.containsKey(tLRPC$TL_forumTopic.id)) {
                     if (sparseArray2 != null) {
                         tLRPC$TL_forumTopic.topMessage = sparseArray2.get(tLRPC$TL_forumTopic.top_message);
                         tLRPC$TL_forumTopic.topicStartMessage = sparseArray2.get(tLRPC$TL_forumTopic.id);
@@ -714,7 +715,7 @@ public class TopicsController extends BaseController {
             } else if (baseFragment == null) {
             } else {
                 applyPinnedOrder(j, arrayList);
-                baseFragment.showDialog(new AlertDialog.Builder(baseFragment.getContext()).setTitle(LocaleController.getString("LimitReached", R.string.LimitReached)).setMessage(LocaleController.formatString("LimitReachedPinnedTopics", R.string.LimitReachedPinnedTopics, 5)).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).create());
+                baseFragment.showDialog(new AlertDialog.Builder(baseFragment.getContext()).setTitle(LocaleController.getString("LimitReached", R.string.LimitReached)).setMessage(LocaleController.formatString("LimitReachedPinnedTopics", R.string.LimitReachedPinnedTopics, Integer.valueOf(MessagesController.getInstance(this.currentAccount).topicsPinnedLimit))).setPositiveButton(LocaleController.getString("OK", R.string.OK), null).create());
             }
         }
     }

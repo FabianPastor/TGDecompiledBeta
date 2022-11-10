@@ -8956,34 +8956,34 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:1405:0x0a2f, code lost:
-        if (r1[0] == 3) goto L331;
+    /* JADX WARN: Code restructure failed: missing block: B:1409:0x0a31, code lost:
+        if (r1[0] == 3) goto L333;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:1671:0x1188, code lost:
-        if (r3 == 2) goto L662;
+    /* JADX WARN: Code restructure failed: missing block: B:1675:0x118a, code lost:
+        if (r3 == 2) goto L664;
      */
-    /* JADX WARN: Removed duplicated region for block: B:1141:0x02e8  */
-    /* JADX WARN: Removed duplicated region for block: B:1142:0x02eb  */
-    /* JADX WARN: Removed duplicated region for block: B:1550:0x0e2c  */
-    /* JADX WARN: Removed duplicated region for block: B:1834:0x1478  */
-    /* JADX WARN: Removed duplicated region for block: B:1838:0x1491  */
-    /* JADX WARN: Removed duplicated region for block: B:1846:0x14b2  */
-    /* JADX WARN: Removed duplicated region for block: B:1850:0x14c9  */
-    /* JADX WARN: Removed duplicated region for block: B:1872:0x1507  */
-    /* JADX WARN: Removed duplicated region for block: B:1876:0x1518  */
-    /* JADX WARN: Removed duplicated region for block: B:1920:0x1668  */
-    /* JADX WARN: Removed duplicated region for block: B:1923:0x1684  */
-    /* JADX WARN: Removed duplicated region for block: B:1925:0x168c  */
-    /* JADX WARN: Removed duplicated region for block: B:1946:0x1738  */
-    /* JADX WARN: Removed duplicated region for block: B:1952:0x174c  */
-    /* JADX WARN: Removed duplicated region for block: B:1956:0x175a  */
-    /* JADX WARN: Removed duplicated region for block: B:1991:0x1820  */
-    /* JADX WARN: Removed duplicated region for block: B:1994:0x1827  */
-    /* JADX WARN: Removed duplicated region for block: B:2069:0x1a05  */
-    /* JADX WARN: Removed duplicated region for block: B:2076:0x1a24  */
-    /* JADX WARN: Removed duplicated region for block: B:2079:0x1a78  */
-    /* JADX WARN: Removed duplicated region for block: B:2107:0x0e35 A[SYNTHETIC] */
-    /* JADX WARN: Removed duplicated region for block: B:2108:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:1143:0x02e8  */
+    /* JADX WARN: Removed duplicated region for block: B:1144:0x02eb  */
+    /* JADX WARN: Removed duplicated region for block: B:1554:0x0e2e  */
+    /* JADX WARN: Removed duplicated region for block: B:1838:0x147a  */
+    /* JADX WARN: Removed duplicated region for block: B:1842:0x1493  */
+    /* JADX WARN: Removed duplicated region for block: B:1850:0x14b4  */
+    /* JADX WARN: Removed duplicated region for block: B:1854:0x14cb  */
+    /* JADX WARN: Removed duplicated region for block: B:1876:0x1509  */
+    /* JADX WARN: Removed duplicated region for block: B:1880:0x151a  */
+    /* JADX WARN: Removed duplicated region for block: B:1924:0x166a  */
+    /* JADX WARN: Removed duplicated region for block: B:1927:0x1686  */
+    /* JADX WARN: Removed duplicated region for block: B:1929:0x168e  */
+    /* JADX WARN: Removed duplicated region for block: B:1950:0x173a  */
+    /* JADX WARN: Removed duplicated region for block: B:1956:0x174e  */
+    /* JADX WARN: Removed duplicated region for block: B:1960:0x175c  */
+    /* JADX WARN: Removed duplicated region for block: B:1995:0x1822  */
+    /* JADX WARN: Removed duplicated region for block: B:1998:0x1829  */
+    /* JADX WARN: Removed duplicated region for block: B:2073:0x1a07  */
+    /* JADX WARN: Removed duplicated region for block: B:2080:0x1a26  */
+    /* JADX WARN: Removed duplicated region for block: B:2083:0x1a7a  */
+    /* JADX WARN: Removed duplicated region for block: B:2111:0x0e37 A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:2112:? A[RETURN, SYNTHETIC] */
     /* JADX WARN: Type inference failed for: r2v480, types: [boolean] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -8991,7 +8991,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     */
     public void drawOverlays(android.graphics.Canvas r28) {
         /*
-            Method dump skipped, instructions count: 6989
+            Method dump skipped, instructions count: 6991
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.drawOverlays(android.graphics.Canvas):void");

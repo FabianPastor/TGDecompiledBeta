@@ -270,6 +270,35 @@ public class AvatarDrawable extends Drawable {
         return this.needApplyColorAccent ? Theme.changeColorAccent(this.color2) : this.color2;
     }
 
+    private String takeFirstCharacter(String str) {
+        StringBuilder sb = new StringBuilder(16);
+        int i = 0;
+        boolean z = false;
+        while (i < str.length()) {
+            int codePointAt = str.codePointAt(i);
+            if (codePointAt == 8205 || codePointAt == 127466) {
+                if (sb.length() == 0) {
+                    z = true;
+                    i = str.offsetByCodePoints(i, 1);
+                } else {
+                    z = true;
+                }
+            } else if (sb.length() > 0 && !z) {
+                break;
+            } else {
+                z = false;
+            }
+            sb.appendCodePoint(codePointAt);
+            i = str.offsetByCodePoints(i, 1);
+        }
+        if (z) {
+            for (int length = sb.length() - 1; length >= 0 && sb.charAt(length) == 8205; length--) {
+                sb.deleteCharAt(length);
+            }
+        }
+        return sb.toString();
+    }
+
     public void setInfo(long j, String str, String str2, String str3) {
         this.hasGradient = true;
         this.color = getThemedColor(Theme.keys_avatar_background[getColorIndex(j)]);
@@ -286,33 +315,31 @@ public class AvatarDrawable extends Drawable {
             this.stringBuilder.append(str3);
         } else {
             if (str != null && str.length() > 0) {
-                this.stringBuilder.appendCodePoint(str.codePointAt(0));
+                this.stringBuilder.append(takeFirstCharacter(str));
             }
             if (str2 != null && str2.length() > 0) {
-                Integer num = null;
-                for (int length = str2.length() - 1; length >= 0 && (num == null || str2.charAt(length) != ' '); length--) {
-                    num = Integer.valueOf(str2.codePointAt(length));
+                int lastIndexOf = str2.lastIndexOf(32);
+                if (lastIndexOf >= 0) {
+                    str2 = str2.substring(lastIndexOf + 1);
                 }
                 if (Build.VERSION.SDK_INT > 17) {
                     this.stringBuilder.append("\u200c");
                 }
-                this.stringBuilder.appendCodePoint(num.intValue());
+                this.stringBuilder.append(takeFirstCharacter(str2));
             } else if (str != null && str.length() > 0) {
-                int length2 = str.length() - 1;
+                int length = str.length() - 1;
                 while (true) {
-                    if (length2 < 0) {
+                    if (length < 0) {
                         break;
-                    }
-                    if (str.charAt(length2) == ' ' && length2 != str.length() - 1) {
-                        int i = length2 + 1;
-                        if (str.charAt(i) != ' ') {
-                            if (Build.VERSION.SDK_INT > 17) {
-                                this.stringBuilder.append("\u200c");
-                            }
-                            this.stringBuilder.appendCodePoint(str.codePointAt(i));
+                    } else if (str.charAt(length) != ' ' || length == str.length() - 1 || str.charAt(length + 1) == ' ') {
+                        length--;
+                    } else {
+                        int length2 = this.stringBuilder.length();
+                        if (Build.VERSION.SDK_INT > 17) {
+                            this.stringBuilder.append("\u200c");
                         }
+                        this.stringBuilder.append(takeFirstCharacter(str.substring(length2)));
                     }
-                    length2--;
                 }
             }
         }

@@ -56,7 +56,7 @@ public final /* synthetic */ class CLASSNAMEg implements j$.util.u {
 
     @Override // j$.util.u
     /* renamed from: trySplit */
-    public /* synthetic */ j$.util.u mo326trySplit() {
+    public /* synthetic */ j$.util.u moNUMtrySplit() {
         return a(this.a.trySplit());
     }
 }

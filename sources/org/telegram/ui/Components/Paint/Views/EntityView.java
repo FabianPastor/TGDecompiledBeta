@@ -42,7 +42,7 @@ public class EntityView extends FrameLayout {
     }
 
     /* renamed from: createSelectionView */
-    protected SelectionView mo1558createSelectionView() {
+    protected SelectionView moNUMcreateSelectionView() {
         return null;
     }
 
@@ -240,10 +240,10 @@ public class EntityView extends FrameLayout {
     }
 
     public void select(ViewGroup viewGroup) {
-        SelectionView mo1558createSelectionView = mo1558createSelectionView();
-        this.selectionView = mo1558createSelectionView;
-        viewGroup.addView(mo1558createSelectionView);
-        mo1558createSelectionView.updatePosition();
+        SelectionView moNUMcreateSelectionView = moNUMcreateSelectionView();
+        this.selectionView = moNUMcreateSelectionView;
+        viewGroup.addView(moNUMcreateSelectionView);
+        moNUMcreateSelectionView.updatePosition();
     }
 
     public void deselect() {

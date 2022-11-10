@@ -422,19 +422,19 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         MessagesController.getInstance(this.currentAccount).loadFullUser(tLRPC$User, this.currentGuid, false);
                     } else {
                         TLRPC$Photo tLRPC$Photo = userFull.profile_photo;
-                        if (tLRPC$Photo != null && (arrayList = tLRPC$Photo.video_sizes) != null && !arrayList.isEmpty()) {
-                            TLRPC$VideoSize tLRPC$VideoSize = userFull.profile_photo.video_sizes.get(0);
+                        if (tLRPC$Photo != null && tLRPC$Photo != null && (arrayList = tLRPC$Photo.video_sizes) != null && !arrayList.isEmpty()) {
+                            TLRPC$VideoSize tLRPC$VideoSize = tLRPC$Photo.video_sizes.get(0);
                             while (true) {
-                                if (i >= userFull.profile_photo.video_sizes.size()) {
+                                if (i >= tLRPC$Photo.video_sizes.size()) {
                                     break;
-                                } else if ("p".equals(userFull.profile_photo.video_sizes.get(i).type)) {
-                                    tLRPC$VideoSize = userFull.profile_photo.video_sizes.get(i);
+                                } else if ("p".equals(tLRPC$Photo.video_sizes.get(i).type)) {
+                                    tLRPC$VideoSize = tLRPC$Photo.video_sizes.get(i);
                                     break;
                                 } else {
                                     i++;
                                 }
                             }
-                            imageLocation2 = ImageLocation.getForPhoto(tLRPC$VideoSize, userFull.profile_photo);
+                            imageLocation2 = ImageLocation.getForPhoto(tLRPC$VideoSize, tLRPC$Photo);
                         }
                     }
                 }

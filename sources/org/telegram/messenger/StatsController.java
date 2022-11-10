@@ -30,7 +30,7 @@ public class StatsController extends BaseController {
         /* JADX WARN: Can't rename method to resolve collision */
         @Override // java.lang.ThreadLocal
         /* renamed from: initialValue */
-        public Long mo804initialValue() {
+        public Long moNUMinitialValue() {
             return Long.valueOf(System.currentTimeMillis() - 1000);
         }
     };

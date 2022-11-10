@@ -66,7 +66,7 @@ final class s4 extends AbstractCLASSNAMEf4 implements j$.util.v {
 
     @Override // j$.util.stream.AbstractCLASSNAMEf4, j$.util.u
     /* renamed from: trySplit  reason: collision with other method in class */
-    public j$.util.v mo326trySplit() {
-        return (j$.util.v) super.mo326trySplit();
+    public j$.util.v moNUMtrySplit() {
+        return (j$.util.v) super.moNUMtrySplit();
     }
 }

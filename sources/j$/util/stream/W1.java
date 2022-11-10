@@ -11,7 +11,7 @@ final class W1 extends AbstractCLASSNAMEa2 implements InterfaceCLASSNAMEu1 {
 
     @Override // j$.util.stream.AbstractCLASSNAMEa2, j$.util.stream.A1
     /* renamed from: b  reason: collision with other method in class */
-    public InterfaceCLASSNAMEz1 mo292b(int i) {
+    public InterfaceCLASSNAMEz1 moNUMb(int i) {
         throw new IndexOutOfBoundsException();
     }
 
@@ -35,20 +35,20 @@ final class W1 extends AbstractCLASSNAMEa2 implements InterfaceCLASSNAMEu1 {
 
     @Override // j$.util.stream.A1
     /* renamed from: spliterator  reason: collision with other method in class */
-    public j$.util.w mo289spliterator() {
+    public j$.util.w moNUMspliterator() {
         return j$.util.L.b();
     }
 
     @Override // j$.util.stream.AbstractCLASSNAMEa2, j$.util.stream.A1
     /* renamed from: b */
-    public /* bridge */ /* synthetic */ A1 mo292b(int i) {
-        mo292b(i);
+    public /* bridge */ /* synthetic */ A1 moNUMb(int i) {
+        moNUMb(i);
         throw null;
     }
 
     @Override // j$.util.stream.A1
     /* renamed from: spliterator */
-    public j$.util.u mo289spliterator() {
+    public j$.util.u moNUMspliterator() {
         return j$.util.L.b();
     }
 }

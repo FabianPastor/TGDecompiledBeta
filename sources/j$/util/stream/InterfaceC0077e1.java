@@ -46,7 +46,7 @@ public interface InterfaceCLASSNAMEe1 extends InterfaceCLASSNAMEg {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    j$.util.r mo307iterator();
+    j$.util.r moNUMiterator();
 
     boolean k(CLASSNAMEj0 CLASSNAMEj0);
 
@@ -60,13 +60,13 @@ public interface InterfaceCLASSNAMEe1 extends InterfaceCLASSNAMEg {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: parallel */
-    InterfaceCLASSNAMEe1 mo308parallel();
+    InterfaceCLASSNAMEe1 moNUMparallel();
 
     InterfaceCLASSNAMEe1 s(j$.util.function.r rVar);
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: sequential */
-    InterfaceCLASSNAMEe1 mo309sequential();
+    InterfaceCLASSNAMEe1 moNUMsequential();
 
     InterfaceCLASSNAMEe1 skip(long j);
 
@@ -74,7 +74,7 @@ public interface InterfaceCLASSNAMEe1 extends InterfaceCLASSNAMEg {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: spliterator */
-    j$.util.v mo310spliterator();
+    j$.util.v moNUMspliterator();
 
     long sum();
 

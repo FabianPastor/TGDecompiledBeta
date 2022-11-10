@@ -1444,7 +1444,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder moNUMonCreateViewHolder(ViewGroup viewGroup, int i) {
             View groupCreateSectionCell;
             GroupCreateUserCell groupCreateUserCell;
             if (i != 0) {

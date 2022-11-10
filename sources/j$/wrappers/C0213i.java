@@ -76,19 +76,19 @@ public final /* synthetic */ class CLASSNAMEi implements j$.util.t {
 
     @Override // j$.util.t, j$.util.w, j$.util.u
     /* renamed from: trySplit */
-    public /* synthetic */ j$.util.t mo326trySplit() {
+    public /* synthetic */ j$.util.t moNUMtrySplit() {
         return a(this.a.trySplit());
     }
 
     @Override // j$.util.t, j$.util.w, j$.util.u
     /* renamed from: trySplit  reason: collision with other method in class */
-    public /* synthetic */ j$.util.u mo326trySplit() {
+    public /* synthetic */ j$.util.u moNUMtrySplit() {
         return CLASSNAMEg.a(this.a.trySplit());
     }
 
     @Override // j$.util.t, j$.util.w, j$.util.u
     /* renamed from: trySplit */
-    public /* synthetic */ j$.util.w mo326trySplit() {
+    public /* synthetic */ j$.util.w moNUMtrySplit() {
         return CLASSNAMEo.a(this.a.trySplit());
     }
 }

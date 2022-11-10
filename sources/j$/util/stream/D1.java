@@ -26,7 +26,7 @@ public class D1 implements A1 {
 
     @Override // j$.util.stream.A1
     /* renamed from: b */
-    public A1 mo292b(int i) {
+    public A1 moNUMb(int i) {
         throw new IndexOutOfBoundsException();
     }
 
@@ -68,7 +68,7 @@ public class D1 implements A1 {
 
     @Override // j$.util.stream.A1
     /* renamed from: spliterator */
-    public j$.util.u mo289spliterator() {
+    public j$.util.u moNUMspliterator() {
         return j$.util.L.m(this.a, 0, this.b, 1040);
     }
 

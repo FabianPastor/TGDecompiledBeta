@@ -27,7 +27,7 @@ class N1 extends AbstractCLASSNAMEf {
     public Object a() {
         InterfaceCLASSNAMEs1 interfaceCLASSNAMEs1 = (InterfaceCLASSNAMEs1) this.i.apply(this.h.q0(this.b));
         this.h.u0(interfaceCLASSNAMEs1, this.b);
-        return interfaceCLASSNAMEs1.mo291a();
+        return interfaceCLASSNAMEs1.moNUMa();
     }
 
     /* JADX INFO: Access modifiers changed from: protected */

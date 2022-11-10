@@ -4,7 +4,7 @@ import j$.util.function.Consumer;
 /* loaded from: classes2.dex */
 interface A1 {
     /* renamed from: b */
-    A1 mo292b(int i);
+    A1 moNUMb(int i);
 
     long count();
 
@@ -19,5 +19,5 @@ interface A1 {
     A1 r(long j, long j2, j$.util.function.m mVar);
 
     /* renamed from: spliterator */
-    j$.util.u mo289spliterator();
+    j$.util.u moNUMspliterator();
 }

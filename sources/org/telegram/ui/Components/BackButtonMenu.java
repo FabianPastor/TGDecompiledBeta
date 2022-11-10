@@ -1,31 +1,19 @@
 package org.telegram.ui.Components;
 
-import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 import java.lang.reflect.GenericDeclaration;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicReference;
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ImageLocation;
-import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.R;
-import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$ChatPhoto;
 import org.telegram.tgnet.TLRPC$User;
-import org.telegram.tgnet.TLRPC$UserProfilePhoto;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.INavigationLayout;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
+import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.ProfileActivity;
 import org.telegram.ui.TopicsFragment;
 /* loaded from: classes3.dex */
@@ -43,149 +31,21 @@ public class BackButtonMenu {
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Type inference failed for: r14v4, types: [android.graphics.drawable.BitmapDrawable] */
-    /* JADX WARN: Type inference failed for: r15v0, types: [android.widget.FrameLayout, android.view.View] */
+    /* JADX WARN: Removed duplicated region for block: B:63:0x01e1  */
+    /* JADX WARN: Removed duplicated region for block: B:74:0x0202 A[SYNTHETIC] */
+    /* JADX WARN: Type inference failed for: r13v0, types: [android.widget.FrameLayout, android.view.View] */
+    /* JADX WARN: Type inference failed for: r15v3, types: [android.graphics.drawable.BitmapDrawable] */
     /* JADX WARN: Type inference failed for: r2v1, types: [org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout, android.widget.FrameLayout, android.view.View] */
-    public static ActionBarPopupWindow show(final BaseFragment baseFragment, View view, long j, int i, Theme.ResourcesProvider resourcesProvider) {
-        ArrayList<PulledDialog> stackedHistoryDialogs;
-        View view2;
-        Drawable drawable;
-        View view3;
-        android.graphics.Rect rect;
-        String userName;
-        ?? r14;
-        if (baseFragment == null) {
-            return null;
-        }
-        final INavigationLayout parentLayout = baseFragment.getParentLayout();
-        Activity parentActivity = baseFragment.getParentActivity();
-        View fragmentView = baseFragment.getFragmentView();
-        if (parentLayout == null || parentActivity == null || fragmentView == null) {
-            return null;
-        }
-        if (i != 0) {
-            new ArrayList();
-            stackedHistoryDialogs = getStackedHistoryForTopic(baseFragment, j, i);
-        } else {
-            stackedHistoryDialogs = getStackedHistoryDialogs(baseFragment, j);
-        }
-        if (stackedHistoryDialogs.size() <= 0) {
-            return null;
-        }
-        ?? actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(parentActivity, resourcesProvider);
-        android.graphics.Rect rect2 = new android.graphics.Rect();
-        baseFragment.getParentActivity().getResources().getDrawable(R.drawable.popup_fixed_alert).mutate().getPadding(rect2);
-        actionBarPopupWindowLayout.setBackgroundColor(Theme.getColor("actionBarDefaultSubmenuBackground", resourcesProvider));
-        final AtomicReference atomicReference = new AtomicReference();
-        int i2 = 0;
-        while (i2 < stackedHistoryDialogs.size()) {
-            final PulledDialog pulledDialog = stackedHistoryDialogs.get(i2);
-            TLRPC$Chat tLRPC$Chat = pulledDialog.chat;
-            TLRPC$User tLRPC$User = pulledDialog.user;
-            ?? frameLayout = new FrameLayout(parentActivity);
-            frameLayout.setMinimumWidth(AndroidUtilities.dp(200.0f));
-            BackupImageView backupImageView = new BackupImageView(parentActivity);
-            backupImageView.setRoundRadius(AndroidUtilities.dp(32.0f));
-            frameLayout.addView(backupImageView, LayoutHelper.createFrameRelatively(32.0f, 32.0f, 8388627, 13.0f, 0.0f, 0.0f, 0.0f));
-            TextView textView = new TextView(parentActivity);
-            ArrayList<PulledDialog> arrayList = stackedHistoryDialogs;
-            textView.setLines(1);
-            Activity activity = parentActivity;
-            textView.setTextSize(1, 16.0f);
-            textView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem", resourcesProvider));
-            textView.setEllipsize(TextUtils.TruncateAt.END);
-            frameLayout.addView(textView, LayoutHelper.createFrameRelatively(-1.0f, -2.0f, 8388627, 59.0f, 0.0f, 12.0f, 0.0f));
-            AvatarDrawable avatarDrawable = new AvatarDrawable();
-            avatarDrawable.setSmallSize(true);
-            if (tLRPC$Chat != null) {
-                avatarDrawable.setInfo(tLRPC$Chat);
-                TLRPC$ChatPhoto tLRPC$ChatPhoto = tLRPC$Chat.photo;
-                if (tLRPC$ChatPhoto != null && (r14 = tLRPC$ChatPhoto.strippedBitmap) != 0) {
-                    avatarDrawable = r14;
-                }
-                backupImageView.setImage(ImageLocation.getForChat(tLRPC$Chat, 1), "50_50", avatarDrawable, tLRPC$Chat);
-                textView.setText(tLRPC$Chat.title);
-            } else if (tLRPC$User != null) {
-                TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto = tLRPC$User.photo;
-                if (tLRPC$UserProfilePhoto == null || (drawable = tLRPC$UserProfilePhoto.strippedBitmap) == null) {
-                    drawable = avatarDrawable;
-                }
-                view3 = fragmentView;
-                rect = rect2;
-                if (pulledDialog.activity == ChatActivity.class && UserObject.isUserSelf(tLRPC$User)) {
-                    userName = LocaleController.getString("SavedMessages", R.string.SavedMessages);
-                    avatarDrawable.setAvatarType(1);
-                    backupImageView.setImageDrawable(avatarDrawable);
-                } else if (UserObject.isReplyUser(tLRPC$User)) {
-                    userName = LocaleController.getString("RepliesTitle", R.string.RepliesTitle);
-                    avatarDrawable.setAvatarType(12);
-                    backupImageView.setImageDrawable(avatarDrawable);
-                } else if (UserObject.isDeleted(tLRPC$User)) {
-                    userName = LocaleController.getString("HiddenName", R.string.HiddenName);
-                    avatarDrawable.setInfo(tLRPC$User);
-                    backupImageView.setImage(ImageLocation.getForUser(tLRPC$User, 1), "50_50", avatarDrawable, tLRPC$User);
-                } else {
-                    userName = UserObject.getUserName(tLRPC$User);
-                    avatarDrawable.setInfo(tLRPC$User);
-                    backupImageView.setImage(ImageLocation.getForUser(tLRPC$User, 1), "50_50", drawable, tLRPC$User);
-                }
-                textView.setText(userName);
-                frameLayout.setBackground(Theme.getSelectorDrawable(Theme.getColor("listSelectorSDK21", resourcesProvider), false));
-                frameLayout.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.BackButtonMenu$$ExternalSyntheticLambda0
-                    @Override // android.view.View.OnClickListener
-                    public final void onClick(View view4) {
-                        BackButtonMenu.lambda$show$0(atomicReference, pulledDialog, parentLayout, baseFragment, view4);
-                    }
-                });
-                actionBarPopupWindowLayout.addView(frameLayout, LayoutHelper.createLinear(-1, 48));
-                i2++;
-                stackedHistoryDialogs = arrayList;
-                parentActivity = activity;
-                fragmentView = view3;
-                rect2 = rect;
-            }
-            rect = rect2;
-            view3 = fragmentView;
-            frameLayout.setBackground(Theme.getSelectorDrawable(Theme.getColor("listSelectorSDK21", resourcesProvider), false));
-            frameLayout.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.BackButtonMenu$$ExternalSyntheticLambda0
-                @Override // android.view.View.OnClickListener
-                public final void onClick(View view4) {
-                    BackButtonMenu.lambda$show$0(atomicReference, pulledDialog, parentLayout, baseFragment, view4);
-                }
-            });
-            actionBarPopupWindowLayout.addView(frameLayout, LayoutHelper.createLinear(-1, 48));
-            i2++;
-            stackedHistoryDialogs = arrayList;
-            parentActivity = activity;
-            fragmentView = view3;
-            rect2 = rect;
-        }
-        android.graphics.Rect rect3 = rect2;
-        View view4 = fragmentView;
-        ActionBarPopupWindow actionBarPopupWindow = new ActionBarPopupWindow(actionBarPopupWindowLayout, -2, -2);
-        atomicReference.set(actionBarPopupWindow);
-        actionBarPopupWindow.setPauseNotifications(true);
-        actionBarPopupWindow.setDismissAnimationDuration(220);
-        actionBarPopupWindow.setOutsideTouchable(true);
-        actionBarPopupWindow.setClippingEnabled(true);
-        actionBarPopupWindow.setAnimationStyle(R.style.PopupContextAnimation);
-        actionBarPopupWindow.setFocusable(true);
-        actionBarPopupWindowLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
-        actionBarPopupWindow.setInputMethodMode(2);
-        actionBarPopupWindow.setSoftInputMode(0);
-        actionBarPopupWindow.getContentView().setFocusableInTouchMode(true);
-        actionBarPopupWindowLayout.setFitItems(true);
-        int dp = AndroidUtilities.dp(8.0f) - rect3.left;
-        if (AndroidUtilities.isTablet()) {
-            int[] iArr = new int[2];
-            view2 = view4;
-            view2.getLocationInWindow(iArr);
-            dp += iArr[0];
-        } else {
-            view2 = view4;
-        }
-        actionBarPopupWindow.showAtLocation(view2, 51, dp, (view.getBottom() - rect3.top) - AndroidUtilities.dp(8.0f));
-        return actionBarPopupWindow;
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
+    public static org.telegram.ui.ActionBar.ActionBarPopupWindow show(final org.telegram.ui.ActionBar.BaseFragment r26, android.view.View r27, long r28, int r30, org.telegram.ui.ActionBar.Theme.ResourcesProvider r31) {
+        /*
+            Method dump skipped, instructions count: 653
+            To view this dump add '--comments-level debug' option
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BackButtonMenu.show(org.telegram.ui.ActionBar.BaseFragment, android.view.View, long, int, org.telegram.ui.ActionBar.Theme$ResourcesProvider):org.telegram.ui.ActionBar.ActionBarPopupWindow");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -232,17 +92,23 @@ public class BackButtonMenu {
 
     private static ArrayList<PulledDialog> getStackedHistoryForTopic(BaseFragment baseFragment, long j, int i) {
         ArrayList<PulledDialog> arrayList = new ArrayList<>();
-        if (baseFragment.getParentLayout().getFragmentStack().size() <= 1 || !(baseFragment.getParentLayout().getFragmentStack().get(baseFragment.getParentLayout().getFragmentStack().size() - 2) instanceof TopicsFragment)) {
+        if (baseFragment.getParentLayout().getFragmentStack().size() > 1 && (baseFragment.getParentLayout().getFragmentStack().get(baseFragment.getParentLayout().getFragmentStack().size() - 2) instanceof TopicsFragment)) {
             PulledDialog pulledDialog = new PulledDialog();
             arrayList.add(pulledDialog);
-            Bundle bundle = new Bundle();
-            pulledDialog.stackIndex = -1;
-            long j2 = -j;
-            bundle.putLong("chat_id", j2);
-            pulledDialog.activity = TopicsFragment.class;
-            pulledDialog.chat = MessagesController.getInstance(baseFragment.getCurrentAccount()).getChat(Long.valueOf(j2));
+            pulledDialog.stackIndex = 0;
+            pulledDialog.activity = DialogsActivity.class;
+            PulledDialog pulledDialog2 = new PulledDialog();
+            arrayList.add(pulledDialog2);
+            pulledDialog2.stackIndex = baseFragment.getParentLayout().getFragmentStack().size() - 2;
+            pulledDialog2.activity = TopicsFragment.class;
+            pulledDialog2.chat = MessagesController.getInstance(baseFragment.getCurrentAccount()).getChat(Long.valueOf(-j));
             return arrayList;
         }
+        PulledDialog pulledDialog3 = new PulledDialog();
+        arrayList.add(pulledDialog3);
+        pulledDialog3.stackIndex = -1;
+        pulledDialog3.activity = TopicsFragment.class;
+        pulledDialog3.chat = MessagesController.getInstance(baseFragment.getCurrentAccount()).getChat(Long.valueOf(-j));
         return arrayList;
     }
 

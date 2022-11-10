@@ -59,13 +59,13 @@ abstract class AbstractCLASSNAMEs2 extends CountedCompleter implements Interface
 
     @Override // java.util.concurrent.CountedCompleter
     public void compute() {
-        j$.util.u mo326trySplit;
+        j$.util.u moNUMtrySplit;
         j$.util.u uVar = this.a;
         AbstractCLASSNAMEs2 abstractCLASSNAMEs2 = this;
-        while (uVar.estimateSize() > abstractCLASSNAMEs2.c && (mo326trySplit = uVar.mo326trySplit()) != null) {
+        while (uVar.estimateSize() > abstractCLASSNAMEs2.c && (moNUMtrySplit = uVar.moNUMtrySplit()) != null) {
             abstractCLASSNAMEs2.setPendingCount(1);
-            long estimateSize = mo326trySplit.estimateSize();
-            abstractCLASSNAMEs2.b(mo326trySplit, abstractCLASSNAMEs2.d, estimateSize).fork();
+            long estimateSize = moNUMtrySplit.estimateSize();
+            abstractCLASSNAMEs2.b(moNUMtrySplit, abstractCLASSNAMEs2.d, estimateSize).fork();
             abstractCLASSNAMEs2 = abstractCLASSNAMEs2.b(uVar, abstractCLASSNAMEs2.d + estimateSize, abstractCLASSNAMEs2.e - estimateSize);
         }
         AbstractCLASSNAMEc abstractCLASSNAMEc = (AbstractCLASSNAMEc) abstractCLASSNAMEs2.b;

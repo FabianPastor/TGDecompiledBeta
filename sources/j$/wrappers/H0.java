@@ -30,7 +30,7 @@ public final /* synthetic */ class H0 implements InterfaceCLASSNAMEg {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public /* synthetic */ Iterator mo307iterator() {
+    public /* synthetic */ Iterator moNUMiterator() {
         return this.a.iterator();
     }
 
@@ -41,19 +41,19 @@ public final /* synthetic */ class H0 implements InterfaceCLASSNAMEg {
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: parallel */
-    public /* synthetic */ InterfaceCLASSNAMEg mo308parallel() {
+    public /* synthetic */ InterfaceCLASSNAMEg moNUMparallel() {
         return n0(this.a.parallel());
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: sequential */
-    public /* synthetic */ InterfaceCLASSNAMEg mo309sequential() {
+    public /* synthetic */ InterfaceCLASSNAMEg moNUMsequential() {
         return n0(this.a.sequential());
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: spliterator */
-    public /* synthetic */ j$.util.u mo310spliterator() {
+    public /* synthetic */ j$.util.u moNUMspliterator() {
         return CLASSNAMEg.a(this.a.spliterator());
     }
 

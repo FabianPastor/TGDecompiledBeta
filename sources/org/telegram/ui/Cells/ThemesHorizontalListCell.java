@@ -99,7 +99,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder moNUMonCreateViewHolder(ViewGroup viewGroup, int i) {
             return new RecyclerListView.Holder(new InnerThemeView(this.mContext));
         }
 

@@ -98,7 +98,7 @@ public class CanvasButton {
                 if (i6 == 0 || this.drawingRects.get(i6).top < i5) {
                     i5 = (int) this.drawingRects.get(i6).top;
                 }
-                this.drawingPath.addRect(this.drawingRects.get(i6), Path.Direction.CW);
+                this.drawingPath.addRect(this.drawingRects.get(i6), Path.Direction.CCW);
                 RippleDrawable rippleDrawable = this.selectorDrawable;
                 if (rippleDrawable != null) {
                     rippleDrawable.setBounds(i4, i5, i3, i2);

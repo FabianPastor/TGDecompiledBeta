@@ -469,7 +469,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements
     /* JADX WARN: Type inference failed for: r1v9 */
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     /* renamed from: onCreateViewHolder */
-    public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder moNUMonCreateViewHolder(ViewGroup viewGroup, int i) {
         ?? dialogCell;
         View shadowSectionCell;
         switch (i) {
@@ -951,6 +951,11 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements
         if (dialogsPreloader != null) {
             dialogsPreloader.pause();
         }
+    }
+
+    @Override // org.telegram.ui.Cells.DialogCell.DialogCellDelegate
+    public boolean canClickButtonInside() {
+        return this.selectedDialogs.isEmpty();
     }
 
     /* loaded from: classes3.dex */

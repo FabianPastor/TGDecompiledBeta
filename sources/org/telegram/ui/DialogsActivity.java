@@ -86,12 +86,10 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$ChatInvite;
 import org.telegram.tgnet.TLRPC$Dialog;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$EmojiStatus;
 import org.telegram.tgnet.TLRPC$EncryptedChat;
-import org.telegram.tgnet.TLRPC$StickerSet;
 import org.telegram.tgnet.TLRPC$TL_account_updateEmojiStatus;
 import org.telegram.tgnet.TLRPC$TL_boolTrue;
 import org.telegram.tgnet.TLRPC$TL_dialogFolder;
@@ -100,16 +98,9 @@ import org.telegram.tgnet.TLRPC$TL_emojiStatusEmpty;
 import org.telegram.tgnet.TLRPC$TL_emojiStatusUntil;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_help_premiumPromo;
-import org.telegram.tgnet.TLRPC$TL_inputStickerSetID;
 import org.telegram.tgnet.TLRPC$TL_messages_checkHistoryImportPeer;
 import org.telegram.tgnet.TLRPC$TL_messages_checkedHistoryImportPeer;
-import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC$TL_messages_updateDialogFilter;
-import org.telegram.tgnet.TLRPC$TL_recentMeUrlChat;
-import org.telegram.tgnet.TLRPC$TL_recentMeUrlChatInvite;
-import org.telegram.tgnet.TLRPC$TL_recentMeUrlStickerSet;
-import org.telegram.tgnet.TLRPC$TL_recentMeUrlUnknown;
-import org.telegram.tgnet.TLRPC$TL_recentMeUrlUser;
 import org.telegram.tgnet.TLRPC$TL_userEmpty;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -150,7 +141,6 @@ import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.FloatingDebug.FloatingDebugController;
 import org.telegram.ui.Components.FloatingDebug.FloatingDebugProvider;
 import org.telegram.ui.Components.FragmentContextView;
-import org.telegram.ui.Components.JoinGroupAlert;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberTextView;
 import org.telegram.ui.Components.PacmanAnimation;
@@ -168,7 +158,6 @@ import org.telegram.ui.Components.RecyclerItemsEnterAnimator;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SearchViewPager;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
-import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.ViewPagerFixed;
 import org.telegram.ui.DialogsActivity;
@@ -606,9 +595,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return true;
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
         @Override // org.telegram.ui.Components.SizeNotifierFrameLayout, android.view.ViewGroup, android.view.View
-        public void dispatchDraw(Canvas canvas) {
+        protected void dispatchDraw(Canvas canvas) {
             int y;
             Paint paint;
             int i;
@@ -868,7 +856,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
         /* JADX WARN: Removed duplicated region for block: B:38:0x00a2  */
         /* JADX WARN: Removed duplicated region for block: B:45:0x00bd  */
         /* JADX WARN: Removed duplicated region for block: B:49:0x00d2  */
@@ -878,7 +865,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
-        public void onLayout(boolean r16, int r17, int r18, int r19, int r20) {
+        protected void onLayout(boolean r16, int r17, int r18, int r19, int r20) {
             /*
                 Method dump skipped, instructions count: 486
                 To view this dump add '--comments-level debug' option
@@ -1125,9 +1112,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             DialogsActivity.this.showDialog(new LimitReachedBottomSheet(DialogsActivity.this, getContext(), 3, ((BaseFragment) DialogsActivity.this).currentAccount));
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
         @Override // org.telegram.ui.Components.SizeNotifierFrameLayout
-        public void drawList(Canvas canvas, boolean z) {
+        protected void drawList(Canvas canvas, boolean z) {
             if (DialogsActivity.this.searchIsShowed) {
                 if (DialogsActivity.this.searchViewPager == null || DialogsActivity.this.searchViewPager.getVisibility() != 0) {
                     return;
@@ -4796,269 +4782,25 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
-    private void onItemClick(View view, int i, RecyclerView.Adapter adapter) {
-        long j;
-        boolean z;
-        int i2;
-        int i3;
-        int i4;
-        long j2;
-        long j3;
-        TLRPC$Chat chat;
-        TLRPC$Document greetingsSticker;
-        int i5;
-        long j4;
-        int i6;
-        if (getParentActivity() == null) {
-            return;
-        }
-        boolean z2 = adapter instanceof DialogsAdapter;
-        if (z2) {
-            DialogsAdapter dialogsAdapter = (DialogsAdapter) adapter;
-            int dialogsType = dialogsAdapter.getDialogsType();
-            if (dialogsType == 7 || dialogsType == 8) {
-                i5 = getMessagesController().selectedDialogFilter[dialogsType == 7 ? (char) 0 : (char) 1].id;
-            } else {
-                i5 = 0;
-            }
-            TLObject item = dialogsAdapter.getItem(i);
-            if (item instanceof TLRPC$User) {
-                j = ((TLRPC$User) item).id;
-            } else if (item instanceof TLRPC$Dialog) {
-                TLRPC$Dialog tLRPC$Dialog = (TLRPC$Dialog) item;
-                i6 = tLRPC$Dialog.folder_id;
-                if (tLRPC$Dialog instanceof TLRPC$TL_dialogFolder) {
-                    if (this.actionBar.isActionModeShowed(null)) {
-                        return;
-                    }
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("folderId", ((TLRPC$TL_dialogFolder) tLRPC$Dialog).folder.id);
-                    presentFragment(new DialogsActivity(bundle));
-                    return;
-                }
-                j = tLRPC$Dialog.id;
-                if (this.actionBar.isActionModeShowed(null)) {
-                    showOrUpdateActionMode(j, view);
-                    return;
-                }
-                i4 = i5;
-                z = false;
-                i3 = i6;
-                i2 = 0;
-            } else {
-                if (item instanceof TLRPC$TL_recentMeUrlChat) {
-                    j4 = ((TLRPC$TL_recentMeUrlChat) item).chat_id;
-                } else if (item instanceof TLRPC$TL_recentMeUrlUser) {
-                    j = ((TLRPC$TL_recentMeUrlUser) item).user_id;
-                } else if (item instanceof TLRPC$TL_recentMeUrlChatInvite) {
-                    TLRPC$TL_recentMeUrlChatInvite tLRPC$TL_recentMeUrlChatInvite = (TLRPC$TL_recentMeUrlChatInvite) item;
-                    TLRPC$ChatInvite tLRPC$ChatInvite = tLRPC$TL_recentMeUrlChatInvite.chat_invite;
-                    TLRPC$Chat tLRPC$Chat = tLRPC$ChatInvite.chat;
-                    if ((tLRPC$Chat == null && (!tLRPC$ChatInvite.channel || tLRPC$ChatInvite.megagroup)) || (tLRPC$Chat != null && (!ChatObject.isChannel(tLRPC$Chat) || tLRPC$ChatInvite.chat.megagroup))) {
-                        String str = tLRPC$TL_recentMeUrlChatInvite.url;
-                        int indexOf = str.indexOf(47);
-                        if (indexOf > 0) {
-                            str = str.substring(indexOf + 1);
-                        }
-                        showDialog(new JoinGroupAlert(getParentActivity(), tLRPC$ChatInvite, str, this, null));
-                        return;
-                    }
-                    TLRPC$Chat tLRPC$Chat2 = tLRPC$ChatInvite.chat;
-                    if (tLRPC$Chat2 == null) {
-                        return;
-                    }
-                    j4 = tLRPC$Chat2.id;
-                } else if (item instanceof TLRPC$TL_recentMeUrlStickerSet) {
-                    TLRPC$StickerSet tLRPC$StickerSet = ((TLRPC$TL_recentMeUrlStickerSet) item).set.set;
-                    TLRPC$TL_inputStickerSetID tLRPC$TL_inputStickerSetID = new TLRPC$TL_inputStickerSetID();
-                    tLRPC$TL_inputStickerSetID.id = tLRPC$StickerSet.id;
-                    tLRPC$TL_inputStickerSetID.access_hash = tLRPC$StickerSet.access_hash;
-                    showDialog(new StickersAlert(getParentActivity(), this, tLRPC$TL_inputStickerSetID, (TLRPC$TL_messages_stickerSet) null, (StickersAlert.StickersAlertDelegate) null));
-                    return;
-                } else {
-                    boolean z3 = item instanceof TLRPC$TL_recentMeUrlUnknown;
-                    return;
-                }
-                j = -j4;
-            }
-            i6 = 0;
-            i4 = i5;
-            z = false;
-            i3 = i6;
-            i2 = 0;
-        } else {
-            DialogsSearchAdapter dialogsSearchAdapter = this.searchViewPager.dialogsSearchAdapter;
-            if (adapter == dialogsSearchAdapter) {
-                Object item2 = dialogsSearchAdapter.getItem(i);
-                z = this.searchViewPager.dialogsSearchAdapter.isGlobalSearch(i);
-                if (item2 instanceof TLRPC$User) {
-                    TLRPC$User tLRPC$User = (TLRPC$User) item2;
-                    j2 = tLRPC$User.id;
-                    if (!this.onlySelect) {
-                        this.searchDialogId = j2;
-                        this.searchObject = tLRPC$User;
-                    }
-                } else if (item2 instanceof TLRPC$Chat) {
-                    TLRPC$Chat tLRPC$Chat3 = (TLRPC$Chat) item2;
-                    j2 = -tLRPC$Chat3.id;
-                    if (!this.onlySelect) {
-                        this.searchDialogId = j2;
-                        this.searchObject = tLRPC$Chat3;
-                    }
-                } else if (item2 instanceof TLRPC$EncryptedChat) {
-                    TLRPC$EncryptedChat tLRPC$EncryptedChat = (TLRPC$EncryptedChat) item2;
-                    j2 = DialogObject.makeEncryptedDialogId(tLRPC$EncryptedChat.id);
-                    if (!this.onlySelect) {
-                        this.searchDialogId = j2;
-                        this.searchObject = tLRPC$EncryptedChat;
-                    }
-                } else if (item2 instanceof MessageObject) {
-                    MessageObject messageObject = (MessageObject) item2;
-                    j2 = messageObject.getDialogId();
-                    i2 = messageObject.getId();
-                    DialogsSearchAdapter dialogsSearchAdapter2 = this.searchViewPager.dialogsSearchAdapter;
-                    dialogsSearchAdapter2.addHashtagsFromMessage(dialogsSearchAdapter2.getLastSearchString());
-                    if (j2 == 0 && this.actionBar.isActionModeShowed()) {
-                        if (!this.actionBar.isActionModeShowed("search_dialogs_action_mode") || i2 != 0 || z) {
-                            return;
-                        }
-                        showOrUpdateActionMode(j2, view);
-                        return;
-                    }
-                    j = j2;
-                } else {
-                    if (item2 instanceof String) {
-                        String str2 = (String) item2;
-                        if (this.searchViewPager.dialogsSearchAdapter.isHashtagSearch()) {
-                            this.actionBar.openSearchField(str2, false);
-                        } else if (!str2.equals("section")) {
-                            NewContactActivity newContactActivity = new NewContactActivity();
-                            newContactActivity.setInitialPhoneNumber(str2, true);
-                            presentFragment(newContactActivity);
-                        }
-                    }
-                    j2 = 0;
-                }
-                i2 = 0;
-                if (j2 == 0) {
-                }
-                j = j2;
-            } else {
-                j = 0;
-                z = false;
-                i2 = 0;
-            }
-            i3 = 0;
-            i4 = 0;
-        }
-        if (j == 0) {
-            return;
-        }
-        if (this.onlySelect) {
-            if (!validateSlowModeDialog(j)) {
-                return;
-            }
-            if (!this.selectedDialogs.isEmpty() || (this.initialDialogsType == 3 && this.selectAlertString != null)) {
-                if (!this.selectedDialogs.contains(Long.valueOf(j)) && !checkCanWrite(j)) {
-                    return;
-                }
-                boolean addOrRemoveSelectedDialog = addOrRemoveSelectedDialog(j, view);
-                if (adapter == this.searchViewPager.dialogsSearchAdapter) {
-                    this.actionBar.closeSearchField();
-                    findAndUpdateCheckBox(j, addOrRemoveSelectedDialog);
-                }
-                updateSelectedCount();
-                return;
-            } else if (this.canSelectTopics && getMessagesController().isForum(j)) {
-                Bundle bundle2 = new Bundle();
-                bundle2.putLong("chat_id", -j);
-                bundle2.putBoolean("for_select", true);
-                bundle2.putBoolean("forward_to", true);
-                TopicsFragment topicsFragment = new TopicsFragment(bundle2);
-                topicsFragment.setForwardFromDialogFragment(this);
-                presentFragment(topicsFragment);
-                return;
-            } else {
-                didSelectResult(j, 0, true, false);
-                return;
-            }
-        }
-        Bundle bundle3 = new Bundle();
-        if (DialogObject.isEncryptedDialog(j)) {
-            bundle3.putInt("enc_id", DialogObject.getEncryptedChatId(j));
-        } else if (DialogObject.isUserDialog(j)) {
-            bundle3.putLong("user_id", j);
-        } else {
-            if (i2 == 0 || (chat = getMessagesController().getChat(Long.valueOf(-j))) == null || chat.migrated_to == null) {
-                j3 = j;
-            } else {
-                bundle3.putLong("migrated_to", j);
-                j3 = -chat.migrated_to.channel_id;
-            }
-            bundle3.putLong("chat_id", -j3);
-        }
-        if (i2 != 0) {
-            bundle3.putInt("message_id", i2);
-        } else if (!z) {
-            closeSearch();
-        } else {
-            TLObject tLObject = this.searchObject;
-            if (tLObject != null) {
-                this.searchViewPager.dialogsSearchAdapter.putRecentSearch(this.searchDialogId, tLObject);
-                this.searchObject = null;
-            }
-        }
-        bundle3.putInt("dialog_folder_id", i3);
-        bundle3.putInt("dialog_filter_id", i4);
-        if (AndroidUtilities.isTablet() && this.openedDialogId == j && adapter != this.searchViewPager.dialogsSearchAdapter) {
-            if (!(getParentActivity() instanceof LaunchActivity)) {
-                return;
-            }
-            LaunchActivity launchActivity = (LaunchActivity) getParentActivity();
-            List<BaseFragment> fragmentStack = launchActivity.getRightActionBarLayout().getFragmentStack();
-            if (fragmentStack.isEmpty()) {
-                return;
-            }
-            if (fragmentStack.size() == 1 && (fragmentStack.get(fragmentStack.size() - 1) instanceof ChatActivity)) {
-                ((ChatActivity) fragmentStack.get(fragmentStack.size() - 1)).onPageDownClicked();
-                return;
-            } else if (fragmentStack.size() == 2) {
-                launchActivity.getRightActionBarLayout().closeLastFragment();
-                return;
-            } else if (!(getParentActivity() instanceof LaunchActivity)) {
-                return;
-            } else {
-                fragmentStack.clear();
-                fragmentStack.add(fragmentStack.get(0));
-                launchActivity.getRightActionBarLayout().rebuildFragments(1);
-                return;
-            }
-        }
-        if (this.searchViewPager.actionModeShowing()) {
-            this.searchViewPager.hideActionMode();
-        }
-        if (this.searchString != null) {
-            if (!getMessagesController().checkCanOpenChat(bundle3, this)) {
-                return;
-            }
-            getNotificationCenter().postNotificationName(NotificationCenter.closeChats, new Object[0]);
-            presentFragment(new ChatActivity(bundle3));
-            return;
-        }
-        this.slowedReloadAfterDialogClick = true;
-        if (!getMessagesController().checkCanOpenChat(bundle3, this)) {
-            return;
-        }
-        TLRPC$Chat chat2 = getMessagesController().getChat(Long.valueOf(-j));
-        if (chat2 != null && chat2.forum) {
-            presentFragment(new TopicsFragment(bundle3));
-            return;
-        }
-        ChatActivity chatActivity = new ChatActivity(bundle3);
-        if (z2 && DialogObject.isUserDialog(j) && getMessagesController().dialogs_dict.get(j) == null && (greetingsSticker = getMediaDataController().getGreetingsSticker()) != null) {
-            chatActivity.setPreloadedSticker(greetingsSticker, true);
-        }
-        presentFragment(chatActivity);
+    /* JADX WARN: Removed duplicated region for block: B:109:0x01c8  */
+    /* JADX WARN: Removed duplicated region for block: B:122:0x01f6 A[RETURN] */
+    /* JADX WARN: Removed duplicated region for block: B:123:0x01f7  */
+    /* JADX WARN: Removed duplicated region for block: B:167:0x02c7  */
+    /* JADX WARN: Removed duplicated region for block: B:168:0x02cd  */
+    /* JADX WARN: Removed duplicated region for block: B:175:0x02f4  */
+    /* JADX WARN: Removed duplicated region for block: B:197:0x0373  */
+    /* JADX WARN: Removed duplicated region for block: B:200:0x037c  */
+    /* JADX WARN: Removed duplicated region for block: B:203:0x039a  */
+    /*
+        Code decompiled incorrectly, please refer to instructions dump.
+        To view partially-correct add '--show-bad-code' argument
+    */
+    private void onItemClick(android.view.View r18, int r19, androidx.recyclerview.widget.RecyclerView.Adapter r20) {
+        /*
+            Method dump skipped, instructions count: 999
+            To view this dump add '--comments-level debug' option
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.onItemClick(android.view.View, int, androidx.recyclerview.widget.RecyclerView$Adapter):void");
     }
 
     public void setOpenedDialogId(long j) {

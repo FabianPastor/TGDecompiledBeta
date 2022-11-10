@@ -90,7 +90,7 @@ public class SlideChooseView extends View {
 
             @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
             /* renamed from: getContentDescription */
-            protected CharSequence mo2207getContentDescription(View view) {
+            protected CharSequence moNUMgetContentDescription(View view) {
                 if (SlideChooseView.this.selectedIndex < SlideChooseView.this.optionsStr.length) {
                     return SlideChooseView.this.optionsStr[SlideChooseView.this.selectedIndex];
                 }

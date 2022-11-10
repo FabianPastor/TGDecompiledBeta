@@ -42,13 +42,13 @@ final class F extends H implements v {
 
     @Override // j$.util.H, j$.util.t, j$.util.w, j$.util.u
     /* renamed from: trySplit */
-    public /* bridge */ /* synthetic */ v mo326trySplit() {
+    public /* bridge */ /* synthetic */ v moNUMtrySplit() {
         return null;
     }
 
     @Override // j$.util.H, j$.util.t, j$.util.w, j$.util.u
     /* renamed from: trySplit  reason: collision with other method in class */
-    public /* bridge */ /* synthetic */ w mo326trySplit() {
+    public /* bridge */ /* synthetic */ w moNUMtrySplit() {
         return null;
     }
 }

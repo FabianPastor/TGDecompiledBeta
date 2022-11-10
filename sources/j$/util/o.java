@@ -5,10 +5,6 @@ import j$.util.function.Consumer;
 public final /* synthetic */ class o implements j$.util.function.l {
     public final /* synthetic */ Consumer a;
 
-    public /* synthetic */ o(Consumer consumer) {
-        this.a = consumer;
-    }
-
     @Override // j$.util.function.l
     public final void accept(int i) {
         this.a.accept(Integer.valueOf(i));

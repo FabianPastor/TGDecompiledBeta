@@ -28,9 +28,9 @@ class CLASSNAMEv2 extends AbstractCLASSNAMEw2 {
     AbstractCLASSNAMEw2 b(int i, int i2) {
         switch (this.c) {
             case 0:
-                return new CLASSNAMEv2(this, ((InterfaceCLASSNAMEz1) this.a).mo292b(i), i2);
+                return new CLASSNAMEv2(this, ((InterfaceCLASSNAMEz1) this.a).moNUMb(i), i2);
             default:
-                return new CLASSNAMEv2(this, this.a.mo292b(i), i2);
+                return new CLASSNAMEv2(this, this.a.moNUMb(i), i2);
         }
     }
 

@@ -15,5 +15,5 @@ public interface v extends w {
 
     @Override // j$.util.w, j$.util.u
     /* renamed from: trySplit */
-    v mo326trySplit();
+    v moNUMtrySplit();
 }

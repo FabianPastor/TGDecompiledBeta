@@ -26,7 +26,7 @@ abstract class AbstractCLASSNAMEk2 implements j$.util.u {
             if (a1 != null) {
                 if (a1.p() != 0) {
                     for (int p = a1.p() - 1; p >= 0; p--) {
-                        deque.addFirst(a1.mo292b(p));
+                        deque.addFirst(a1.moNUMb(p));
                     }
                 } else if (a1.count() > 0) {
                     return a1;
@@ -53,7 +53,7 @@ abstract class AbstractCLASSNAMEk2 implements j$.util.u {
             return uVar.estimateSize();
         }
         for (int i = this.b; i < this.a.p(); i++) {
-            j += this.a.mo292b(i).count();
+            j += this.a.moNUMb(i).count();
         }
         return j;
     }
@@ -65,7 +65,7 @@ abstract class AbstractCLASSNAMEk2 implements j$.util.u {
         while (true) {
             p--;
             if (p >= this.b) {
-                arrayDeque.addFirst(this.a.mo292b(p));
+                arrayDeque.addFirst(this.a.moNUMb(p));
             } else {
                 return arrayDeque;
             }
@@ -99,7 +99,7 @@ abstract class AbstractCLASSNAMEk2 implements j$.util.u {
                 this.a = null;
                 return false;
             }
-            uVar = a.mo289spliterator();
+            uVar = a.moNUMspliterator();
         }
         this.d = uVar;
         return true;
@@ -112,55 +112,55 @@ abstract class AbstractCLASSNAMEk2 implements j$.util.u {
 
     @Override // j$.util.u
     /* renamed from: trySplit */
-    public /* bridge */ /* synthetic */ j$.util.t mo326trySplit() {
-        return (j$.util.t) mo326trySplit();
+    public /* bridge */ /* synthetic */ j$.util.t moNUMtrySplit() {
+        return (j$.util.t) moNUMtrySplit();
     }
 
     @Override // j$.util.u
     /* renamed from: trySplit  reason: collision with other method in class */
-    public /* bridge */ /* synthetic */ u.a mo326trySplit() {
-        return (u.a) mo326trySplit();
+    public /* bridge */ /* synthetic */ u.a moNUMtrySplit() {
+        return (u.a) moNUMtrySplit();
     }
 
     @Override // j$.util.u
     /* renamed from: trySplit */
-    public final j$.util.u mo326trySplit() {
+    public final j$.util.u moNUMtrySplit() {
         A1 a1 = this.a;
         if (a1 == null || this.d != null) {
             return null;
         }
         j$.util.u uVar = this.c;
         if (uVar != null) {
-            return uVar.mo326trySplit();
+            return uVar.moNUMtrySplit();
         }
         if (this.b < a1.p() - 1) {
             A1 a12 = this.a;
             int i = this.b;
             this.b = i + 1;
-            return a12.mo292b(i).mo289spliterator();
+            return a12.moNUMb(i).moNUMspliterator();
         }
-        A1 mo292b = this.a.mo292b(this.b);
-        this.a = mo292b;
-        if (mo292b.p() == 0) {
-            j$.util.u mo289spliterator = this.a.mo289spliterator();
-            this.c = mo289spliterator;
-            return mo289spliterator.mo326trySplit();
+        A1 moNUMb = this.a.moNUMb(this.b);
+        this.a = moNUMb;
+        if (moNUMb.p() == 0) {
+            j$.util.u moNUMspliterator = this.a.moNUMspliterator();
+            this.c = moNUMspliterator;
+            return moNUMspliterator.moNUMtrySplit();
         }
         this.b = 0;
         A1 a13 = this.a;
         this.b = 1;
-        return a13.mo292b(0).mo289spliterator();
+        return a13.moNUMb(0).moNUMspliterator();
     }
 
     @Override // j$.util.u
     /* renamed from: trySplit  reason: collision with other method in class */
-    public /* bridge */ /* synthetic */ j$.util.v mo326trySplit() {
-        return (j$.util.v) mo326trySplit();
+    public /* bridge */ /* synthetic */ j$.util.v moNUMtrySplit() {
+        return (j$.util.v) moNUMtrySplit();
     }
 
     @Override // j$.util.u
     /* renamed from: trySplit */
-    public /* bridge */ /* synthetic */ j$.util.w mo326trySplit() {
-        return (j$.util.w) mo326trySplit();
+    public /* bridge */ /* synthetic */ j$.util.w moNUMtrySplit() {
+        return (j$.util.w) moNUMtrySplit();
     }
 }

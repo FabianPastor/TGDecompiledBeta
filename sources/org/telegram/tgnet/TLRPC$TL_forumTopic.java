@@ -31,17 +31,19 @@ public class TLRPC$TL_forumTopic extends TLRPC$ForumTopic {
     public int unread_reactions_count;
 
     public static TLRPC$TL_forumTopic TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$TL_forumTopic tLRPC$TL_forumTopic_layer147;
-        if (i == NUM) {
-            tLRPC$TL_forumTopic_layer147 = new TLRPC$TL_forumTopic_layer147();
+        TLRPC$TL_forumTopic tLRPC$TL_forumTopicDeleted;
+        if (i == 37687451) {
+            tLRPC$TL_forumTopicDeleted = new TLRPC$TL_forumTopicDeleted();
+        } else if (i == NUM) {
+            tLRPC$TL_forumTopicDeleted = new TLRPC$TL_forumTopic_layer147();
         } else {
-            tLRPC$TL_forumTopic_layer147 = i != NUM ? null : new TLRPC$TL_forumTopic();
+            tLRPC$TL_forumTopicDeleted = i != NUM ? null : new TLRPC$TL_forumTopic();
         }
-        if (tLRPC$TL_forumTopic_layer147 != null || !z) {
-            if (tLRPC$TL_forumTopic_layer147 != null) {
-                tLRPC$TL_forumTopic_layer147.readParams(abstractSerializedData, z);
+        if (tLRPC$TL_forumTopicDeleted != null || !z) {
+            if (tLRPC$TL_forumTopicDeleted != null) {
+                tLRPC$TL_forumTopicDeleted.readParams(abstractSerializedData, z);
             }
-            return tLRPC$TL_forumTopic_layer147;
+            return tLRPC$TL_forumTopicDeleted;
         }
         throw new RuntimeException(String.format("can't parse magic %x in TL_forumTopic", Integer.valueOf(i)));
     }

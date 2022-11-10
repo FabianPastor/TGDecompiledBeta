@@ -80,18 +80,18 @@ public final /* synthetic */ class CLASSNAMEl implements Spliterator.OfInt {
 
     @Override // java.util.Spliterator.OfInt, java.util.Spliterator.OfPrimitive, java.util.Spliterator
     public /* synthetic */ Spliterator.OfInt trySplit() {
-        return a(this.a.mo326trySplit());
+        return a(this.a.moNUMtrySplit());
     }
 
     @Override // java.util.Spliterator.OfInt, java.util.Spliterator.OfPrimitive, java.util.Spliterator
     /* renamed from: trySplit */
-    public /* synthetic */ Spliterator.OfPrimitive mo321trySplit() {
-        return CLASSNAMEp.a(this.a.mo326trySplit());
+    public /* synthetic */ Spliterator.OfPrimitive moNUMtrySplit() {
+        return CLASSNAMEp.a(this.a.moNUMtrySplit());
     }
 
     @Override // java.util.Spliterator.OfInt, java.util.Spliterator.OfPrimitive, java.util.Spliterator
     /* renamed from: trySplit */
-    public /* synthetic */ Spliterator mo322trySplit() {
-        return CLASSNAMEh.a(this.a.mo326trySplit());
+    public /* synthetic */ Spliterator moNUMtrySplit() {
+        return CLASSNAMEh.a(this.a.moNUMtrySplit());
     }
 }

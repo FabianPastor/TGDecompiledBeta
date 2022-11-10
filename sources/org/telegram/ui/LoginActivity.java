@@ -145,6 +145,7 @@ import org.telegram.tgnet.TLRPC$TL_emailVerifyPurposeLoginSetup;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_help_countriesList;
 import org.telegram.tgnet.TLRPC$TL_help_country;
+import org.telegram.tgnet.TLRPC$TL_help_countryCode;
 import org.telegram.tgnet.TLRPC$TL_help_getCountriesList;
 import org.telegram.tgnet.TLRPC$TL_help_termsOfService;
 import org.telegram.tgnet.TLRPC$TL_inputCheckPasswordSRP;
@@ -2133,14 +2134,17 @@ public class LoginActivity extends BaseFragment {
                 for (int i = 0; i < tLRPC$TL_help_countriesList.countries.size(); i++) {
                     TLRPC$TL_help_country tLRPC$TL_help_country = tLRPC$TL_help_countriesList.countries.get(i);
                     for (int i2 = 0; i2 < tLRPC$TL_help_country.country_codes.size(); i2++) {
-                        CountrySelectActivity.Country country = new CountrySelectActivity.Country();
-                        country.name = tLRPC$TL_help_country.default_name;
-                        country.code = tLRPC$TL_help_country.country_codes.get(i2).country_code;
-                        country.shortname = tLRPC$TL_help_country.iso2;
-                        this.countriesArray.add(country);
-                        this.codesMap.put(tLRPC$TL_help_country.country_codes.get(i2).country_code, country);
-                        if (tLRPC$TL_help_country.country_codes.get(i2).patterns.size() > 0) {
-                            this.phoneFormatMap.put(tLRPC$TL_help_country.country_codes.get(i2).country_code, tLRPC$TL_help_country.country_codes.get(i2).patterns);
+                        TLRPC$TL_help_countryCode tLRPC$TL_help_countryCode = tLRPC$TL_help_country.country_codes.get(i2);
+                        if (tLRPC$TL_help_countryCode != null) {
+                            CountrySelectActivity.Country country = new CountrySelectActivity.Country();
+                            country.name = tLRPC$TL_help_country.default_name;
+                            country.code = tLRPC$TL_help_countryCode.country_code;
+                            country.shortname = tLRPC$TL_help_country.iso2;
+                            this.countriesArray.add(country);
+                            this.codesMap.put(tLRPC$TL_help_countryCode.country_code, country);
+                            if (tLRPC$TL_help_countryCode.patterns.size() > 0) {
+                                this.phoneFormatMap.put(tLRPC$TL_help_countryCode.country_code, tLRPC$TL_help_countryCode.patterns);
+                            }
                         }
                     }
                 }

@@ -28,7 +28,7 @@ final class CLASSNAMEr0 extends CountedCompleter {
 
     @Override // java.util.concurrent.CountedCompleter
     public void compute() {
-        j$.util.u mo326trySplit;
+        j$.util.u moNUMtrySplit;
         j$.util.u uVar = this.a;
         long estimateSize = uVar.estimateSize();
         long j = this.d;
@@ -43,13 +43,13 @@ final class CLASSNAMEr0 extends CountedCompleter {
         while (true) {
             if (d && interfaceCLASSNAMEm3.o()) {
                 break;
-            } else if (estimateSize <= j || (mo326trySplit = uVar.mo326trySplit()) == null) {
+            } else if (estimateSize <= j || (moNUMtrySplit = uVar.moNUMtrySplit()) == null) {
                 break;
             } else {
-                CLASSNAMEr0 CLASSNAMEr02 = new CLASSNAMEr0(CLASSNAMEr0, mo326trySplit);
+                CLASSNAMEr0 CLASSNAMEr02 = new CLASSNAMEr0(CLASSNAMEr0, moNUMtrySplit);
                 CLASSNAMEr0.addToPendingCount(1);
                 if (z) {
-                    uVar = mo326trySplit;
+                    uVar = moNUMtrySplit;
                 } else {
                     CLASSNAMEr0 CLASSNAMEr03 = CLASSNAMEr0;
                     CLASSNAMEr0 = CLASSNAMEr02;

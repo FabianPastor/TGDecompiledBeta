@@ -48,11 +48,11 @@ abstract class D4 {
         long j2 = this.e;
         if (j < j2 && this.d < j2) {
             while (true) {
-                j$.util.u mo326trySplit = this.c.mo326trySplit();
-                if (mo326trySplit == null) {
+                j$.util.u moNUMtrySplit = this.c.moNUMtrySplit();
+                if (moNUMtrySplit == null) {
                     return null;
                 }
-                long estimateSize = mo326trySplit.estimateSize() + this.d;
+                long estimateSize = moNUMtrySplit.estimateSize() + this.d;
                 long min = Math.min(estimateSize, this.b);
                 long j3 = this.a;
                 if (j3 >= min) {
@@ -63,12 +63,12 @@ abstract class D4 {
                         long j5 = this.d;
                         if (j5 < j3 || estimateSize > j4) {
                             this.d = min;
-                            return a(mo326trySplit, j3, j4, j5, min);
+                            return a(moNUMtrySplit, j3, j4, j5, min);
                         }
                         this.d = min;
-                        return mo326trySplit;
+                        return moNUMtrySplit;
                     }
-                    this.c = mo326trySplit;
+                    this.c = moNUMtrySplit;
                     this.e = min;
                 }
             }

@@ -17,7 +17,7 @@ public class U3 extends Z3 implements j$.util.function.f {
 
     @Override // j$.util.stream.Z3, java.lang.Iterable, j$.lang.e
     /* renamed from: B */
-    public j$.util.t mo293spliterator() {
+    public j$.util.t moNUMspliterator() {
         return new T3(this, 0, this.c, 0, this.b);
     }
 
@@ -39,7 +39,7 @@ public class U3 extends Z3 implements j$.util.function.f {
         if (consumer instanceof j$.util.function.f) {
             g((j$.util.function.f) consumer);
         } else if (!Q4.a) {
-            mo293spliterator().forEachRemaining(consumer);
+            moNUMspliterator().forEachRemaining(consumer);
         } else {
             Q4.a(getClass(), "{0} calling SpinedBuffer.OfDouble.forEach(Consumer)");
             throw null;
@@ -48,7 +48,7 @@ public class U3 extends Z3 implements j$.util.function.f {
 
     @Override // java.lang.Iterable
     public Iterator iterator() {
-        return j$.util.L.f(mo293spliterator());
+        return j$.util.L.f(moNUMspliterator());
     }
 
     @Override // j$.util.function.f

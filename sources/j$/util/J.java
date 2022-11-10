@@ -84,7 +84,7 @@ public class J implements u {
 
     @Override // j$.util.u
     /* renamed from: trySplit */
-    public u mo326trySplit() {
+    public u moNUMtrySplit() {
         long j;
         java.util.Iterator it = this.b;
         if (it == null) {

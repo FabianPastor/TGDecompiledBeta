@@ -12,7 +12,7 @@ public interface p extends java.util.Iterator {
 
         @Override // java.util.Iterator
         /* renamed from: next */
-        Integer mo313next();
+        Integer moNUMnext();
 
         int nextInt();
     }

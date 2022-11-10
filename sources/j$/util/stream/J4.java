@@ -80,11 +80,11 @@ abstract class J4 {
 
     /* renamed from: trySplit  reason: collision with other method in class */
     public final j$.util.u m252trySplit() {
-        j$.util.u mo326trySplit;
-        if (this.d.get() == 0 || (mo326trySplit = this.a.mo326trySplit()) == null) {
+        j$.util.u moNUMtrySplit;
+        if (this.d.get() == 0 || (moNUMtrySplit = this.a.moNUMtrySplit()) == null) {
             return null;
         }
-        return q(mo326trySplit);
+        return q(moNUMtrySplit);
     }
 
     /* renamed from: trySplit  reason: collision with other method in class */

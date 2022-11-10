@@ -89,10 +89,10 @@ final class CLASSNAMEm4 implements j$.util.u, Consumer {
 
     @Override // j$.util.u
     /* renamed from: trySplit */
-    public j$.util.u mo326trySplit() {
-        j$.util.u mo326trySplit = this.a.mo326trySplit();
-        if (mo326trySplit != null) {
-            return new CLASSNAMEm4(mo326trySplit, this.b);
+    public j$.util.u moNUMtrySplit() {
+        j$.util.u moNUMtrySplit = this.a.moNUMtrySplit();
+        if (moNUMtrySplit != null) {
+            return new CLASSNAMEm4(moNUMtrySplit, this.b);
         }
         return null;
     }

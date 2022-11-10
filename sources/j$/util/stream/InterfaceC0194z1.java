@@ -4,7 +4,7 @@ package j$.util.stream;
 public interface InterfaceCLASSNAMEz1 extends A1 {
     @Override // j$.util.stream.A1
     /* renamed from: b */
-    InterfaceCLASSNAMEz1 mo292b(int i);
+    InterfaceCLASSNAMEz1 moNUMb(int i);
 
     Object c(int i);
 
@@ -16,5 +16,5 @@ public interface InterfaceCLASSNAMEz1 extends A1 {
 
     @Override // j$.util.stream.A1
     /* renamed from: spliterator */
-    j$.util.w mo289spliterator();
+    j$.util.w moNUMspliterator();
 }

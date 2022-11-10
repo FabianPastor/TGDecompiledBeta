@@ -113,13 +113,13 @@ public final /* synthetic */ class L0 implements j$.util.stream.U {
 
     @Override // j$.util.stream.U, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public /* synthetic */ InterfaceCLASSNAMEn mo307iterator() {
+    public /* synthetic */ InterfaceCLASSNAMEn moNUMiterator() {
         return CLASSNAMEa.a(this.a.iterator());
     }
 
     @Override // j$.util.stream.U, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: iterator */
-    public /* synthetic */ Iterator mo307iterator() {
+    public /* synthetic */ Iterator moNUMiterator() {
         return this.a.iterator();
     }
 
@@ -155,13 +155,13 @@ public final /* synthetic */ class L0 implements j$.util.stream.U {
 
     @Override // j$.util.stream.U, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: parallel */
-    public /* synthetic */ j$.util.stream.U mo308parallel() {
+    public /* synthetic */ j$.util.stream.U moNUMparallel() {
         return n0(this.a.parallel());
     }
 
     @Override // j$.util.stream.U, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: parallel */
-    public /* synthetic */ InterfaceCLASSNAMEg mo308parallel() {
+    public /* synthetic */ InterfaceCLASSNAMEg moNUMparallel() {
         return H0.n0(this.a.parallel());
     }
 
@@ -172,13 +172,13 @@ public final /* synthetic */ class L0 implements j$.util.stream.U {
 
     @Override // j$.util.stream.U, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: sequential */
-    public /* synthetic */ j$.util.stream.U mo309sequential() {
+    public /* synthetic */ j$.util.stream.U moNUMsequential() {
         return n0(this.a.sequential());
     }
 
     @Override // j$.util.stream.U, j$.util.stream.InterfaceCLASSNAMEg, j$.util.stream.IntStream
     /* renamed from: sequential */
-    public /* synthetic */ InterfaceCLASSNAMEg mo309sequential() {
+    public /* synthetic */ InterfaceCLASSNAMEg moNUMsequential() {
         return H0.n0(this.a.sequential());
     }
 
@@ -194,13 +194,13 @@ public final /* synthetic */ class L0 implements j$.util.stream.U {
 
     @Override // j$.util.stream.U, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: spliterator */
-    public /* synthetic */ j$.util.t mo310spliterator() {
+    public /* synthetic */ j$.util.t moNUMspliterator() {
         return CLASSNAMEi.a(this.a.spliterator());
     }
 
     @Override // j$.util.stream.U, j$.util.stream.InterfaceCLASSNAMEg
     /* renamed from: spliterator */
-    public /* synthetic */ j$.util.u mo310spliterator() {
+    public /* synthetic */ j$.util.u moNUMspliterator() {
         return CLASSNAMEg.a(this.a.spliterator());
     }
 

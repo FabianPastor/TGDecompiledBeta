@@ -667,7 +667,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder  reason: collision with other method in class */
-        public RecyclerListView.Holder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerListView.Holder moNUMonCreateViewHolder(ViewGroup viewGroup, int i) {
             MemberRequestCell memberRequestCell;
             if (i == 1) {
                 View view = new View(viewGroup.getContext());

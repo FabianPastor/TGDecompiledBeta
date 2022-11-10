@@ -13,14 +13,14 @@ public final class CLASSNAMEm2 extends CLASSNAMEl2 implements InterfaceCLASSNAME
 
     @Override // j$.util.stream.InterfaceCLASSNAMEr1, j$.util.stream.InterfaceCLASSNAMEs1
     /* renamed from: a */
-    public /* bridge */ /* synthetic */ A1 mo291a() {
-        mo291a();
+    public /* bridge */ /* synthetic */ A1 moNUMa() {
+        moNUMa();
         return this;
     }
 
     @Override // j$.util.stream.InterfaceCLASSNAMEr1, j$.util.stream.InterfaceCLASSNAMEs1
     /* renamed from: a  reason: collision with other method in class */
-    public InterfaceCLASSNAMEy1 mo291a() {
+    public InterfaceCLASSNAMEy1 moNUMa() {
         if (this.b >= this.a.length) {
             return this;
         }

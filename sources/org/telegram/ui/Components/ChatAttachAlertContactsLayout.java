@@ -360,7 +360,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$new$1(Theme.ResourcesProvider resourcesProvider, View view, int i) {
-        Object mo1793getItem;
+        Object moNUMgetItem;
         ContactsController.Contact contact;
         String str;
         String str2;
@@ -369,18 +369,18 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         RecyclerView.Adapter adapter = this.listView.getAdapter();
         ShareSearchAdapter shareSearchAdapter = this.searchAdapter;
         if (adapter == shareSearchAdapter) {
-            mo1793getItem = shareSearchAdapter.getItem(i);
+            moNUMgetItem = shareSearchAdapter.getItem(i);
         } else {
             int sectionForPosition = this.listAdapter.getSectionForPosition(i);
             int positionInSectionForPosition = this.listAdapter.getPositionInSectionForPosition(i);
             if (positionInSectionForPosition < 0 || sectionForPosition < 0) {
                 return;
             }
-            mo1793getItem = this.listAdapter.mo1793getItem(sectionForPosition, positionInSectionForPosition);
+            moNUMgetItem = this.listAdapter.moNUMgetItem(sectionForPosition, positionInSectionForPosition);
         }
-        if (mo1793getItem != null) {
-            if (mo1793getItem instanceof ContactsController.Contact) {
-                ContactsController.Contact contact2 = (ContactsController.Contact) mo1793getItem;
+        if (moNUMgetItem != null) {
+            if (moNUMgetItem instanceof ContactsController.Contact) {
+                ContactsController.Contact contact2 = (ContactsController.Contact) moNUMgetItem;
                 TLRPC$User tLRPC$User = contact2.user;
                 if (tLRPC$User != null) {
                     str3 = tLRPC$User.first_name;
@@ -393,7 +393,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 str2 = str4;
                 str = str3;
             } else {
-                TLRPC$User tLRPC$User2 = (TLRPC$User) mo1793getItem;
+                TLRPC$User tLRPC$User2 = (TLRPC$User) moNUMgetItem;
                 ContactsController.Contact contact3 = new ContactsController.Contact();
                 String str5 = tLRPC$User2.first_name;
                 contact3.first_name = str5;
@@ -630,7 +630,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
         @Override // org.telegram.ui.Components.RecyclerListView.SectionsAdapter
         /* renamed from: getItem */
-        public Object mo1793getItem(int i, int i2) {
+        public Object moNUMgetItem(int i, int i2) {
             if (i == 0) {
                 return null;
             }
@@ -675,7 +675,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder moNUMonCreateViewHolder(ViewGroup viewGroup, int i) {
             View userCell;
             if (i == 0) {
                 userCell = new UserCell(this.mContext, ChatAttachAlertContactsLayout.this.resourcesProvider);
@@ -693,13 +693,13 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             final TLRPC$User tLRPC$User;
             if (viewHolder.getItemViewType() == 0) {
                 UserCell userCell = (UserCell) viewHolder.itemView;
-                Object mo1793getItem = mo1793getItem(i, i2);
+                Object moNUMgetItem = moNUMgetItem(i, i2);
                 boolean z = true;
                 if (i == getSectionCount() - 2 && i2 == getCountForSection(i) - 1) {
                     z = false;
                 }
-                if (mo1793getItem instanceof ContactsController.Contact) {
-                    final ContactsController.Contact contact = (ContactsController.Contact) mo1793getItem;
+                if (moNUMgetItem instanceof ContactsController.Contact) {
+                    final ContactsController.Contact contact = (ContactsController.Contact) moNUMgetItem;
                     tLRPC$User = contact.user;
                     if (tLRPC$User == null) {
                         userCell.setCurrentId(contact.contact_id);
@@ -714,7 +714,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                         tLRPC$User = null;
                     }
                 } else {
-                    tLRPC$User = (TLRPC$User) mo1793getItem;
+                    tLRPC$User = (TLRPC$User) moNUMgetItem;
                 }
                 if (tLRPC$User == null) {
                     return;
@@ -886,7 +886,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder moNUMonCreateViewHolder(ViewGroup viewGroup, int i) {
             View userCell;
             if (i == 0) {
                 userCell = new UserCell(this.mContext, ChatAttachAlertContactsLayout.this.resourcesProvider);

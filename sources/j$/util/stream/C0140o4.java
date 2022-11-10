@@ -67,7 +67,7 @@ final class CLASSNAMEo4 extends AbstractCLASSNAMEf4 implements j$.util.t {
 
     @Override // j$.util.stream.AbstractCLASSNAMEf4, j$.util.u
     /* renamed from: trySplit */
-    public j$.util.t mo326trySplit() {
-        return (j$.util.t) super.mo326trySplit();
+    public j$.util.t moNUMtrySplit() {
+        return (j$.util.t) super.moNUMtrySplit();
     }
 }

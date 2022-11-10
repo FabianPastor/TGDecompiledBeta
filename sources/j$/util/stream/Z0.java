@@ -36,7 +36,7 @@ class Z0 extends AbstractCLASSNAMEh3 {
                 InterfaceCLASSNAMEe1 interfaceCLASSNAMEe1 = (InterfaceCLASSNAMEe1) ((j$.util.function.r) ((N) this.c).m).apply(j);
                 if (interfaceCLASSNAMEe1 != null) {
                     try {
-                        interfaceCLASSNAMEe1.mo309sequential().d(new W0(this));
+                        interfaceCLASSNAMEe1.moNUMsequential().d(new W0(this));
                     } finally {
                         try {
                             interfaceCLASSNAMEe1.close();

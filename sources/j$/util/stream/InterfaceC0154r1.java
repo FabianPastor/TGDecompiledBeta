@@ -4,5 +4,5 @@ package j$.util.stream;
 public interface InterfaceCLASSNAMEr1 extends InterfaceCLASSNAMEs1, InterfaceCLASSNAMEl3 {
     @Override // j$.util.stream.InterfaceCLASSNAMEs1
     /* renamed from: a */
-    InterfaceCLASSNAMEy1 mo291a();
+    InterfaceCLASSNAMEy1 moNUMa();
 }

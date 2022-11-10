@@ -111,13 +111,13 @@ public final /* synthetic */ class M0 implements DoubleStream {
 
     @Override // java.util.stream.DoubleStream, java.util.stream.BaseStream
     public /* synthetic */ Iterator<Double> iterator() {
-        return this.a.mo307iterator();
+        return this.a.moNUMiterator();
     }
 
     @Override // java.util.stream.DoubleStream, java.util.stream.BaseStream
     /* renamed from: iterator */
     public /* synthetic */ Iterator<Double> iterator2() {
-        return CLASSNAMEb.a(this.a.mo307iterator());
+        return CLASSNAMEb.a(this.a.moNUMiterator());
     }
 
     @Override // java.util.stream.DoubleStream
@@ -169,13 +169,13 @@ public final /* synthetic */ class M0 implements DoubleStream {
     /* JADX WARN: Type inference failed for: r0v2, types: [java.util.stream.BaseStream, java.util.stream.DoubleStream] */
     @Override // java.util.stream.DoubleStream, java.util.stream.BaseStream
     public /* synthetic */ DoubleStream parallel() {
-        return I0.n0(this.a.mo308parallel());
+        return I0.n0(this.a.moNUMparallel());
     }
 
     @Override // java.util.stream.DoubleStream, java.util.stream.BaseStream
     /* renamed from: parallel */
     public /* synthetic */ DoubleStream parallel2() {
-        return n0(this.a.mo308parallel());
+        return n0(this.a.moNUMparallel());
     }
 
     @Override // java.util.stream.DoubleStream
@@ -196,13 +196,13 @@ public final /* synthetic */ class M0 implements DoubleStream {
     /* JADX WARN: Type inference failed for: r0v2, types: [java.util.stream.BaseStream, java.util.stream.DoubleStream] */
     @Override // java.util.stream.DoubleStream, java.util.stream.BaseStream
     public /* synthetic */ DoubleStream sequential() {
-        return I0.n0(this.a.mo309sequential());
+        return I0.n0(this.a.moNUMsequential());
     }
 
     @Override // java.util.stream.DoubleStream, java.util.stream.BaseStream
     /* renamed from: sequential */
     public /* synthetic */ DoubleStream sequential2() {
-        return n0(this.a.mo309sequential());
+        return n0(this.a.moNUMsequential());
     }
 
     @Override // java.util.stream.DoubleStream
@@ -217,13 +217,13 @@ public final /* synthetic */ class M0 implements DoubleStream {
 
     @Override // java.util.stream.DoubleStream, java.util.stream.BaseStream
     public /* synthetic */ Spliterator<Double> spliterator() {
-        return CLASSNAMEj.a(this.a.mo310spliterator());
+        return CLASSNAMEj.a(this.a.moNUMspliterator());
     }
 
     @Override // java.util.stream.DoubleStream, java.util.stream.BaseStream
     /* renamed from: spliterator */
     public /* synthetic */ Spliterator<Double> spliterator2() {
-        return CLASSNAMEh.a(this.a.mo310spliterator());
+        return CLASSNAMEh.a(this.a.moNUMspliterator());
     }
 
     @Override // java.util.stream.DoubleStream

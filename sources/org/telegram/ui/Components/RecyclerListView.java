@@ -281,7 +281,7 @@ public class RecyclerListView extends RecyclerView {
         public abstract int getCountForSection(int i);
 
         /* renamed from: getItem */
-        public abstract Object mo1793getItem(int i, int i2);
+        public abstract Object moNUMgetItem(int i, int i2);
 
         public abstract int getItemViewType(int i, int i2);
 
@@ -342,7 +342,7 @@ public class RecyclerListView extends RecyclerView {
         }
 
         public final Object getItem(int i) {
-            return mo1793getItem(getSectionForPosition(i), getPositionInSectionForPosition(i));
+            return moNUMgetItem(getSectionForPosition(i), getPositionInSectionForPosition(i));
         }
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
@@ -424,7 +424,7 @@ public class RecyclerListView extends RecyclerView {
             for (int i = 0; i < internalGetSectionCount; i++) {
                 int internalGetCountForSection = internalGetCountForSection(i);
                 for (int i2 = 0; i2 < internalGetCountForSection; i2++) {
-                    this.hashes.add(Integer.valueOf(Arrays.hashCode(new Object[]{Integer.valueOf((-49612) * i), mo1793getItem(i, i2)})));
+                    this.hashes.add(Integer.valueOf(Arrays.hashCode(new Object[]{Integer.valueOf((-49612) * i), moNUMgetItem(i, i2)})));
                 }
             }
             if (z) {
@@ -1741,6 +1741,10 @@ public class RecyclerListView extends RecyclerView {
             return super.dispatchTouchEvent(motionEvent);
         }
         return true;
+    }
+
+    public void checkIfEmpty() {
+        checkIfEmpty(updateEmptyViewAnimated());
     }
 
     /* JADX INFO: Access modifiers changed from: private */

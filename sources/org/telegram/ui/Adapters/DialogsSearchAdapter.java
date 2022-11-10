@@ -172,7 +172,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder moNUMonCreateViewHolder(ViewGroup viewGroup, int i) {
             HintDialogCell hintDialogCell = new HintDialogCell(this.mContext, this.drawChecked);
             hintDialogCell.setLayoutParams(new RecyclerView.LayoutParams(AndroidUtilities.dp(80.0f), AndroidUtilities.dp(86.0f)));
             return new RecyclerListView.Holder(hintDialogCell);
@@ -1188,71 +1188,72 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     /* renamed from: onCreateViewHolder */
-    public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder moNUMonCreateViewHolder(ViewGroup viewGroup, int i) {
         RecyclerListView recyclerListView;
-        FlickerLoadingView flickerLoadingView;
         if (i == 0) {
             recyclerListView = new ProfileSearchCell(this.mContext);
-        } else if (i != 1) {
-            if (i == 2) {
-                flickerLoadingView = new DialogCell(null, this.mContext, false, true);
-            } else if (i == 3) {
-                FlickerLoadingView flickerLoadingView2 = new FlickerLoadingView(this.mContext);
-                flickerLoadingView2.setViewType(1);
-                flickerLoadingView2.setIsSingleCell(true);
-                flickerLoadingView = flickerLoadingView2;
-            } else if (i == 4) {
-                recyclerListView = new HashtagSearchCell(this.mContext);
-            } else if (i == 5) {
-                RecyclerListView recyclerListView2 = new RecyclerListView(this, this.mContext) { // from class: org.telegram.ui.Adapters.DialogsSearchAdapter.2
-                    @Override // org.telegram.ui.Components.RecyclerListView, androidx.recyclerview.widget.RecyclerView, android.view.ViewGroup
-                    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                        if (getParent() != null && getParent().getParent() != null) {
-                            ViewParent parent = getParent().getParent();
-                            boolean z = true;
-                            if (!canScrollHorizontally(-1) && !canScrollHorizontally(1)) {
-                                z = false;
-                            }
-                            parent.requestDisallowInterceptTouchEvent(z);
-                        }
-                        return super.onInterceptTouchEvent(motionEvent);
-                    }
-                };
-                recyclerListView2.setSelectorDrawableColor(Theme.getColor("listSelectorSDK21"));
-                recyclerListView2.setTag(9);
-                recyclerListView2.setItemAnimator(null);
-                recyclerListView2.setLayoutAnimation(null);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, this.mContext) { // from class: org.telegram.ui.Adapters.DialogsSearchAdapter.3
-                    @Override // androidx.recyclerview.widget.LinearLayoutManager, androidx.recyclerview.widget.RecyclerView.LayoutManager
-                    public boolean supportsPredictiveItemAnimations() {
-                        return false;
-                    }
-                };
-                linearLayoutManager.setOrientation(0);
-                recyclerListView2.setLayoutManager(linearLayoutManager);
-                recyclerListView2.setAdapter(new CategoryAdapterRecycler(this.mContext, this.currentAccount, false));
-                recyclerListView2.setOnItemClickListener(new RecyclerListView.OnItemClickListener() { // from class: org.telegram.ui.Adapters.DialogsSearchAdapter$$ExternalSyntheticLambda23
-                    @Override // org.telegram.ui.Components.RecyclerListView.OnItemClickListener
-                    public final void onItemClick(View view, int i2) {
-                        DialogsSearchAdapter.this.lambda$onCreateViewHolder$15(view, i2);
-                    }
-                });
-                recyclerListView2.setOnItemLongClickListener(new RecyclerListView.OnItemLongClickListener() { // from class: org.telegram.ui.Adapters.DialogsSearchAdapter$$ExternalSyntheticLambda24
-                    @Override // org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener
-                    public final boolean onItemClick(View view, int i2) {
-                        boolean lambda$onCreateViewHolder$16;
-                        lambda$onCreateViewHolder$16 = DialogsSearchAdapter.this.lambda$onCreateViewHolder$16(view, i2);
-                        return lambda$onCreateViewHolder$16;
-                    }
-                });
-                this.innerListView = recyclerListView2;
-                recyclerListView = recyclerListView2;
-            } else {
-                recyclerListView = new TextCell(this.mContext, 16, false);
-            }
-            recyclerListView = flickerLoadingView;
-        } else {
+        } else if (i == 1) {
             recyclerListView = new GraySectionCell(this.mContext);
+        } else if (i == 2) {
+            recyclerListView = new DialogCell(this, null, this.mContext, false, true) { // from class: org.telegram.ui.Adapters.DialogsSearchAdapter.2
+                @Override // org.telegram.ui.Cells.DialogCell
+                protected boolean isForumCell() {
+                    return false;
+                }
+            };
+        } else if (i == 3) {
+            FlickerLoadingView flickerLoadingView = new FlickerLoadingView(this.mContext);
+            flickerLoadingView.setViewType(1);
+            flickerLoadingView.setIsSingleCell(true);
+            recyclerListView = flickerLoadingView;
+        } else if (i == 4) {
+            recyclerListView = new HashtagSearchCell(this.mContext);
+        } else if (i == 5) {
+            RecyclerListView recyclerListView2 = new RecyclerListView(this, this.mContext) { // from class: org.telegram.ui.Adapters.DialogsSearchAdapter.3
+                @Override // org.telegram.ui.Components.RecyclerListView, androidx.recyclerview.widget.RecyclerView, android.view.ViewGroup
+                public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                    if (getParent() != null && getParent().getParent() != null) {
+                        ViewParent parent = getParent().getParent();
+                        boolean z = true;
+                        if (!canScrollHorizontally(-1) && !canScrollHorizontally(1)) {
+                            z = false;
+                        }
+                        parent.requestDisallowInterceptTouchEvent(z);
+                    }
+                    return super.onInterceptTouchEvent(motionEvent);
+                }
+            };
+            recyclerListView2.setSelectorDrawableColor(Theme.getColor("listSelectorSDK21"));
+            recyclerListView2.setTag(9);
+            recyclerListView2.setItemAnimator(null);
+            recyclerListView2.setLayoutAnimation(null);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, this.mContext) { // from class: org.telegram.ui.Adapters.DialogsSearchAdapter.4
+                @Override // androidx.recyclerview.widget.LinearLayoutManager, androidx.recyclerview.widget.RecyclerView.LayoutManager
+                public boolean supportsPredictiveItemAnimations() {
+                    return false;
+                }
+            };
+            linearLayoutManager.setOrientation(0);
+            recyclerListView2.setLayoutManager(linearLayoutManager);
+            recyclerListView2.setAdapter(new CategoryAdapterRecycler(this.mContext, this.currentAccount, false));
+            recyclerListView2.setOnItemClickListener(new RecyclerListView.OnItemClickListener() { // from class: org.telegram.ui.Adapters.DialogsSearchAdapter$$ExternalSyntheticLambda23
+                @Override // org.telegram.ui.Components.RecyclerListView.OnItemClickListener
+                public final void onItemClick(View view, int i2) {
+                    DialogsSearchAdapter.this.lambda$onCreateViewHolder$15(view, i2);
+                }
+            });
+            recyclerListView2.setOnItemLongClickListener(new RecyclerListView.OnItemLongClickListener() { // from class: org.telegram.ui.Adapters.DialogsSearchAdapter$$ExternalSyntheticLambda24
+                @Override // org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener
+                public final boolean onItemClick(View view, int i2) {
+                    boolean lambda$onCreateViewHolder$16;
+                    lambda$onCreateViewHolder$16 = DialogsSearchAdapter.this.lambda$onCreateViewHolder$16(view, i2);
+                    return lambda$onCreateViewHolder$16;
+                }
+            });
+            this.innerListView = recyclerListView2;
+            recyclerListView = recyclerListView2;
+        } else {
+            recyclerListView = new TextCell(this.mContext, 16, false);
         }
         if (i == 5) {
             recyclerListView.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(86.0f)));

@@ -123,13 +123,13 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$IntStream$WRP i
 
     @Override // java.util.stream.IntStream, java.util.stream.BaseStream
     public /* synthetic */ Iterator<Integer> iterator() {
-        return this.a.mo307iterator();
+        return this.a.moNUMiterator();
     }
 
     @Override // java.util.stream.IntStream, java.util.stream.BaseStream
     /* renamed from: iterator  reason: avoid collision after fix types in other method */
     public /* synthetic */ Iterator<Integer> iterator2() {
-        return CLASSNAMEd.a(this.a.mo307iterator());
+        return CLASSNAMEd.a(this.a.moNUMiterator());
     }
 
     @Override // java.util.stream.IntStream
@@ -181,13 +181,13 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$IntStream$WRP i
     /* JADX WARN: Type inference failed for: r0v2, types: [java.util.stream.IntStream, java.util.stream.BaseStream] */
     @Override // java.util.stream.IntStream, java.util.stream.BaseStream
     public /* synthetic */ IntStream parallel() {
-        return I0.n0(this.a.mo308parallel());
+        return I0.n0(this.a.moNUMparallel());
     }
 
     @Override // java.util.stream.IntStream, java.util.stream.BaseStream
     /* renamed from: parallel  reason: avoid collision after fix types in other method */
     public /* synthetic */ IntStream parallel2() {
-        return convert(this.a.mo308parallel());
+        return convert(this.a.moNUMparallel());
     }
 
     @Override // java.util.stream.IntStream
@@ -208,13 +208,13 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$IntStream$WRP i
     /* JADX WARN: Type inference failed for: r0v2, types: [java.util.stream.IntStream, java.util.stream.BaseStream] */
     @Override // java.util.stream.IntStream, java.util.stream.BaseStream
     public /* synthetic */ IntStream sequential() {
-        return I0.n0(this.a.mo309sequential());
+        return I0.n0(this.a.moNUMsequential());
     }
 
     @Override // java.util.stream.IntStream, java.util.stream.BaseStream
     /* renamed from: sequential  reason: avoid collision after fix types in other method */
     public /* synthetic */ IntStream sequential2() {
-        return convert(this.a.mo309sequential());
+        return convert(this.a.moNUMsequential());
     }
 
     @Override // java.util.stream.IntStream
@@ -229,13 +229,13 @@ public final /* synthetic */ class C$r8$wrapper$java$util$stream$IntStream$WRP i
 
     @Override // java.util.stream.IntStream, java.util.stream.BaseStream
     public /* synthetic */ Spliterator<Integer> spliterator() {
-        return CLASSNAMEl.a(this.a.mo310spliterator());
+        return CLASSNAMEl.a(this.a.moNUMspliterator());
     }
 
     @Override // java.util.stream.IntStream, java.util.stream.BaseStream
     /* renamed from: spliterator  reason: avoid collision after fix types in other method */
     public /* synthetic */ Spliterator<Integer> spliterator2() {
-        return CLASSNAMEh.a(this.a.mo310spliterator());
+        return CLASSNAMEh.a(this.a.moNUMspliterator());
     }
 
     @Override // java.util.stream.IntStream

@@ -131,7 +131,7 @@ public class EglBase14Impl implements EglBase14 {
 
     @Override // org.webrtc.EglBase
     /* renamed from: getEglBaseContext  reason: collision with other method in class */
-    public Context mo2462getEglBaseContext() {
+    public Context moNUMgetEglBaseContext() {
         return new Context(this.eglContext);
     }
 

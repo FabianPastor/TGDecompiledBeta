@@ -68,7 +68,7 @@ final class CLASSNAMEq4 extends AbstractCLASSNAMEf4 implements u.a {
 
     @Override // j$.util.stream.AbstractCLASSNAMEf4, j$.util.u
     /* renamed from: trySplit */
-    public u.a mo326trySplit() {
-        return (u.a) super.mo326trySplit();
+    public u.a moNUMtrySplit() {
+        return (u.a) super.moNUMtrySplit();
     }
 }
