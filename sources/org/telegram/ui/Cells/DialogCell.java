@@ -1212,7 +1212,7 @@ public class DialogCell extends BaseCell {
     */
     public boolean update(int r27, boolean r28) {
         /*
-            Method dump skipped, instructions count: 1916
+            Method dump skipped, instructions count: 1912
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DialogCell.update(int, boolean):boolean");

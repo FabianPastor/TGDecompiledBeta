@@ -4797,7 +4797,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     */
     private void onItemClick(android.view.View r18, int r19, androidx.recyclerview.widget.RecyclerView.Adapter r20) {
         /*
-            Method dump skipped, instructions count: 999
+            Method dump skipped, instructions count: 1017
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.onItemClick(android.view.View, int, androidx.recyclerview.widget.RecyclerView$Adapter):void");
