@@ -569,7 +569,7 @@ public class QrActivity extends BaseFragment {
 
     /* JADX INFO: Access modifiers changed from: private */
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Type inference failed for: r0v0, types: [boolean, int] */
+    /* JADX WARN: Type inference failed for: r0v0, types: [int, boolean] */
     public void onItemSelected(EmojiThemes emojiThemes, int i, boolean z) {
         float f;
         this.selectedPosition = i;

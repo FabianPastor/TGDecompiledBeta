@@ -767,12 +767,12 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             Code decompiled incorrectly, please refer to instructions dump.
             To view partially-correct add '--show-bad-code' argument
         */
-        public org.telegram.ui.Components.ProfileGalleryView.Item mo1613instantiateItem(android.view.ViewGroup r24, int r25) {
+        public org.telegram.ui.Components.ProfileGalleryView.Item mo1615instantiateItem(android.view.ViewGroup r24, int r25) {
             /*
                 Method dump skipped, instructions count: 840
                 To view this dump add '--comments-level debug' option
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ProfileGalleryView.ViewPagerAdapter.mo1613instantiateItem(android.view.ViewGroup, int):org.telegram.ui.Components.ProfileGalleryView$Item");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ProfileGalleryView.ViewPagerAdapter.mo1615instantiateItem(android.view.ViewGroup, int):org.telegram.ui.Components.ProfileGalleryView$Item");
         }
 
         @Override // androidx.viewpager.widget.PagerAdapter

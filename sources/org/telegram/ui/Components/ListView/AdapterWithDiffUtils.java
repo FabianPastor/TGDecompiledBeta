@@ -28,8 +28,9 @@ public abstract class AdapterWithDiffUtils extends RecyclerListView.SelectionAda
         }
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes3.dex */
-    private class DiffUtilsCallback extends DiffUtil.Callback {
+    public class DiffUtilsCallback extends DiffUtil.Callback {
         ArrayList<? extends Item> newItems;
         ArrayList<? extends Item> oldItems;
 

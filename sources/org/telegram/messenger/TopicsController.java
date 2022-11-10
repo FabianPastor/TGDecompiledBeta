@@ -649,7 +649,7 @@ public class TopicsController extends BaseController {
             return;
         }
         ArrayList<TLRPC$TL_forumTopic> topics = getTopics(j);
-        boolean z2 = false;
+        boolean z2 = true;
         if (topics != null) {
             boolean z3 = false;
             for (int i = 0; i < topics.size(); i++) {

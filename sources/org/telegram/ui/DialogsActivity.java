@@ -5818,7 +5818,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     /* JADX WARN: Removed duplicated region for block: B:223:0x047a  */
     /* JADX WARN: Removed duplicated region for block: B:240:0x04d4  */
     /* JADX WARN: Type inference failed for: r15v0 */
-    /* JADX WARN: Type inference failed for: r15v1, types: [boolean, int] */
+    /* JADX WARN: Type inference failed for: r15v1, types: [int, boolean] */
     /* JADX WARN: Type inference failed for: r15v16 */
     /*
         Code decompiled incorrectly, please refer to instructions dump.

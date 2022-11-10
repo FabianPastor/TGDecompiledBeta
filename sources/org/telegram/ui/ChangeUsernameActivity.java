@@ -517,7 +517,7 @@ public class ChangeUsernameActivity extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
             if (i == 0) {
                 HeaderCell headerCell = new HeaderCell(ChangeUsernameActivity.this.getContext());
                 headerCell.setBackgroundColor(ChangeUsernameActivity.this.getThemedColor("windowBackgroundWhite"));
@@ -673,7 +673,7 @@ public class ChangeUsernameActivity extends BaseFragment {
             }
         }
         tLRPC$TL_account_reorderUsernames.order = arrayList;
-        getConnectionsManager().sendRequest(tLRPC$TL_account_reorderUsernames, ChangeUsernameActivity$$ExternalSyntheticLambda10.INSTANCE);
+        getConnectionsManager().sendRequest(tLRPC$TL_account_reorderUsernames, ChangeUsernameActivity$$ExternalSyntheticLambda11.INSTANCE);
         updateUser();
     }
 
@@ -724,6 +724,11 @@ public class ChangeUsernameActivity extends BaseFragment {
                 public void setText(CharSequence charSequence, TextView.BufferType bufferType) {
                     if (charSequence != 0) {
                         charSequence = AndroidUtilities.replaceTags(charSequence.toString());
+                        int indexOf = charSequence.toString().indexOf(10);
+                        if (indexOf >= 0) {
+                            charSequence.replace(indexOf, indexOf + 1, " ");
+                            charSequence.setSpan(new ForegroundColorSpan(ChangeUsernameActivity.this.getThemedColor("windowBackgroundWhiteRedText4")), 0, indexOf, 33);
+                        }
                         TypefaceSpan[] typefaceSpanArr = (TypefaceSpan[]) charSequence.getSpans(0, charSequence.length(), TypefaceSpan.class);
                         for (int i2 = 0; i2 < typefaceSpanArr.length; i2++) {
                             charSequence.setSpan(new ClickableSpan() { // from class: org.telegram.ui.ChangeUsernameActivity.UsernameHelpCell.1.1
@@ -1399,7 +1404,7 @@ public class ChangeUsernameActivity extends BaseFragment {
     public /* synthetic */ void lambda$checkUserName$5(final String str) {
         final TLRPC$TL_account_checkUsername tLRPC$TL_account_checkUsername = new TLRPC$TL_account_checkUsername();
         tLRPC$TL_account_checkUsername.username = str;
-        this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_checkUsername, new RequestDelegate() { // from class: org.telegram.ui.ChangeUsernameActivity$$ExternalSyntheticLambda8
+        this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_checkUsername, new RequestDelegate() { // from class: org.telegram.ui.ChangeUsernameActivity$$ExternalSyntheticLambda9
             @Override // org.telegram.tgnet.RequestDelegate
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                 ChangeUsernameActivity.this.lambda$checkUserName$4(str, tLRPC$TL_account_checkUsername, tLObject, tLRPC$TL_error);
@@ -1449,8 +1454,8 @@ public class ChangeUsernameActivity extends BaseFragment {
                 } else {
                     this.statusTextView.setText(LocaleController.getString("UsernameInUsePurchase", R.string.UsernameInUsePurchase));
                 }
-                this.statusTextView.setTag("windowBackgroundWhiteYellowText");
-                this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteYellowText"));
+                this.statusTextView.setTag("windowBackgroundWhiteGrayText8");
+                this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
             } else {
                 this.statusTextView.setText(LocaleController.getString("UsernameInUse", R.string.UsernameInUse));
                 this.statusTextView.setTag("windowBackgroundWhiteRedText4");
@@ -1489,44 +1494,51 @@ public class ChangeUsernameActivity extends BaseFragment {
         final TLRPC$TL_account_updateUsername tLRPC$TL_account_updateUsername = new TLRPC$TL_account_updateUsername();
         tLRPC$TL_account_updateUsername.username = this.username;
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, Integer.valueOf(MessagesController.UPDATE_MASK_NAME));
-        final int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateUsername, new RequestDelegate() { // from class: org.telegram.ui.ChangeUsernameActivity$$ExternalSyntheticLambda9
+        final int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateUsername, new RequestDelegate() { // from class: org.telegram.ui.ChangeUsernameActivity$$ExternalSyntheticLambda10
             @Override // org.telegram.tgnet.RequestDelegate
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ChangeUsernameActivity.this.lambda$saveName$9(alertDialog, tLRPC$TL_account_updateUsername, tLObject, tLRPC$TL_error);
+                ChangeUsernameActivity.this.lambda$saveName$10(alertDialog, tLRPC$TL_account_updateUsername, tLObject, tLRPC$TL_error);
             }
         }, 2);
         ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(sendRequest, this.classGuid);
         alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() { // from class: org.telegram.ui.ChangeUsernameActivity$$ExternalSyntheticLambda0
             @Override // android.content.DialogInterface.OnCancelListener
             public final void onCancel(DialogInterface dialogInterface) {
-                ChangeUsernameActivity.this.lambda$saveName$10(sendRequest, dialogInterface);
+                ChangeUsernameActivity.this.lambda$saveName$11(sendRequest, dialogInterface);
             }
         });
         alertDialog.show();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveName$9(final AlertDialog alertDialog, final TLRPC$TL_account_updateUsername tLRPC$TL_account_updateUsername, TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$saveName$10(final AlertDialog alertDialog, final TLRPC$TL_account_updateUsername tLRPC$TL_account_updateUsername, TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             final TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ChangeUsernameActivity$$ExternalSyntheticLambda7
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ChangeUsernameActivity$$ExternalSyntheticLambda8
                 @Override // java.lang.Runnable
                 public final void run() {
                     ChangeUsernameActivity.this.lambda$saveName$6(alertDialog, tLRPC$User);
                 }
             });
         } else if ("USERNAME_NOT_MODIFIED".equals(tLRPC$TL_error.text)) {
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ChangeUsernameActivity$$ExternalSyntheticLambda5
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ChangeUsernameActivity$$ExternalSyntheticLambda6
                 @Override // java.lang.Runnable
                 public final void run() {
                     ChangeUsernameActivity.this.lambda$saveName$7(alertDialog);
                 }
             });
-        } else {
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ChangeUsernameActivity$$ExternalSyntheticLambda6
+        } else if ("USERNAME_PURCHASE_AVAILABLE".equals(tLRPC$TL_error.text) || "USERNAME_INVALID".equals(tLRPC$TL_error.text)) {
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ChangeUsernameActivity$$ExternalSyntheticLambda5
                 @Override // java.lang.Runnable
                 public final void run() {
-                    ChangeUsernameActivity.this.lambda$saveName$8(alertDialog, tLRPC$TL_error, tLRPC$TL_account_updateUsername);
+                    ChangeUsernameActivity.this.lambda$saveName$8(alertDialog);
+                }
+            });
+        } else {
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ChangeUsernameActivity$$ExternalSyntheticLambda7
+                @Override // java.lang.Runnable
+                public final void run() {
+                    ChangeUsernameActivity.this.lambda$saveName$9(alertDialog, tLRPC$TL_error, tLRPC$TL_account_updateUsername);
                 }
             });
         }
@@ -1558,7 +1570,17 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveName$8(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_updateUsername tLRPC$TL_account_updateUsername) {
+    public /* synthetic */ void lambda$saveName$8(AlertDialog alertDialog) {
+        try {
+            alertDialog.dismiss();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        shakeIfOff();
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$saveName$9(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_updateUsername tLRPC$TL_account_updateUsername) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -1569,7 +1591,7 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$saveName$10(int i, DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$saveName$11(int i, DialogInterface dialogInterface) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(i, true);
     }
 

@@ -356,7 +356,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
             this.textureView.renderer.setMirror(sharedInstance.isFrontFaceCamera());
-            this.textureView.renderer.init(VideoCapturerDevice.getEglBase().mo2460getEglBaseContext(), new RendererCommon.RendererEvents(this) { // from class: org.telegram.ui.Components.voip.PrivateVideoPreviewDialog.4
+            this.textureView.renderer.init(VideoCapturerDevice.getEglBase().mo2462getEglBaseContext(), new RendererCommon.RendererEvents(this) { // from class: org.telegram.ui.Components.voip.PrivateVideoPreviewDialog.4
                 @Override // org.webrtc.RendererCommon.RendererEvents
                 public void onFirstFrameRendered() {
                 }
@@ -655,7 +655,7 @@ public abstract class PrivateVideoPreviewDialog extends FrameLayout implements V
         /* JADX WARN: Multi-variable type inference failed */
         @Override // androidx.viewpager.widget.PagerAdapter
         /* renamed from: instantiateItem */
-        public Object mo1613instantiateItem(ViewGroup viewGroup, int i) {
+        public Object mo1615instantiateItem(ViewGroup viewGroup, int i) {
             ImageView imageView;
             int i2 = 1;
             if (PrivateVideoPreviewDialog.this.needScreencast && i == 0) {

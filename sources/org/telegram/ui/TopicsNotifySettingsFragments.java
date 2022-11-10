@@ -275,7 +275,7 @@ public class TopicsNotifySettingsFragments extends BaseFragment {
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
             TextCell textCell = null;
             if (i == 1) {
                 TextCell textCell2 = new TextCell(viewGroup.getContext());

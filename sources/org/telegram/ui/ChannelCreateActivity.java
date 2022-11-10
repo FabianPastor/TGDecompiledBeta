@@ -18,8 +18,11 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,6 +40,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -78,11 +82,13 @@ import org.telegram.ui.Components.EditTextEmoji;
 import org.telegram.ui.Components.ImageUpdater;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkActionView;
+import org.telegram.ui.Components.LinkSpanDrawable;
 import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
+import org.telegram.ui.Components.TypefaceSpan;
 /* loaded from: classes3.dex */
 public class ChannelCreateActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate {
     private ArrayList<AdminedChannelCell> adminedChannelCells;
@@ -900,12 +906,51 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             linkActionView.hideRevokeOption(true);
             this.permanentLinkView.setUsers(0, null);
             this.privateContainer.addView(this.permanentLinkView);
-            TextView textView2 = new TextView(context);
-            this.checkTextView = textView2;
-            textView2.setTextSize(1, 15.0f);
+            LinkSpanDrawable.LinksTextView linksTextView = new LinkSpanDrawable.LinksTextView(context) { // from class: org.telegram.ui.ChannelCreateActivity.8
+                /* JADX WARN: Multi-variable type inference failed */
+                /* JADX WARN: Type inference failed for: r7v0, types: [android.widget.TextView, org.telegram.ui.ChannelCreateActivity$8] */
+                /* JADX WARN: Type inference failed for: r8v0, types: [java.lang.CharSequence] */
+                /* JADX WARN: Type inference failed for: r8v1, types: [java.lang.CharSequence] */
+                /* JADX WARN: Type inference failed for: r8v3, types: [android.text.SpannableStringBuilder] */
+                @Override // android.widget.TextView
+                public void setText(CharSequence charSequence, TextView.BufferType bufferType) {
+                    if (charSequence != 0) {
+                        charSequence = AndroidUtilities.replaceTags(charSequence.toString());
+                        int indexOf = charSequence.toString().indexOf(10);
+                        if (indexOf >= 0) {
+                            charSequence.replace(indexOf, indexOf + 1, " ");
+                            charSequence.setSpan(new ForegroundColorSpan(ChannelCreateActivity.this.getThemedColor("windowBackgroundWhiteRedText4")), 0, indexOf, 33);
+                        }
+                        TypefaceSpan[] typefaceSpanArr = (TypefaceSpan[]) charSequence.getSpans(0, charSequence.length(), TypefaceSpan.class);
+                        final String obj = (ChannelCreateActivity.this.descriptionTextView == null || ChannelCreateActivity.this.descriptionTextView.getText() == null) ? "" : ChannelCreateActivity.this.descriptionTextView.getText().toString();
+                        for (int i3 = 0; i3 < typefaceSpanArr.length; i3++) {
+                            charSequence.setSpan(new ClickableSpan() { // from class: org.telegram.ui.ChannelCreateActivity.8.1
+                                @Override // android.text.style.ClickableSpan
+                                public void onClick(View view3) {
+                                    Context context2 = getContext();
+                                    Browser.openUrl(context2, "https://fragment.com/username/" + obj);
+                                }
+
+                                @Override // android.text.style.ClickableSpan, android.text.style.CharacterStyle
+                                public void updateDrawState(TextPaint textPaint) {
+                                    super.updateDrawState(textPaint);
+                                    textPaint.setUnderlineText(false);
+                                }
+                            }, charSequence.getSpanStart(typefaceSpanArr[i3]), charSequence.getSpanEnd(typefaceSpanArr[i3]), 33);
+                            charSequence.removeSpan(typefaceSpanArr[i3]);
+                        }
+                    }
+                    super.setText(charSequence, bufferType);
+                }
+            };
+            this.checkTextView = linksTextView;
+            linksTextView.setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
+            this.checkTextView.setHighlightColor(Theme.getColor("windowBackgroundWhiteLinkSelection"));
+            this.checkTextView.setTextSize(1, 15.0f);
             this.checkTextView.setGravity(LocaleController.isRTL ? 5 : 3);
             this.checkTextView.setVisibility(8);
-            this.linkContainer.addView(this.checkTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 17, 3, 17, 7));
+            this.checkTextView.setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
+            this.linkContainer.addView(this.checkTextView, LayoutHelper.createLinear(-2, -2, LocaleController.isRTL ? 5 : 3, 18, 3, 18, 7));
             TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(context);
             this.typeInfoCell = textInfoPrivacyCell;
             int i3 = R.drawable.greydivider_bottom;
@@ -1228,7 +1273,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.avatarAnimation.playTogether(ObjectAnimator.ofFloat(this.avatarEditor, View.ALPHA, 1.0f), ObjectAnimator.ofFloat(this.avatarProgressView, View.ALPHA, 0.0f));
         }
         this.avatarAnimation.setDuration(180L);
-        this.avatarAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.ChannelCreateActivity.8
+        this.avatarAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.ChannelCreateActivity.9
             @Override // android.animation.AnimatorListenerAdapter, android.animation.Animator.AnimatorListener
             public void onAnimationEnd(Animator animator) {
                 if (ChannelCreateActivity.this.avatarAnimation == null || ChannelCreateActivity.this.avatarEditor == null) {
@@ -1492,7 +1537,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 }
             }
         }
-        if (str == null || str.length() < 5) {
+        if (str == null || str.length() < 4) {
             this.checkTextView.setText(LocaleController.getString("LinkInvalidShort", R.string.LinkInvalidShort));
             this.checkTextView.setTag("windowBackgroundWhiteRedText4");
             this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
@@ -1521,29 +1566,29 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$checkUserName$24(final String str) {
-        TLRPC$TL_channels_checkUsername tLRPC$TL_channels_checkUsername = new TLRPC$TL_channels_checkUsername();
+        final TLRPC$TL_channels_checkUsername tLRPC$TL_channels_checkUsername = new TLRPC$TL_channels_checkUsername();
         tLRPC$TL_channels_checkUsername.username = str;
         tLRPC$TL_channels_checkUsername.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(this.chatId);
         this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_channels_checkUsername, new RequestDelegate() { // from class: org.telegram.ui.ChannelCreateActivity$$ExternalSyntheticLambda25
             @Override // org.telegram.tgnet.RequestDelegate
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ChannelCreateActivity.this.lambda$checkUserName$23(str, tLObject, tLRPC$TL_error);
+                ChannelCreateActivity.this.lambda$checkUserName$23(str, tLRPC$TL_channels_checkUsername, tLObject, tLRPC$TL_error);
             }
         }, 2);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkUserName$23(final String str, final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$checkUserName$23(final String str, final TLRPC$TL_channels_checkUsername tLRPC$TL_channels_checkUsername, final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ChannelCreateActivity$$ExternalSyntheticLambda16
             @Override // java.lang.Runnable
             public final void run() {
-                ChannelCreateActivity.this.lambda$checkUserName$22(str, tLRPC$TL_error, tLObject);
+                ChannelCreateActivity.this.lambda$checkUserName$22(str, tLRPC$TL_error, tLObject, tLRPC$TL_channels_checkUsername);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkUserName$22(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$checkUserName$22(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_channels_checkUsername tLRPC$TL_channels_checkUsername) {
         this.checkReqId = 0;
         String str2 = this.lastCheckName;
         if (str2 == null || !str2.equals(str)) {
@@ -1556,14 +1601,24 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.lastNameAvailable = true;
             return;
         }
-        if (tLRPC$TL_error != null && tLRPC$TL_error.text.equals("CHANNELS_ADMIN_PUBLIC_TOO_MUCH")) {
+        if (tLRPC$TL_error != null && "USERNAME_INVALID".equals(tLRPC$TL_error.text) && tLRPC$TL_channels_checkUsername.username.length() == 4) {
+            this.checkTextView.setText(LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
+            this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
+        } else if (tLRPC$TL_error != null && "USERNAME_PURCHASE_AVAILABLE".equals(tLRPC$TL_error.text)) {
+            if (tLRPC$TL_channels_checkUsername.username.length() == 4) {
+                this.checkTextView.setText(LocaleController.getString("UsernameInvalidShortPurchase", R.string.UsernameInvalidShortPurchase));
+            } else {
+                this.checkTextView.setText(LocaleController.getString("UsernameInUsePurchase", R.string.UsernameInUsePurchase));
+            }
+            this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
+        } else if (tLRPC$TL_error != null && "CHANNELS_ADMIN_PUBLIC_TOO_MUCH".equals(tLRPC$TL_error.text)) {
+            this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
             this.canCreatePublic = false;
             showPremiumIncreaseLimitDialog();
         } else {
+            this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
             this.checkTextView.setText(LocaleController.getString("LinkInUse", R.string.LinkInUse));
         }
-        this.checkTextView.setTag("windowBackgroundWhiteRedText4");
-        this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
         this.lastNameAvailable = false;
     }
 

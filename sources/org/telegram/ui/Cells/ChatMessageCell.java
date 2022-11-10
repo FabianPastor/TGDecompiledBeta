@@ -611,6 +611,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private int titleX;
     private float toSeekBarProgress;
     private boolean topNearToSet;
+    private int topicArrowColor;
     private Drawable topicArrowDrawable;
     private int topicBackgroundColor;
     private AnimatedColor topicBackgroundColorAnimated;
@@ -3036,11 +3037,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         this.reactionsLayoutInBubble.onDetachFromWindow();
         this.statusDrawableAnimationInProgress = false;
         Runnable runnable = this.unregisterFlagSecure;
-        if (runnable == null) {
+        if (runnable != null) {
+            runnable.run();
+            this.unregisterFlagSecure = null;
+        }
+        Drawable drawable = this.topicIconDrawable;
+        if (!(drawable instanceof AnimatedEmojiDrawable)) {
             return;
         }
-        runnable.run();
-        this.unregisterFlagSecure = null;
+        ((AnimatedEmojiDrawable) drawable).removeView(new ChatMessageCell$$ExternalSyntheticLambda9(this));
     }
 
     @Override // android.view.ViewGroup, android.view.View
@@ -3115,10 +3120,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         this.reactionsLayoutInBubble.onAttachToWindow();
         updateFlagSecure();
         MessageObject messageObject4 = this.currentMessageObject;
-        if (messageObject4 == null || messageObject4.type != 20 || this.unlockLayout == null) {
-            return;
+        if (messageObject4 != null && messageObject4.type == 20 && this.unlockLayout != null) {
+            invalidate();
         }
-        invalidate();
+        Drawable drawable = this.topicIconDrawable;
+        if (drawable instanceof AnimatedEmojiDrawable) {
+            ((AnimatedEmojiDrawable) drawable).addView(new ChatMessageCell$$ExternalSyntheticLambda9(this));
+        }
     }
 
     private void checkImageReceiversAttachState() {
@@ -3736,9 +3744,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     /* JADX WARN: Type inference failed for: r3v1128 */
     /* JADX WARN: Type inference failed for: r3v1129 */
     /* JADX WARN: Type inference failed for: r3v25 */
-    /* JADX WARN: Type inference failed for: r3v26, types: [boolean, int] */
+    /* JADX WARN: Type inference failed for: r3v26, types: [int, boolean] */
     /* JADX WARN: Type inference failed for: r3v34 */
-    /* JADX WARN: Type inference failed for: r3v47, types: [boolean, int] */
+    /* JADX WARN: Type inference failed for: r3v47, types: [int, boolean] */
     /* JADX WARN: Type inference failed for: r4v804, types: [org.telegram.tgnet.TLRPC$InputStickerSet] */
     /* JADX WARN: Type inference failed for: r5v157 */
     /* JADX WARN: Type inference failed for: r5v161, types: [java.lang.CharSequence] */
@@ -4043,6 +4051,18 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     private boolean invalidateParentForce() {
         return !this.links.isEmpty() || !this.reactionsLayoutInBubble.isEmpty;
+    }
+
+    public void invalidateOutbounds() {
+        ChatMessageCellDelegate chatMessageCellDelegate = this.delegate;
+        if (chatMessageCellDelegate == null || !chatMessageCellDelegate.canDrawOutboundsContent()) {
+            if (!(getParent() instanceof View)) {
+                return;
+            }
+            ((View) getParent()).invalidate();
+            return;
+        }
+        super.invalidate();
     }
 
     @Override // android.view.View, org.telegram.ui.Cells.TextSelectionHelper.SelectableView
@@ -6456,74 +6476,82 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         this.currentReplyUserId = 0L;
     }
 
-    /* JADX WARN: Can't wrap try/catch for region: R(29:21|(1:23)|24|(1:578)(2:30|(24:32|33|34|(1:36)(1:(1:546)(1:547))|37|(1:39)(1:544)|40|(7:42|(1:44)|45|(1:47)(3:53|(1:55)(1:57)|56)|48|(1:50)(1:52)|51)|58|59|60|61|62|(3:64|(1:66)|67)(1:539)|68|(1:70)|(1:72)(1:538)|73|(1:75)|76|(1:78)(2:532|(1:534)(2:535|(1:537)))|79|(1:81)|82))|548|(25:555|(4:568|(1:570)(1:577)|571|(3:573|(1:575)|576))|559|34|(0)(0)|37|(0)(0)|40|(0)|58|59|60|61|62|(0)(0)|68|(0)|(0)(0)|73|(0)|76|(0)(0)|79|(0)|82)(1:554)|33|34|(0)(0)|37|(0)(0)|40|(0)|58|59|60|61|62|(0)(0)|68|(0)|(0)(0)|73|(0)|76|(0)(0)|79|(0)|82) */
-    /* JADX WARN: Can't wrap try/catch for region: R(59:1|(2:586|(1:592))|5|(3:7|(1:11)|582)(3:583|(1:585)|582)|12|(1:581)(1:16)|17|(1:579)(29:21|(1:23)|24|(1:578)(2:30|(24:32|33|34|(1:36)(1:(1:546)(1:547))|37|(1:39)(1:544)|40|(7:42|(1:44)|45|(1:47)(3:53|(1:55)(1:57)|56)|48|(1:50)(1:52)|51)|58|59|60|61|62|(3:64|(1:66)|67)(1:539)|68|(1:70)|(1:72)(1:538)|73|(1:75)|76|(1:78)(2:532|(1:534)(2:535|(1:537)))|79|(1:81)|82))|548|(25:555|(4:568|(1:570)(1:577)|571|(3:573|(1:575)|576))|559|34|(0)(0)|37|(0)(0)|40|(0)|58|59|60|61|62|(0)(0)|68|(0)|(0)(0)|73|(0)|76|(0)(0)|79|(0)|82)(1:554)|33|34|(0)(0)|37|(0)(0)|40|(0)|58|59|60|61|62|(0)(0)|68|(0)|(0)(0)|73|(0)|76|(0)(0)|79|(0)|82)|83|(2:85|(1:87)(2:88|(1:90)(2:91|(1:93))))|94|(4:102|(1:104)|105|(19:111|(1:(1:114)(2:151|(1:153)(1:154)))(1:(1:156)(1:157))|115|(1:117)|118|119|120|(1:122)(1:148)|123|(1:129)|130|131|132|133|134|135|(1:137)|138|(1:142)))|158|(3:168|(1:170)|(28:172|(1:174)(3:524|(1:526)(2:528|(1:530))|527)|175|(1:177)|178|(1:180)(1:523)|181|(1:183)|184|(6:186|(3:518|(1:520)|521)|190|191|(1:193)(1:517)|(3:195|(1:197)(1:199)|198))(1:522)|200|(4:202|(1:204)|205|(1:207))|208|(1:210)|211|(3:213|(1:215)(1:508)|216)(2:509|(3:511|(1:513)(1:515)|514)(1:516))|217|(2:221|(1:223))|224|(1:226)(1:507)|227|(7:229|(1:231)|232|(1:234)(1:240)|235|(1:237)(1:239)|238)|241|(3:243|(1:245)|246)|247|(2:255|(23:262|(2:266|(1:268))|269|(1:273)|274|(1:276)(2:475|(1:477))|277|(10:372|(3:374|(3:376|(1:378)(1:472)|379)(1:473)|380)(1:474)|(1:382)|(1:471)(3:394|(1:396)(1:470)|397)|398|(2:400|(2:402|(2:404|(1:406)(1:450))(1:451))(1:452))(2:453|(2:457|(2:459|(1:461))(2:462|(2:464|(1:466))(2:467|(1:469)))))|(1:408)|409|(1:411)(2:413|(1:415)(2:416|(1:418)(2:419|(6:421|(1:423)(1:432)|424|(1:426)|427|(1:431))(2:433|(1:449)(6:439|(1:441)(1:448)|442|(1:444)|445|(1:447))))))|412)(6:281|(1:283)(2:364|(1:366)(2:367|(1:369)))|284|(1:286)|287|(7:344|(1:(1:347)(1:360))(1:(1:362)(1:363))|348|(1:350)(1:359)|351|(1:357)|358)(1:293))|(1:295)(1:343)|296|297|298|299|300|(1:302)(1:338)|303|(2:305|(1:307))|309|310|311|(1:313)(1:335)|314|(8:316|(3:318|(2:320|321)(1:323)|322)|324|325|(1:327)|328|(1:332)|333)))(2:478|(8:482|(2:484|(1:(1:487)))|489|(2:493|(1:495))|496|(1:498)(2:502|(1:504))|499|(1:501)))|259|260))|531|241|(0)|247|(1:249)|505|255|(1:257)|262|(3:264|266|(0))|269|(2:271|273)|274|(0)(0)|277|(1:279)|370|372|(0)(0)|(0)|(1:384)|471|398|(0)(0)|(0)|409|(0)(0)|412|(0)(0)|296|297|298|299|300|(0)(0)|303|(0)|309|310|311|(0)(0)|314|(0)|259|260) */
-    /* JADX WARN: Code restructure failed: missing block: B:1156:0x1135, code lost:
+    /* JADX WARN: Can't wrap try/catch for region: R(27:21|(1:23)|24|(2:561|(25:568|(4:581|(1:583)(1:590)|584|(3:586|(1:588)|589))|572|34|(1:36)(1:(1:559)(1:560))|37|(1:39)(1:557)|40|(7:42|(1:44)|45|(1:47)(3:53|(1:55)(1:57)|56)|48|(1:50)(1:52)|51)|58|59|60|61|62|(3:64|(1:66)|67)(1:552)|68|(1:70)|(1:72)(1:551)|73|(1:75)|76|(1:78)(2:545|(1:547)(2:548|(1:550)))|79|(1:81)|82)(1:567))(1:32)|33|34|(0)(0)|37|(0)(0)|40|(0)|58|59|60|61|62|(0)(0)|68|(0)|(0)(0)|73|(0)|76|(0)(0)|79|(0)|82) */
+    /* JADX WARN: Can't wrap try/catch for region: R(60:1|(2:598|(1:604))|5|(3:7|(1:11)|594)(3:595|(1:597)|594)|12|(1:593)(1:16)|17|(1:591)(27:21|(1:23)|24|(2:561|(25:568|(4:581|(1:583)(1:590)|584|(3:586|(1:588)|589))|572|34|(1:36)(1:(1:559)(1:560))|37|(1:39)(1:557)|40|(7:42|(1:44)|45|(1:47)(3:53|(1:55)(1:57)|56)|48|(1:50)(1:52)|51)|58|59|60|61|62|(3:64|(1:66)|67)(1:552)|68|(1:70)|(1:72)(1:551)|73|(1:75)|76|(1:78)(2:545|(1:547)(2:548|(1:550)))|79|(1:81)|82)(1:567))(1:32)|33|34|(0)(0)|37|(0)(0)|40|(0)|58|59|60|61|62|(0)(0)|68|(0)|(0)(0)|73|(0)|76|(0)(0)|79|(0)|82)|83|(2:85|(1:87)(2:88|(1:90)(2:91|(1:93))))|94|(1:544)(50:98|(4:487|(1:489)|490|(19:496|(1:(1:499)(2:537|(1:539)(1:540)))(1:(1:542)(1:543))|500|(1:502)|503|504|505|(1:507)(1:534)|508|(1:514)|515|516|517|518|519|520|(1:522)|523|(1:527)))|102|103|(3:113|(1:115)|(32:117|(1:119)(3:479|(1:481)(2:483|(1:485))|482)|120|(1:122)|123|(1:125)(1:478)|126|(1:128)(1:477)|129|(1:131)(1:476)|132|(1:134)|135|(5:137|(3:471|(1:473)|474)(1:141)|142|(1:144)(1:470)|(3:146|(1:148)(1:150)|149))(1:475)|151|(4:153|(1:155)|156|(1:158))|159|(1:161)|162|(5:164|(1:166)(1:465)|167|(2:169|(1:171)(1:172))|173)(2:466|(1:468)(1:469))|174|(2:178|(1:180))|181|(1:183)(1:464)|184|(7:186|(1:188)|189|(1:191)(1:197)|192|(1:194)(1:196)|195)|198|(3:200|(1:202)|203)|204|(2:212|(23:219|(2:223|(1:225))|226|(1:230)|231|(1:233)(2:432|(1:434))|234|(10:329|(3:331|(3:333|(1:335)(1:429)|336)(1:430)|337)(1:431)|(1:339)|(1:428)(3:351|(1:353)(1:427)|354)|355|(2:357|(2:359|(2:361|(1:363)(1:407))(1:408))(1:409))(2:410|(2:414|(2:416|(1:418))(2:419|(2:421|(1:423))(2:424|(1:426)))))|(1:365)|366|(1:368)(2:370|(1:372)(2:373|(1:375)(2:376|(6:378|(1:380)(1:389)|381|(1:383)|384|(1:388))(2:390|(1:406)(6:396|(1:398)(1:405)|399|(1:401)|402|(1:404))))))|369)(6:238|(1:240)(2:321|(1:323)(2:324|(1:326)))|241|(1:243)|244|(7:301|(1:(1:304)(1:317))(1:(1:319)(1:320))|305|(1:307)(1:316)|308|(1:314)|315)(1:250))|(1:252)(1:300)|253|254|255|256|257|(1:259)(1:295)|260|(2:262|(1:264))|266|267|268|(1:270)(1:292)|271|(8:273|(3:275|(2:277|278)(1:280)|279)|281|282|(1:284)|285|(1:289)|290)))(2:435|(8:439|(2:441|(1:(1:444)))|446|(2:450|(1:452))|453|(1:455)(2:459|(1:461))|456|(1:458)))|216|217))|486|198|(0)|204|(1:206)|462|212|(1:214)|219|(3:221|223|(0))|226|(2:228|230)|231|(0)(0)|234|(1:236)|327|329|(0)(0)|(0)|(1:341)|428|355|(0)(0)|(0)|366|(0)(0)|369|(0)(0)|253|254|255|256|257|(0)(0)|260|(0)|266|267|268|(0)(0)|271|(0)|216|217)|529|103|(5:105|109|113|(0)|(0))|486|198|(0)|204|(0)|462|212|(0)|219|(0)|226|(0)|231|(0)(0)|234|(0)|327|329|(0)(0)|(0)|(0)|428|355|(0)(0)|(0)|366|(0)(0)|369|(0)(0)|253|254|255|256|257|(0)(0)|260|(0)|266|267|268|(0)(0)|271|(0)|216|217) */
+    /* JADX WARN: Code restructure failed: missing block: B:1182:0x1149, code lost:
         r0 = move-exception;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:1157:0x1136, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:1183:0x114a, code lost:
         org.telegram.messenger.FileLog.e(r0);
      */
-    /* JADX WARN: Code restructure failed: missing block: B:1181:0x1202, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:1207:0x1216, code lost:
         r0 = move-exception;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:1182:0x1203, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:1208:0x1217, code lost:
         org.telegram.messenger.FileLog.e(r0);
      */
-    /* JADX WARN: Code restructure failed: missing block: B:726:0x03bf, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:738:0x03ba, code lost:
         r0 = move-exception;
      */
-    /* JADX WARN: Code restructure failed: missing block: B:727:0x03c0, code lost:
+    /* JADX WARN: Code restructure failed: missing block: B:739:0x03bb, code lost:
         org.telegram.messenger.FileLog.e(r0);
      */
-    /* JADX WARN: Code restructure failed: missing block: B:951:0x0b6b, code lost:
-        if ((r0.action instanceof org.telegram.tgnet.TLRPC$TL_messageActionTopicCreate) == false) goto L489;
+    /* JADX WARN: Code restructure failed: missing block: B:977:0x0b7e, code lost:
+        if ((r0.action instanceof org.telegram.tgnet.TLRPC$TL_messageActionTopicCreate) == false) goto L446;
      */
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:1007:0x0cd4  */
-    /* JADX WARN: Removed duplicated region for block: B:1009:0x0cd9  */
-    /* JADX WARN: Removed duplicated region for block: B:1030:0x0d5e  */
-    /* JADX WARN: Removed duplicated region for block: B:1040:0x0db0  */
-    /* JADX WARN: Removed duplicated region for block: B:1059:0x0e12  */
-    /* JADX WARN: Removed duplicated region for block: B:1062:0x0e20  */
-    /* JADX WARN: Removed duplicated region for block: B:1063:0x0e23  */
-    /* JADX WARN: Removed duplicated region for block: B:1142:0x10a8  */
-    /* JADX WARN: Removed duplicated region for block: B:1143:0x10ab  */
-    /* JADX WARN: Removed duplicated region for block: B:1148:0x10d6 A[Catch: Exception -> 0x1135, TryCatch #4 {Exception -> 0x1135, blocks: (B:1146:0x10ce, B:1148:0x10d6, B:1150:0x10ed, B:1152:0x10f2, B:1154:0x1111), top: B:1195:0x10ce }] */
-    /* JADX WARN: Removed duplicated region for block: B:1149:0x10ec  */
-    /* JADX WARN: Removed duplicated region for block: B:1152:0x10f2 A[Catch: Exception -> 0x1135, TryCatch #4 {Exception -> 0x1135, blocks: (B:1146:0x10ce, B:1148:0x10d6, B:1150:0x10ed, B:1152:0x10f2, B:1154:0x1111), top: B:1195:0x10ce }] */
-    /* JADX WARN: Removed duplicated region for block: B:1161:0x1143 A[Catch: Exception -> 0x1202, TryCatch #7 {Exception -> 0x1202, blocks: (B:1159:0x113b, B:1161:0x1143, B:1163:0x115a, B:1165:0x115f, B:1167:0x1175, B:1169:0x1181, B:1170:0x1184, B:1171:0x1187, B:1173:0x11ae, B:1174:0x11d1, B:1176:0x11de, B:1178:0x11e8, B:1179:0x11f1), top: B:1201:0x113b }] */
-    /* JADX WARN: Removed duplicated region for block: B:1162:0x1159  */
-    /* JADX WARN: Removed duplicated region for block: B:1165:0x115f A[Catch: Exception -> 0x1202, TryCatch #7 {Exception -> 0x1202, blocks: (B:1159:0x113b, B:1161:0x1143, B:1163:0x115a, B:1165:0x115f, B:1167:0x1175, B:1169:0x1181, B:1170:0x1184, B:1171:0x1187, B:1173:0x11ae, B:1174:0x11d1, B:1176:0x11de, B:1178:0x11e8, B:1179:0x11f1), top: B:1201:0x113b }] */
-    /* JADX WARN: Removed duplicated region for block: B:684:0x01f0  */
-    /* JADX WARN: Removed duplicated region for block: B:685:0x01f3  */
-    /* JADX WARN: Removed duplicated region for block: B:690:0x0216  */
-    /* JADX WARN: Removed duplicated region for block: B:691:0x0219  */
-    /* JADX WARN: Removed duplicated region for block: B:694:0x0224  */
-    /* JADX WARN: Removed duplicated region for block: B:714:0x0343 A[Catch: Exception -> 0x03bf, TryCatch #2 {Exception -> 0x03bf, blocks: (B:712:0x0322, B:714:0x0343, B:716:0x035a, B:717:0x036d, B:719:0x037c, B:721:0x0380, B:723:0x038d, B:724:0x03bb, B:718:0x0377), top: B:1192:0x0322 }] */
-    /* JADX WARN: Removed duplicated region for block: B:718:0x0377 A[Catch: Exception -> 0x03bf, TryCatch #2 {Exception -> 0x03bf, blocks: (B:712:0x0322, B:714:0x0343, B:716:0x035a, B:717:0x036d, B:719:0x037c, B:721:0x0380, B:723:0x038d, B:724:0x03bb, B:718:0x0377), top: B:1192:0x0322 }] */
-    /* JADX WARN: Removed duplicated region for block: B:721:0x0380 A[Catch: Exception -> 0x03bf, TryCatch #2 {Exception -> 0x03bf, blocks: (B:712:0x0322, B:714:0x0343, B:716:0x035a, B:717:0x036d, B:719:0x037c, B:721:0x0380, B:723:0x038d, B:724:0x03bb, B:718:0x0377), top: B:1192:0x0322 }] */
-    /* JADX WARN: Removed duplicated region for block: B:723:0x038d A[Catch: Exception -> 0x03bf, TryCatch #2 {Exception -> 0x03bf, blocks: (B:712:0x0322, B:714:0x0343, B:716:0x035a, B:717:0x036d, B:719:0x037c, B:721:0x0380, B:723:0x038d, B:724:0x03bb, B:718:0x0377), top: B:1192:0x0322 }] */
-    /* JADX WARN: Removed duplicated region for block: B:724:0x03bb A[Catch: Exception -> 0x03bf, TRY_LEAVE, TryCatch #2 {Exception -> 0x03bf, blocks: (B:712:0x0322, B:714:0x0343, B:716:0x035a, B:717:0x036d, B:719:0x037c, B:721:0x0380, B:723:0x038d, B:724:0x03bb, B:718:0x0377), top: B:1192:0x0322 }] */
-    /* JADX WARN: Removed duplicated region for block: B:730:0x03c7  */
-    /* JADX WARN: Removed duplicated region for block: B:733:0x03d9  */
-    /* JADX WARN: Removed duplicated region for block: B:734:0x03e1  */
-    /* JADX WARN: Removed duplicated region for block: B:742:0x0406  */
-    /* JADX WARN: Removed duplicated region for block: B:926:0x0b1e  */
-    /* JADX WARN: Removed duplicated region for block: B:978:0x0CLASSNAME  */
-    /* JADX WARN: Removed duplicated region for block: B:986:0x0c5e  */
-    /* JADX WARN: Removed duplicated region for block: B:987:0x0CLASSNAME  */
-    /* JADX WARN: Removed duplicated region for block: B:998:0x0ca0  */
-    /* JADX WARN: Type inference failed for: r3v304 */
+    /* JADX WARN: Removed duplicated region for block: B:1000:0x0CLASSNAME  */
+    /* JADX WARN: Removed duplicated region for block: B:1004:0x0c4c  */
+    /* JADX WARN: Removed duplicated region for block: B:1007:0x0CLASSNAME  */
+    /* JADX WARN: Removed duplicated region for block: B:1012:0x0CLASSNAME  */
+    /* JADX WARN: Removed duplicated region for block: B:1013:0x0CLASSNAME  */
+    /* JADX WARN: Removed duplicated region for block: B:1018:0x0CLASSNAME  */
+    /* JADX WARN: Removed duplicated region for block: B:1024:0x0cb3  */
+    /* JADX WARN: Removed duplicated region for block: B:1033:0x0ce7  */
+    /* JADX WARN: Removed duplicated region for block: B:1035:0x0cec  */
+    /* JADX WARN: Removed duplicated region for block: B:1037:0x0cef  */
+    /* JADX WARN: Removed duplicated region for block: B:1056:0x0d78  */
+    /* JADX WARN: Removed duplicated region for block: B:1066:0x0dca  */
+    /* JADX WARN: Removed duplicated region for block: B:1085:0x0e2c  */
+    /* JADX WARN: Removed duplicated region for block: B:1088:0x0e3a  */
+    /* JADX WARN: Removed duplicated region for block: B:1089:0x0e3d  */
+    /* JADX WARN: Removed duplicated region for block: B:1168:0x10bc  */
+    /* JADX WARN: Removed duplicated region for block: B:1169:0x10bf  */
+    /* JADX WARN: Removed duplicated region for block: B:1174:0x10ea A[Catch: Exception -> 0x1149, TryCatch #4 {Exception -> 0x1149, blocks: (B:1172:0x10e2, B:1174:0x10ea, B:1176:0x1101, B:1178:0x1106, B:1180:0x1125), top: B:1221:0x10e2 }] */
+    /* JADX WARN: Removed duplicated region for block: B:1175:0x1100  */
+    /* JADX WARN: Removed duplicated region for block: B:1178:0x1106 A[Catch: Exception -> 0x1149, TryCatch #4 {Exception -> 0x1149, blocks: (B:1172:0x10e2, B:1174:0x10ea, B:1176:0x1101, B:1178:0x1106, B:1180:0x1125), top: B:1221:0x10e2 }] */
+    /* JADX WARN: Removed duplicated region for block: B:1187:0x1157 A[Catch: Exception -> 0x1216, TryCatch #6 {Exception -> 0x1216, blocks: (B:1185:0x114f, B:1187:0x1157, B:1189:0x116e, B:1191:0x1173, B:1193:0x1189, B:1195:0x1195, B:1196:0x1198, B:1197:0x119b, B:1199:0x11c2, B:1200:0x11e5, B:1202:0x11f2, B:1204:0x11fc, B:1205:0x1205), top: B:1225:0x114f }] */
+    /* JADX WARN: Removed duplicated region for block: B:1188:0x116d  */
+    /* JADX WARN: Removed duplicated region for block: B:1191:0x1173 A[Catch: Exception -> 0x1216, TryCatch #6 {Exception -> 0x1216, blocks: (B:1185:0x114f, B:1187:0x1157, B:1189:0x116e, B:1191:0x1173, B:1193:0x1189, B:1195:0x1195, B:1196:0x1198, B:1197:0x119b, B:1199:0x11c2, B:1200:0x11e5, B:1202:0x11f2, B:1204:0x11fc, B:1205:0x1205), top: B:1225:0x114f }] */
+    /* JADX WARN: Removed duplicated region for block: B:696:0x01e7  */
+    /* JADX WARN: Removed duplicated region for block: B:697:0x01ea  */
+    /* JADX WARN: Removed duplicated region for block: B:702:0x0211  */
+    /* JADX WARN: Removed duplicated region for block: B:703:0x0214  */
+    /* JADX WARN: Removed duplicated region for block: B:706:0x021f  */
+    /* JADX WARN: Removed duplicated region for block: B:726:0x033e A[Catch: Exception -> 0x03ba, TryCatch #3 {Exception -> 0x03ba, blocks: (B:724:0x031d, B:726:0x033e, B:728:0x0355, B:729:0x0368, B:731:0x0377, B:733:0x037b, B:735:0x0388, B:736:0x03b6, B:730:0x0372), top: B:1220:0x031d }] */
+    /* JADX WARN: Removed duplicated region for block: B:730:0x0372 A[Catch: Exception -> 0x03ba, TryCatch #3 {Exception -> 0x03ba, blocks: (B:724:0x031d, B:726:0x033e, B:728:0x0355, B:729:0x0368, B:731:0x0377, B:733:0x037b, B:735:0x0388, B:736:0x03b6, B:730:0x0372), top: B:1220:0x031d }] */
+    /* JADX WARN: Removed duplicated region for block: B:733:0x037b A[Catch: Exception -> 0x03ba, TryCatch #3 {Exception -> 0x03ba, blocks: (B:724:0x031d, B:726:0x033e, B:728:0x0355, B:729:0x0368, B:731:0x0377, B:733:0x037b, B:735:0x0388, B:736:0x03b6, B:730:0x0372), top: B:1220:0x031d }] */
+    /* JADX WARN: Removed duplicated region for block: B:735:0x0388 A[Catch: Exception -> 0x03ba, TryCatch #3 {Exception -> 0x03ba, blocks: (B:724:0x031d, B:726:0x033e, B:728:0x0355, B:729:0x0368, B:731:0x0377, B:733:0x037b, B:735:0x0388, B:736:0x03b6, B:730:0x0372), top: B:1220:0x031d }] */
+    /* JADX WARN: Removed duplicated region for block: B:736:0x03b6 A[Catch: Exception -> 0x03ba, TRY_LEAVE, TryCatch #3 {Exception -> 0x03ba, blocks: (B:724:0x031d, B:726:0x033e, B:728:0x0355, B:729:0x0368, B:731:0x0377, B:733:0x037b, B:735:0x0388, B:736:0x03b6, B:730:0x0372), top: B:1220:0x031d }] */
+    /* JADX WARN: Removed duplicated region for block: B:742:0x03c2  */
+    /* JADX WARN: Removed duplicated region for block: B:745:0x03d4  */
+    /* JADX WARN: Removed duplicated region for block: B:746:0x03dc  */
+    /* JADX WARN: Removed duplicated region for block: B:754:0x0401  */
+    /* JADX WARN: Removed duplicated region for block: B:843:0x070d  */
+    /* JADX WARN: Removed duplicated region for block: B:845:0x0722  */
+    /* JADX WARN: Removed duplicated region for block: B:952:0x0b2c  */
+    /* JADX WARN: Removed duplicated region for block: B:958:0x0b4a  */
+    /* JADX WARN: Removed duplicated region for block: B:996:0x0c1f  */
+    /* JADX WARN: Type inference failed for: r3v302 */
     /* JADX WARN: Type inference failed for: r3v5 */
     /* JADX WARN: Type inference failed for: r3v6, types: [org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$User, java.lang.String] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    private void setMessageObjectInternal(org.telegram.messenger.MessageObject r45) {
+    private void setMessageObjectInternal(org.telegram.messenger.MessageObject r47) {
         /*
-            Method dump skipped, instructions count: 4618
+            Method dump skipped, instructions count: 4638
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.setMessageObjectInternal(org.telegram.messenger.MessageObject):void");
@@ -6548,16 +6576,22 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         float[] fArr = this.topicHSV;
         float f = fArr[0];
         float f2 = fArr[1];
-        boolean z = f2 <= 0.0f || f2 >= 1.0f;
-        Color.colorToHSV(getThemedColor("chat_inReactionButtonText"), this.topicHSV);
-        float[] fArr2 = this.topicHSV;
-        fArr2[0] = f;
-        if (z) {
-            fArr2[1] = f2;
-            fArr2[2] = MathUtils.clamp(fArr2[2] + (Theme.isCurrentThemeDark() ? 0.3f : -0.3f), 0.0f, 1.0f);
+        if (f2 <= 0.0f || f2 >= 1.0f) {
+            this.topicNameColor = getThemedColor("chat_inReactionButtonText");
+            this.topicBackgroundColor = ColorUtils.setAlphaComponent(getThemedColor("chat_inReactionButtonBackground"), 38);
+            return;
         }
-        this.topicNameColor = Color.HSVToColor(255, this.topicHSV);
-        this.topicBackgroundColor = Color.HSVToColor(38, this.topicHSV);
+        Color.colorToHSV(getThemedColor("chat_inReactionButtonText"), this.topicHSV);
+        this.topicHSV[0] = f;
+        if (!Theme.isCurrentThemeDark() && AndroidUtilities.computePerceivedBrightness(Color.HSVToColor(this.topicHSV)) > 0.7f) {
+            float[] fArr2 = this.topicHSV;
+            fArr2[2] = MathUtils.clamp(fArr2[2] - 0.25f, 0.0f, 1.0f);
+        }
+        this.topicNameColor = Color.HSVToColor(Color.alpha(getThemedColor("chat_inReactionButtonText")), this.topicHSV);
+        Color.colorToHSV(getThemedColor("chat_inReactionButtonBackground"), this.topicHSV);
+        float[] fArr3 = this.topicHSV;
+        fArr3[0] = f;
+        this.topicBackgroundColor = Color.HSVToColor(38, fArr3);
     }
 
     private boolean isNeedAuthorName() {
@@ -7154,11 +7188,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     public boolean hasOutboundsContent() {
         AnimatedEmojiSpan.EmojiGroupedSpans emojiGroupedSpans;
+        MessageObject.GroupedMessagePosition groupedMessagePosition;
         AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable swapAnimatedEmojiDrawable;
         if (getAlpha() != 1.0f) {
             return false;
         }
-        if ((this.transitionParams.transitionBotButtons.isEmpty() || !this.transitionParams.animateBotButtonsChanged) && this.botButtons.isEmpty() && this.drawSideButton == 0 && ((!this.drawNameLayout || this.nameLayout == null || (swapAnimatedEmojiDrawable = this.currentNameStatusDrawable) == null || swapAnimatedEmojiDrawable.getDrawable() == null) && ((emojiGroupedSpans = this.animatedEmojiStack) == null || emojiGroupedSpans.holders.isEmpty()))) {
+        if ((this.transitionParams.transitionBotButtons.isEmpty() || !this.transitionParams.animateBotButtonsChanged) && this.botButtons.isEmpty() && this.drawSideButton == 0 && ((!this.drawNameLayout || this.nameLayout == null || (swapAnimatedEmojiDrawable = this.currentNameStatusDrawable) == null || swapAnimatedEmojiDrawable.getDrawable() == null) && (((emojiGroupedSpans = this.animatedEmojiStack) == null || emojiGroupedSpans.holders.isEmpty()) && (!this.drawTopic || this.topicIconDrawable == null || ((groupedMessagePosition = this.currentPosition) != null && (groupedMessagePosition.minY != 0 || groupedMessagePosition.minX != 0)))))) {
             if (this.currentMessagesGroup != null) {
                 return false;
             }
@@ -7171,9 +7206,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     public void drawOutboundsContent(Canvas canvas) {
-        int themedColor;
+        MessageObject.GroupedMessagePosition groupedMessagePosition;
         float f;
-        float f2 = 1.0f;
+        float f2;
+        float f3;
+        int themedColor;
+        float f4;
+        float f5 = 1.0f;
         if (!this.enterTransitionInProgress) {
             drawAnimatedEmojis(canvas, 1.0f);
         }
@@ -7188,15 +7227,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 this.nameY = this.layoutHeight - AndroidUtilities.dp(38.0f);
                 this.nameX -= this.nameOffsetX;
             } else {
-                float f3 = 11.0f;
+                float f6 = 11.0f;
                 if (this.mediaBackground || this.currentMessageObject.isOutOwner()) {
                     this.nameX = (((this.backgroundDrawableLeft + this.transitionParams.deltaLeft) + AndroidUtilities.dp(11.0f)) - this.nameOffsetX) + getExtraTextX();
                 } else {
-                    float f4 = this.backgroundDrawableLeft + this.transitionParams.deltaLeft;
+                    float f7 = this.backgroundDrawableLeft + this.transitionParams.deltaLeft;
                     if (this.mediaBackground || !this.drawPinnedBottom) {
-                        f3 = 17.0f;
+                        f6 = 17.0f;
                     }
-                    this.nameX = ((f4 + AndroidUtilities.dp(f3)) - this.nameOffsetX) + getExtraTextX();
+                    this.nameX = ((f7 + AndroidUtilities.dp(f6)) - this.nameOffsetX) + getExtraTextX();
                 }
                 if (this.currentUser != null) {
                     Theme.MessageDrawable messageDrawable = this.currentBackgroundDrawable;
@@ -7234,31 +7273,63 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
             }
             this.nameX += this.animationOffsetX;
-            float f5 = this.nameY;
+            float f8 = this.nameY;
             TransitionParams transitionParams2 = this.transitionParams;
-            this.nameY = f5 + transitionParams2.deltaTop;
+            this.nameY = f8 + transitionParams2.deltaTop;
             if (!transitionParams2.animateSign) {
-                f = this.nameX;
+                f4 = this.nameX;
             } else {
-                f = this.transitionParams.animateNameX + ((this.nameX - this.transitionParams.animateNameX) * this.transitionParams.animateChangeProgress);
+                f4 = this.transitionParams.animateNameX + ((this.nameX - this.transitionParams.animateNameX) * this.transitionParams.animateChangeProgress);
             }
-            this.currentNameStatusDrawable.setBounds((int) (Math.abs(f) + this.nameLayoutWidth + AndroidUtilities.dp(2.0f)), (((int) this.nameY) + (this.nameLayout.getHeight() / 2)) - AndroidUtilities.dp(10.0f), (int) (Math.abs(f) + this.nameLayoutWidth + AndroidUtilities.dp(22.0f)), (int) (this.nameY + (this.nameLayout.getHeight() / 2) + AndroidUtilities.dp(10.0f)));
+            this.currentNameStatusDrawable.setBounds((int) (Math.abs(f4) + this.nameLayoutWidth + AndroidUtilities.dp(2.0f)), (((int) this.nameY) + (this.nameLayout.getHeight() / 2)) - AndroidUtilities.dp(10.0f), (int) (Math.abs(f4) + this.nameLayoutWidth + AndroidUtilities.dp(22.0f)), (int) (this.nameY + (this.nameLayout.getHeight() / 2) + AndroidUtilities.dp(10.0f)));
             this.currentNameStatusDrawable.setColor(Integer.valueOf(ColorUtils.setAlphaComponent(themedColor, 115)));
             this.currentNameStatusDrawable.draw(canvas);
         }
+        if (this.drawTopic && this.topicIconDrawable != null && this.topicHitRect != null && ((groupedMessagePosition = this.currentPosition) == null || (groupedMessagePosition.minY == 0 && groupedMessagePosition.minX == 0))) {
+            if (!this.isRoundVideo || this.hasLinkPreview) {
+                f = 1.0f;
+            } else {
+                f = (1.0f - getVideoTranscriptionProgress()) * 1.0f;
+                TransitionParams transitionParams3 = this.transitionParams;
+                if (transitionParams3.animatePlayingRound) {
+                    if (this.isPlayingRound) {
+                        f3 = 1.0f - transitionParams3.animateChangeProgress;
+                    } else {
+                        f3 = transitionParams3.animateChangeProgress;
+                    }
+                    f *= f3;
+                } else if (this.isPlayingRound) {
+                    f = 0.0f;
+                }
+            }
+            if (!this.transitionParams.animateForwardedLayout) {
+                f2 = 1.0f;
+            } else if (!this.currentMessageObject.needDrawForwarded()) {
+                f2 = 1.0f - this.transitionParams.animateChangeProgress;
+            } else {
+                f2 = this.transitionParams.animateChangeProgress;
+            }
+            canvas.save();
+            RectF rectF = this.topicHitRect;
+            canvas.translate(rectF.left, rectF.top);
+            this.topicIconDrawable.setAlpha((int) (f2 * 255.0f * f));
+            this.topicIconDrawable.setBounds(this.topicIconDrawableBounds);
+            this.topicIconDrawable.draw(canvas);
+            canvas.restore();
+        }
         if (!this.transitionParams.transitionBotButtons.isEmpty()) {
-            TransitionParams transitionParams3 = this.transitionParams;
-            if (transitionParams3.animateBotButtonsChanged) {
-                drawBotButtons(canvas, transitionParams3.transitionBotButtons, 1.0f - this.transitionParams.animateChangeProgress);
+            TransitionParams transitionParams4 = this.transitionParams;
+            if (transitionParams4.animateBotButtonsChanged) {
+                drawBotButtons(canvas, transitionParams4.transitionBotButtons, 1.0f - this.transitionParams.animateChangeProgress);
             }
         }
         if (!this.botButtons.isEmpty()) {
             ArrayList<BotButton> arrayList = this.botButtons;
-            TransitionParams transitionParams4 = this.transitionParams;
-            if (transitionParams4.animateBotButtonsChanged) {
-                f2 = transitionParams4.animateChangeProgress;
+            TransitionParams transitionParams5 = this.transitionParams;
+            if (transitionParams5.animateBotButtonsChanged) {
+                f5 = transitionParams5.animateChangeProgress;
             }
-            drawBotButtons(canvas, arrayList, f2);
+            drawBotButtons(canvas, arrayList, f5);
         }
         drawSideButton(canvas);
     }
@@ -7820,17 +7891,17 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         return !TextUtils.equals(this.lastPostAuthor, this.currentMessageObject.messageOwner.post_author);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:1002:0x0888  */
-    /* JADX WARN: Removed duplicated region for block: B:850:0x04b4  */
-    /* JADX WARN: Removed duplicated region for block: B:990:0x0823  */
-    /* JADX WARN: Removed duplicated region for block: B:999:0x0881  */
+    /* JADX WARN: Removed duplicated region for block: B:1001:0x0834  */
+    /* JADX WARN: Removed duplicated region for block: B:1010:0x0892  */
+    /* JADX WARN: Removed duplicated region for block: B:1013:0x0899  */
+    /* JADX WARN: Removed duplicated region for block: B:857:0x04b6  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void drawNamesLayout(android.graphics.Canvas r31, float r32) {
+    public void drawNamesLayout(android.graphics.Canvas r33, float r34) {
         /*
-            Method dump skipped, instructions count: 4406
+            Method dump skipped, instructions count: 4440
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.drawNamesLayout(android.graphics.Canvas, float):void");

@@ -1832,7 +1832,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
             if (i == 0) {
                 return new RecyclerListView.Holder(new InnerAccentView(this.mContext));
             }
@@ -2099,7 +2099,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
             DefaultThemesPreviewCell defaultThemesPreviewCell;
             ThemePreviewMessagesCell themePreviewMessagesCell;
             switch (i) {

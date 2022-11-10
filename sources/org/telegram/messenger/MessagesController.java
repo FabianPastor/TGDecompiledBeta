@@ -15186,13 +15186,13 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* JADX WARN: Removed duplicated region for block: B:1489:0x0var_  */
-    /* JADX WARN: Removed duplicated region for block: B:1494:0x0var_  */
-    /* JADX WARN: Removed duplicated region for block: B:1538:0x1095  */
-    /* JADX WARN: Removed duplicated region for block: B:1540:0x10a3  */
-    /* JADX WARN: Removed duplicated region for block: B:1542:0x10a9  */
-    /* JADX WARN: Removed duplicated region for block: B:1545:0x10b5  */
-    /* JADX WARN: Removed duplicated region for block: B:1555:0x10f1  */
-    /* JADX WARN: Removed duplicated region for block: B:1558:0x1107  */
+    /* JADX WARN: Removed duplicated region for block: B:1494:0x0f8e  */
+    /* JADX WARN: Removed duplicated region for block: B:1538:0x1093  */
+    /* JADX WARN: Removed duplicated region for block: B:1540:0x10a1  */
+    /* JADX WARN: Removed duplicated region for block: B:1542:0x10a7  */
+    /* JADX WARN: Removed duplicated region for block: B:1545:0x10b3  */
+    /* JADX WARN: Removed duplicated region for block: B:1555:0x10ef  */
+    /* JADX WARN: Removed duplicated region for block: B:1558:0x1105  */
     /* JADX WARN: Removed duplicated region for block: B:1641:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -15200,7 +15200,7 @@ public class MessagesController extends BaseController implements NotificationCe
     */
     public /* synthetic */ void lambda$processUpdateArray$335(int r46, java.util.ArrayList r47, androidx.collection.LongSparseArray r48, int r49, org.telegram.messenger.support.LongSparseIntArray r50, androidx.collection.LongSparseArray r51, androidx.collection.LongSparseArray r52, java.util.ArrayList r53, androidx.collection.LongSparseArray r54, androidx.collection.LongSparseArray r55, boolean r56, java.util.ArrayList r57, java.util.ArrayList r58, androidx.collection.LongSparseArray r59, androidx.collection.LongSparseArray r60, androidx.collection.LongSparseArray r61, java.util.ArrayList r62) {
         /*
-            Method dump skipped, instructions count: 4367
+            Method dump skipped, instructions count: 4365
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$processUpdateArray$335(int, java.util.ArrayList, androidx.collection.LongSparseArray, int, org.telegram.messenger.support.LongSparseIntArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, java.util.ArrayList, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, boolean, java.util.ArrayList, java.util.ArrayList, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, androidx.collection.LongSparseArray, java.util.ArrayList):void");

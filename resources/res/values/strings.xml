@@ -3336,6 +3336,7 @@
     <string name="OnlyWhenScreenOff">Only when screen \"off\"</string>
     <string name="OnlyWhenScreenOn">Only when screen \"on\"</string>
     <string name="Open">Open</string>
+    <string name="OpenAllTopics">All Topics</string>
     <string name="OpenBackground">VIEW BACKGROUND</string>
     <string name="OpenBot">OPEN BOT</string>
     <string name="OpenChannel">VIEW CHANNEL</string>
@@ -5213,11 +5214,11 @@
     <string name="UsernameHelp">You can choose a username on **Telegram**. If you do, other people will be able to find you by this username and contact you without knowing your phone number.\n\nYou can use **a–z**, **0–9** and underscores. Minimum length is **5** characters.</string>
     <string name="UsernameHelpLink">This link opens a chat with you:\n%1$s</string>
     <string name="UsernameInUse">Sorry, this username is already taken.</string>
-    <string name="UsernameInUsePurchase">This username is currently available for purchase on **fragment.com**</string>
+    <string name="UsernameInUsePurchase">This link is already taken.\nHowever, it is currently available for purchase. **Learn more…**</string>
     <string name="UsernameInvalid">Sorry, this username is invalid.</string>
     <string name="UsernameInvalidLong">The username must not exceed 32 characters.</string>
     <string name="UsernameInvalidShort">A username must have at least 5 characters.</string>
-    <string name="UsernameInvalidShortPurchase">This username is available exclusively on **fragment.com**</string>
+    <string name="UsernameInvalidShortPurchase">A username must have at least 5 characters.\nHowever, it is currently available for purchase. **Learn more…**</string>
     <string name="UsernameInvalidStartNumber">Sorry, a username can\'t start with a number.</string>
     <string name="UsernameLinkActive">active</string>
     <string name="UsernameLinkEditable">tap to edit</string>

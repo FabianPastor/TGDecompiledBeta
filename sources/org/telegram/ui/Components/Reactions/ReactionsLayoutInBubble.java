@@ -866,8 +866,9 @@ public class ReactionsLayoutInBubble {
         return this.totalHeight;
     }
 
+    /* JADX INFO: Access modifiers changed from: private */
     /* loaded from: classes3.dex */
-    private static class ButtonsComparator implements Comparator<ReactionButton> {
+    public static class ButtonsComparator implements Comparator<ReactionButton> {
         int currentAccount;
         long dialogId;
 

@@ -121,7 +121,7 @@ public class SeekBarView extends FrameLayout {
 
             @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
             /* renamed from: getContentDescription */
-            public CharSequence mo2205getContentDescription(View view) {
+            public CharSequence mo2207getContentDescription(View view) {
                 SeekBarViewDelegate seekBarViewDelegate = SeekBarView.this.delegate;
                 if (seekBarViewDelegate != null) {
                     return seekBarViewDelegate.getContentDescription();

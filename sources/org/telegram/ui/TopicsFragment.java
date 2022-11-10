@@ -2098,7 +2098,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
 
         @Override // androidx.recyclerview.widget.RecyclerView.Adapter
         /* renamed from: onCreateViewHolder */
-        public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
             return new RecyclerListView.Holder(new TopicDialogCell(null, viewGroup.getContext(), true, false));
         }
 
@@ -2642,7 +2642,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
                 View graySectionCell;
                 if (i == 1) {
                     graySectionCell = new GraySectionCell(viewGroup.getContext());

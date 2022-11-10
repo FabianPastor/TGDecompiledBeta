@@ -276,7 +276,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
 
     @Override // androidx.recyclerview.widget.RecyclerView.Adapter
     /* renamed from: onCreateViewHolder */
-    public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
         View sendLocationCell;
         View view;
         switch (i) {

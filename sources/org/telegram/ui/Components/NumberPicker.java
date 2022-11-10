@@ -99,14 +99,14 @@ public class NumberPicker extends LinearLayout {
         return 0.9f;
     }
 
-    /* JADX WARN: Type inference failed for: r2v2, types: [boolean, byte] */
+    /* JADX WARN: Type inference failed for: r2v2, types: [byte, boolean] */
     static /* synthetic */ boolean access$280(NumberPicker numberPicker, int i) {
         ?? r2 = (byte) (i ^ (numberPicker.mIncrementVirtualButtonPressed ? 1 : 0));
         numberPicker.mIncrementVirtualButtonPressed = r2;
         return r2;
     }
 
-    /* JADX WARN: Type inference failed for: r2v2, types: [boolean, byte] */
+    /* JADX WARN: Type inference failed for: r2v2, types: [byte, boolean] */
     static /* synthetic */ boolean access$480(NumberPicker numberPicker, int i) {
         ?? r2 = (byte) (i ^ (numberPicker.mDecrementVirtualButtonPressed ? 1 : 0));
         numberPicker.mDecrementVirtualButtonPressed = r2;
@@ -184,7 +184,7 @@ public class NumberPicker extends LinearLayout {
 
             @Override // org.telegram.ui.Components.SeekBarAccessibilityDelegate
             /* renamed from: getContentDescription */
-            public CharSequence mo2205getContentDescription(View view) {
+            public CharSequence mo2207getContentDescription(View view) {
                 NumberPicker numberPicker = NumberPicker.this;
                 return numberPicker.getContentDescription(numberPicker.mValue);
             }

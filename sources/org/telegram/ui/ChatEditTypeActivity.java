@@ -11,8 +11,11 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Vibrator;
 import android.text.Editable;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +36,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -79,6 +83,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkActionView;
 import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.TypefaceSpan;
 /* loaded from: classes3.dex */
 public class ChatEditTypeActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     private ShadowSectionCell adminedInfoCell;
@@ -449,7 +454,43 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         });
         this.permanentLinkView.setUsers(0, null);
         this.privateContainer.addView(this.permanentLinkView);
-        TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(context);
+        TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(context) { // from class: org.telegram.ui.ChatEditTypeActivity.6
+            /* JADX WARN: Multi-variable type inference failed */
+            /* JADX WARN: Type inference failed for: r7v0, types: [org.telegram.ui.ChatEditTypeActivity$6, org.telegram.ui.Cells.TextInfoPrivacyCell] */
+            /* JADX WARN: Type inference failed for: r8v0, types: [java.lang.CharSequence] */
+            /* JADX WARN: Type inference failed for: r8v1, types: [java.lang.CharSequence] */
+            /* JADX WARN: Type inference failed for: r8v3, types: [android.text.SpannableStringBuilder] */
+            @Override // org.telegram.ui.Cells.TextInfoPrivacyCell
+            public void setText(CharSequence charSequence) {
+                if (charSequence != 0) {
+                    charSequence = AndroidUtilities.replaceTags(charSequence.toString());
+                    int indexOf = charSequence.toString().indexOf(10);
+                    if (indexOf >= 0) {
+                        charSequence.replace(indexOf, indexOf + 1, " ");
+                        charSequence.setSpan(new ForegroundColorSpan(ChatEditTypeActivity.this.getThemedColor("windowBackgroundWhiteRedText4")), 0, indexOf, 33);
+                    }
+                    TypefaceSpan[] typefaceSpanArr = (TypefaceSpan[]) charSequence.getSpans(0, charSequence.length(), TypefaceSpan.class);
+                    final String obj = (ChatEditTypeActivity.this.usernameTextView == null || ChatEditTypeActivity.this.usernameTextView.getText() == null) ? "" : ChatEditTypeActivity.this.usernameTextView.getText().toString();
+                    for (int i = 0; i < typefaceSpanArr.length; i++) {
+                        charSequence.setSpan(new ClickableSpan() { // from class: org.telegram.ui.ChatEditTypeActivity.6.1
+                            @Override // android.text.style.ClickableSpan
+                            public void onClick(View view) {
+                                Context context2 = getContext();
+                                Browser.openUrl(context2, "https://fragment.com/username/" + obj);
+                            }
+
+                            @Override // android.text.style.ClickableSpan, android.text.style.CharacterStyle
+                            public void updateDrawState(TextPaint textPaint) {
+                                super.updateDrawState(textPaint);
+                                textPaint.setUnderlineText(false);
+                            }
+                        }, charSequence.getSpanStart(typefaceSpanArr[i]), charSequence.getSpanEnd(typefaceSpanArr[i]), 33);
+                        charSequence.removeSpan(typefaceSpanArr[i]);
+                    }
+                }
+                super.setText(charSequence);
+            }
+        };
         this.checkTextView = textInfoPrivacyCell;
         textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, "windowBackgroundGrayShadow"));
         this.checkTextView.setBottomPadding(6);
@@ -1150,7 +1191,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
             @Override // androidx.recyclerview.widget.RecyclerView.Adapter
             /* renamed from: onCreateViewHolder */
-            public RecyclerView.ViewHolder mo1803onCreateViewHolder(ViewGroup viewGroup, int i) {
+            public RecyclerView.ViewHolder mo1805onCreateViewHolder(ViewGroup viewGroup, int i) {
                 if (i != 0) {
                     if (i == 1) {
                         return new RecyclerListView.Holder(new ChangeUsernameActivity.UsernameCell(UsernamesListView.this.getContext(), ((RecyclerListView) UsernamesListView.this).resourcesProvider) { // from class: org.telegram.ui.ChatEditTypeActivity.UsernamesListView.Adapter.1
@@ -1653,7 +1694,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                 }
             }
         }
-        if (str == null || str.length() < 5) {
+        if (str == null || str.length() < 4) {
             if (this.isChannel) {
                 this.checkTextView.setText(LocaleController.getString("LinkInvalidShort", R.string.LinkInvalidShort));
             } else {
@@ -1683,29 +1724,29 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$checkUserName$23(final String str) {
-        TLRPC$TL_channels_checkUsername tLRPC$TL_channels_checkUsername = new TLRPC$TL_channels_checkUsername();
+        final TLRPC$TL_channels_checkUsername tLRPC$TL_channels_checkUsername = new TLRPC$TL_channels_checkUsername();
         tLRPC$TL_channels_checkUsername.username = str;
         tLRPC$TL_channels_checkUsername.channel = getMessagesController().getInputChannel(this.chatId);
         this.checkReqId = getConnectionsManager().sendRequest(tLRPC$TL_channels_checkUsername, new RequestDelegate() { // from class: org.telegram.ui.ChatEditTypeActivity$$ExternalSyntheticLambda24
             @Override // org.telegram.tgnet.RequestDelegate
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ChatEditTypeActivity.this.lambda$checkUserName$22(str, tLObject, tLRPC$TL_error);
+                ChatEditTypeActivity.this.lambda$checkUserName$22(str, tLRPC$TL_channels_checkUsername, tLObject, tLRPC$TL_error);
             }
         }, 2);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkUserName$22(final String str, final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$checkUserName$22(final String str, final TLRPC$TL_channels_checkUsername tLRPC$TL_channels_checkUsername, final TLObject tLObject, final TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.ChatEditTypeActivity$$ExternalSyntheticLambda14
             @Override // java.lang.Runnable
             public final void run() {
-                ChatEditTypeActivity.this.lambda$checkUserName$21(str, tLRPC$TL_error, tLObject);
+                ChatEditTypeActivity.this.lambda$checkUserName$21(str, tLRPC$TL_error, tLObject, tLRPC$TL_channels_checkUsername);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkUserName$21(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    public /* synthetic */ void lambda$checkUserName$21(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_channels_checkUsername tLRPC$TL_channels_checkUsername) {
         this.checkReqId = 0;
         String str2 = this.lastCheckName;
         if (str2 == null || !str2.equals(str)) {
@@ -1717,13 +1758,23 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             this.lastNameAvailable = true;
             return;
         }
-        if (tLRPC$TL_error != null && tLRPC$TL_error.text.equals("CHANNELS_ADMIN_PUBLIC_TOO_MUCH")) {
+        if (tLRPC$TL_error != null && "USERNAME_INVALID".equals(tLRPC$TL_error.text) && tLRPC$TL_channels_checkUsername.username.length() == 4) {
+            this.checkTextView.setText(LocaleController.getString("UsernameInvalidShort", R.string.UsernameInvalidShort));
+            this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
+        } else if (tLRPC$TL_error != null && "USERNAME_PURCHASE_AVAILABLE".equals(tLRPC$TL_error.text)) {
+            if (tLRPC$TL_channels_checkUsername.username.length() == 4) {
+                this.checkTextView.setText(LocaleController.getString("UsernameInvalidShortPurchase", R.string.UsernameInvalidShortPurchase));
+            } else {
+                this.checkTextView.setText(LocaleController.getString("UsernameInUsePurchase", R.string.UsernameInUsePurchase));
+            }
+            this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
+        } else if (tLRPC$TL_error != null && "CHANNELS_ADMIN_PUBLIC_TOO_MUCH".equals(tLRPC$TL_error.text)) {
             this.canCreatePublic = false;
             showPremiumIncreaseLimitDialog();
         } else {
             this.checkTextView.setText(LocaleController.getString("LinkInUse", R.string.LinkInUse));
+            this.checkTextView.setTextColor("windowBackgroundWhiteRedText4");
         }
-        this.checkTextView.setTextColor("windowBackgroundWhiteRedText4");
         this.lastNameAvailable = false;
     }
 
