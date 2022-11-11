@@ -263,10 +263,6 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
     public void setPressed(boolean z) {
     }
 
-    public void putAnimatedEmojiToCache(AnimatedEmojiDrawable animatedEmojiDrawable) {
-        this.emojiGridView.animatedEmojiDrawables.put(animatedEmojiDrawable.getDocumentId(), animatedEmojiDrawable);
-    }
-
     public void setSelectedReactions(HashSet<ReactionsLayoutInBubble.VisibleReaction> hashSet) {
         this.selectedReactions = hashSet;
         this.selectedDocumentIds.clear();
@@ -3142,7 +3138,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
         this.emojiTabs.updateEmojiPacks(this.packs);
     }
 
-    /* JADX WARN: Type inference failed for: r5v2, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r5v2, types: [boolean, int] */
     public void expand(int i, View view) {
         ?? r5;
         int size;

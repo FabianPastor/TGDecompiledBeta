@@ -89,6 +89,10 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter implements
     public void onButtonClicked(DialogCell dialogCell) {
     }
 
+    @Override // org.telegram.ui.Cells.DialogCell.DialogCellDelegate
+    public void onButtonLongPress(DialogCell dialogCell) {
+    }
+
     public DialogsAdapter(DialogsActivity dialogsActivity, Context context, int i, int i2, boolean z, ArrayList<Long> arrayList, int i3) {
         this.mContext = context;
         this.parentFragment = dialogsActivity;

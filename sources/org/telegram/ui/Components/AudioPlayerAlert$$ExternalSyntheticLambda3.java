@@ -10,6 +10,6 @@ public final /* synthetic */ class AudioPlayerAlert$$ExternalSyntheticLambda3 im
 
     @Override // android.view.View.OnClickListener
     public final void onClick(View view) {
-        AudioPlayerAlert.lambda$new$5(view);
+        AudioPlayerAlert.lambda$new$6(view);
     }
 }

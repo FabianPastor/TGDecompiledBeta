@@ -3441,7 +3441,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         if (i2 == -1) {
                             return;
                         }
-                        FileLoader.getInstance(((BaseFragment) DialogsActivity.this).currentAccount).loadFile(premiumPromo.videos.get(i2), null, 3, 0);
+                        FileLoader.getInstance(((BaseFragment) DialogsActivity.this).currentAccount).loadFile(premiumPromo.videos.get(i2), premiumPromo, 3, 0);
                     }
                 }
             });
@@ -5560,7 +5560,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     /* JADX WARN: Removed duplicated region for block: B:223:0x047a  */
     /* JADX WARN: Removed duplicated region for block: B:240:0x04d4  */
     /* JADX WARN: Type inference failed for: r15v0 */
-    /* JADX WARN: Type inference failed for: r15v1, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r15v1, types: [boolean, int] */
     /* JADX WARN: Type inference failed for: r15v16 */
     /*
         Code decompiled incorrectly, please refer to instructions dump.

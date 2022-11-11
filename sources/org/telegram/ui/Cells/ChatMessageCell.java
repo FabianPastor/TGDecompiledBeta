@@ -51,7 +51,6 @@ import android.view.accessibility.AccessibilityNodeProvider;
 import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
-import androidx.core.math.MathUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -3732,7 +3731,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     /* JADX WARN: Type inference failed for: r0v623, types: [org.telegram.messenger.ImageReceiver] */
     /* JADX WARN: Type inference failed for: r13v0 */
     /* JADX WARN: Type inference failed for: r13v1 */
-    /* JADX WARN: Type inference failed for: r13v102, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r13v102, types: [boolean, int] */
     /* JADX WARN: Type inference failed for: r13v151 */
     /* JADX WARN: Type inference failed for: r13v161 */
     /* JADX WARN: Type inference failed for: r13v2 */
@@ -3744,9 +3743,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     /* JADX WARN: Type inference failed for: r3v1128 */
     /* JADX WARN: Type inference failed for: r3v1129 */
     /* JADX WARN: Type inference failed for: r3v25 */
-    /* JADX WARN: Type inference failed for: r3v26, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r3v26, types: [boolean, int] */
     /* JADX WARN: Type inference failed for: r3v34 */
-    /* JADX WARN: Type inference failed for: r3v47, types: [int, boolean] */
+    /* JADX WARN: Type inference failed for: r3v47, types: [boolean, int] */
     /* JADX WARN: Type inference failed for: r4v804, types: [org.telegram.tgnet.TLRPC$InputStickerSet] */
     /* JADX WARN: Type inference failed for: r5v157 */
     /* JADX WARN: Type inference failed for: r5v161, types: [java.lang.CharSequence] */
@@ -6582,16 +6581,42 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             return;
         }
         Color.colorToHSV(getThemedColor("chat_inReactionButtonText"), this.topicHSV);
-        this.topicHSV[0] = f;
-        if (!Theme.isCurrentThemeDark() && AndroidUtilities.computePerceivedBrightness(Color.HSVToColor(this.topicHSV)) > 0.7f) {
-            float[] fArr2 = this.topicHSV;
-            fArr2[2] = MathUtils.clamp(fArr2[2] - 0.25f, 0.0f, 1.0f);
+        float[] fArr2 = this.topicHSV;
+        fArr2[0] = f;
+        if (f >= 0.0f && f < 43.0f) {
+            float f3 = f / 43.0f;
+            fArr2[1] = AndroidUtilities.lerp(0.6f, 1.0f, f3);
+            this.topicHSV[2] = AndroidUtilities.lerp(0.79f, 0.73f, f3);
+        } else if (f >= 43.0f && f < 56.0f) {
+            float f4 = (f - 43.0f) / 13.0f;
+            fArr2[1] = AndroidUtilities.lerp(1.0f, 0.95f, f4);
+            this.topicHSV[2] = AndroidUtilities.lerp(0.73f, 0.6f, f4);
+        } else if (f >= 56.0f && f < 86.0f) {
+            fArr2[1] = 0.97f;
+            fArr2[2] = AndroidUtilities.lerp(0.6f, 0.62f, (f - 56.0f) / 30.0f);
+        } else if (f >= 86.0f && f < 169.0f) {
+            float f5 = (f - 86.0f) / 83.0f;
+            fArr2[1] = AndroidUtilities.lerp(0.98f, 0.8f, f5);
+            this.topicHSV[2] = AndroidUtilities.lerp(0.62f, 0.6f, f5);
+        } else if (f >= 169.0f && f < 183.0f) {
+            float f6 = (f - 169.0f) / 14.0f;
+            fArr2[1] = AndroidUtilities.lerp(0.8f, 0.88f, f6);
+            this.topicHSV[2] = AndroidUtilities.lerp(0.6f, 0.61f, f6);
+        } else if (f >= 183.0f && f < 249.0f) {
+            float f7 = (f - 183.0f) / 66.0f;
+            fArr2[1] = AndroidUtilities.lerp(0.88f, 0.51f, f7);
+            this.topicHSV[2] = AndroidUtilities.lerp(0.61f, 0.8f, f7);
+        } else if (f >= 249.0f && f <= 289.0f) {
+            float f8 = (f - 249.0f) / 40.0f;
+            fArr2[1] = AndroidUtilities.lerp(0.51f, 0.55f, f8);
+            this.topicHSV[2] = AndroidUtilities.lerp(0.8f, 0.7f, f8);
+        } else if (f >= 289.0f && f <= 360.0f) {
+            float f9 = (f - 289.0f) / 71.0f;
+            fArr2[1] = AndroidUtilities.lerp(0.55f, 0.6f, f9);
+            this.topicHSV[2] = AndroidUtilities.lerp(0.7f, 0.79f, f9);
         }
         this.topicNameColor = Color.HSVToColor(Color.alpha(getThemedColor("chat_inReactionButtonText")), this.topicHSV);
-        Color.colorToHSV(getThemedColor("chat_inReactionButtonBackground"), this.topicHSV);
-        float[] fArr3 = this.topicHSV;
-        fArr3[0] = f;
-        this.topicBackgroundColor = Color.HSVToColor(38, fArr3);
+        this.topicBackgroundColor = Color.HSVToColor(38, this.topicHSV);
     }
 
     private boolean isNeedAuthorName() {

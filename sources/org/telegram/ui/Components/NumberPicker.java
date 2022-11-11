@@ -99,14 +99,14 @@ public class NumberPicker extends LinearLayout {
         return 0.9f;
     }
 
-    /* JADX WARN: Type inference failed for: r2v2, types: [byte, boolean] */
+    /* JADX WARN: Type inference failed for: r2v2, types: [boolean, byte] */
     static /* synthetic */ boolean access$280(NumberPicker numberPicker, int i) {
         ?? r2 = (byte) (i ^ (numberPicker.mIncrementVirtualButtonPressed ? 1 : 0));
         numberPicker.mIncrementVirtualButtonPressed = r2;
         return r2;
     }
 
-    /* JADX WARN: Type inference failed for: r2v2, types: [byte, boolean] */
+    /* JADX WARN: Type inference failed for: r2v2, types: [boolean, byte] */
     static /* synthetic */ boolean access$480(NumberPicker numberPicker, int i) {
         ?? r2 = (byte) (i ^ (numberPicker.mDecrementVirtualButtonPressed ? 1 : 0));
         numberPicker.mDecrementVirtualButtonPressed = r2;

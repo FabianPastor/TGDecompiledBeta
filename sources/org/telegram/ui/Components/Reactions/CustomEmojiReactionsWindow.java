@@ -771,8 +771,4 @@ public class CustomEmojiReactionsWindow {
     public void setRecentReactions(List<ReactionsLayoutInBubble.VisibleReaction> list) {
         this.selectAnimatedEmojiDialog.setRecentReactions(list);
     }
-
-    public SelectAnimatedEmojiDialog getSelectAnimatedEmojiDialog() {
-        return this.selectAnimatedEmojiDialog;
-    }
 }

@@ -101,6 +101,7 @@ import org.telegram.tgnet.TLRPC$TL_emojiKeywordDeleted;
 import org.telegram.tgnet.TLRPC$TL_emojiKeywordsDifference;
 import org.telegram.tgnet.TLRPC$TL_emojiStatus;
 import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_help_getPremiumPromo;
 import org.telegram.tgnet.TLRPC$TL_help_premiumPromo;
 import org.telegram.tgnet.TLRPC$TL_inputDocument;
 import org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName;
@@ -834,19 +835,7 @@ public class MediaDataController extends BaseController {
             });
             return;
         }
-        getConnectionsManager().sendRequest(new TLObject() { // from class: org.telegram.tgnet.TLRPC$TL_help_getPremiumPromo
-            public static int constructor = -NUM;
-
-            @Override // org.telegram.tgnet.TLObject
-            public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z2) {
-                return TLRPC$TL_help_premiumPromo.TLdeserialize(abstractSerializedData, i, z2);
-            }
-
-            @Override // org.telegram.tgnet.TLObject
-            public void serializeToStream(AbstractSerializedData abstractSerializedData) {
-                abstractSerializedData.writeInt32(constructor);
-            }
-        }, new RequestDelegate() { // from class: org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda168
+        getConnectionsManager().sendRequest(new TLRPC$TL_help_getPremiumPromo(), new RequestDelegate() { // from class: org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda168
             @Override // org.telegram.tgnet.RequestDelegate
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                 MediaDataController.this.lambda$loadPremiumPromo$7(tLObject, tLRPC$TL_error);
@@ -929,7 +918,7 @@ public class MediaDataController extends BaseController {
         }
     }
 
-    private void processLoadedPremiumPromo(TLRPC$TL_help_premiumPromo tLRPC$TL_help_premiumPromo, int i, boolean z) {
+    public void processLoadedPremiumPromo(TLRPC$TL_help_premiumPromo tLRPC$TL_help_premiumPromo, int i, boolean z) {
         this.premiumPromo = tLRPC$TL_help_premiumPromo;
         this.premiumPromoUpdateDate = i;
         getMessagesController().putUsers(tLRPC$TL_help_premiumPromo.users, z);
@@ -1177,11 +1166,11 @@ public class MediaDataController extends BaseController {
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$processLoadedReactions$14() {
-        preloadReactions();
+        preloadDefaultReactions();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.reactionsDidLoad, new Object[0]);
     }
 
-    public void preloadReactions() {
+    public void preloadDefaultReactions() {
         if (this.reactionsList == null || this.reactionsCacheGenerated) {
             return;
         }
@@ -1189,13 +1178,14 @@ public class MediaDataController extends BaseController {
         ArrayList arrayList = new ArrayList(this.reactionsList);
         for (int i = 0; i < arrayList.size(); i++) {
             TLRPC$TL_availableReaction tLRPC$TL_availableReaction = (TLRPC$TL_availableReaction) arrayList.get(i);
-            int sizeForBigReaction = ReactionsEffectOverlay.sizeForBigReaction();
-            preloadImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.around_animation), ReactionsEffectOverlay.getFilterForAroundAnimation(), true);
-            ImageLocation forDocument = ImageLocation.getForDocument(tLRPC$TL_availableReaction.effect_animation);
-            preloadImage(forDocument, sizeForBigReaction + "_" + sizeForBigReaction);
             preloadImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.activate_animation), null);
-            preloadImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.appear_animation), "30_30_nolimit_pcache");
-            preloadImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.center_icon), null);
+            preloadImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.appear_animation), null);
+        }
+        for (int i2 = 0; i2 < arrayList.size(); i2++) {
+            TLRPC$TL_availableReaction tLRPC$TL_availableReaction2 = (TLRPC$TL_availableReaction) arrayList.get(i2);
+            ReactionsEffectOverlay.sizeForBigReaction();
+            preloadImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction2.around_animation), ReactionsEffectOverlay.getFilterForAroundAnimation(), true);
+            preloadImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction2.effect_animation), null);
         }
     }
 
@@ -1232,13 +1222,20 @@ public class MediaDataController extends BaseController {
                 lottieAnimation.checkCache(new Runnable() { // from class: org.telegram.messenger.MediaDataController$$ExternalSyntheticLambda2
                     @Override // java.lang.Runnable
                     public final void run() {
-                        ImageReceiver.this.setDelegate(null);
+                        MediaDataController.lambda$preloadImage$15(ImageReceiver.this);
                     }
                 });
-            } else {
-                imageReceiver.setDelegate(null);
+                return;
             }
+            imageReceiver.clearImage();
+            imageReceiver.setDelegate(null);
         }
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public static /* synthetic */ void lambda$preloadImage$15(ImageReceiver imageReceiver) {
+        imageReceiver.clearImage();
+        imageReceiver.setDelegate(null);
     }
 
     private void putReactionsToCache(List<TLRPC$TL_availableReaction> list, final int i, final int i2) {

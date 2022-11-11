@@ -1028,7 +1028,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         if (getMediaDataController().getPremiumPromo() != null) {
             Iterator<TLRPC$Document> it = getMediaDataController().getPremiumPromo().videos.iterator();
             while (it.hasNext()) {
-                FileLoader.getInstance(this.currentAccount).loadFile(it.next(), null, 3, 0);
+                FileLoader.getInstance(this.currentAccount).loadFile(it.next(), getMediaDataController().getPremiumPromo(), 3, 0);
             }
         }
         return super.onFragmentCreate();

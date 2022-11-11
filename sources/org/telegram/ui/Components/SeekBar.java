@@ -172,6 +172,9 @@ public class SeekBar {
     }
 
     public void setSize(int i, int i2) {
+        if (this.width == i && this.height == i2) {
+            return;
+        }
         this.width = i;
         this.height = i2;
         setProgress(this.thumbProgress);

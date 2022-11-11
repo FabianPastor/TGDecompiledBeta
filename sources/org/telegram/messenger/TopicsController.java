@@ -160,6 +160,14 @@ public class TopicsController extends BaseController {
         }
         this.topicsIsLoading.put(j, 0);
         processTopics(j, arrayList, null, z, i, -1);
+        if (!endIsReached(j)) {
+            LongSparseIntArray longSparseIntArray = this.endIsReached;
+            SharedPreferences preferences = getUserConfig().getPreferences();
+            StringBuilder sb2 = new StringBuilder();
+            sb2.append("topics_end_reached_");
+            sb2.append(j);
+            longSparseIntArray.put(j, preferences.getBoolean(sb2.toString(), false) ? 1 : 0);
+        }
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -215,7 +223,6 @@ public class TopicsController extends BaseController {
 
     public void processTopics(final long j, ArrayList<TLRPC$TL_forumTopic> arrayList, SparseArray<TLRPC$Message> sparseArray, boolean z, int i, int i2) {
         boolean z2;
-        char c;
         ArrayList<TLRPC$TL_forumTopic> arrayList2 = arrayList;
         SparseArray<TLRPC$Message> sparseArray2 = sparseArray;
         ArrayList<TLRPC$TL_forumTopic> arrayList3 = this.topicsByChatId.get(j);
@@ -286,19 +293,12 @@ public class TopicsController extends BaseController {
         }
         if (arrayList4 != null && i != 2) {
             reloadTopics(j, arrayList4);
-            c = 1;
-        } else {
-            c = 1;
-            if (i == 1 && arrayList3.size() >= i2 && i2 >= 0) {
-                this.endIsReached.put(j, 1);
-            }
+        } else if (i == 1 && arrayList3.size() >= i2 && i2 >= 0) {
+            this.endIsReached.put(j, 1);
+            SharedPreferences.Editor edit = getUserConfig().getPreferences().edit();
+            edit.putBoolean("topics_end_reached_" + j, true).apply();
         }
-        NotificationCenter notificationCenter = getNotificationCenter();
-        int i7 = NotificationCenter.topicsDidLoaded;
-        Object[] objArr = new Object[2];
-        objArr[0] = Long.valueOf(j);
-        objArr[c] = Boolean.TRUE;
-        notificationCenter.postNotificationName(i7, objArr);
+        getNotificationCenter().postNotificationName(NotificationCenter.topicsDidLoaded, Long.valueOf(j), Boolean.TRUE);
         if ((i == 0 || (i == 0 && !z)) && z && this.topicsByChatId.get(j).isEmpty()) {
             AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.messenger.TopicsController$$ExternalSyntheticLambda2
                 @Override // java.lang.Runnable
@@ -936,6 +936,8 @@ public class TopicsController extends BaseController {
 
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$reloadTopics$18(long j, boolean z) {
+        SharedPreferences.Editor edit = getUserConfig().getPreferences().edit();
+        edit.remove("topics_end_reached_" + j).apply();
         this.topicsByChatId.remove(j);
         this.topicsMapByChatId.remove(j);
         this.endIsReached.delete(j);
@@ -974,6 +976,9 @@ public class TopicsController extends BaseController {
                 edit.remove(str);
             }
             if (str.startsWith("topics_load_offset_topic_id_")) {
+                edit.remove(str);
+            }
+            if (str.startsWith("topics_end_reached_")) {
                 edit.remove(str);
             }
         }

@@ -1021,19 +1021,20 @@
     <public type="drawable" name="msg_usersearch" id="0x7var_" />
     <public type="drawable" name="msg_video" id="0x7var_" />
     <public type="drawable" name="msg_videocall" id="0x7var_" />
+    <public type="drawable" name="msg_viewchats" id="0x7var_" />
     <public type="drawable" name="msg_viewintopic" id="0x7var_" />
     <public type="drawable" name="msg_viewreplies" id="0x7var_" />
     <public type="drawable" name="msg_views" id="0x7var_" />
     <public type="drawable" name="msg_voice_bluetooth" id="0x7var_" />
     <public type="drawable" name="msg_voice_headphones" id="0x7var_" />
     <public type="drawable" name="msg_voice_muted" id="0x7var_" />
-    <public type="drawable" name="msg_voice_phone" id="0x7var_" />
-    <public type="drawable" name="msg_voice_pip" id="0x7var_a" />
-    <public type="drawable" name="msg_voice_speaker" id="0x7var_b" />
-    <public type="drawable" name="msg_voice_unmuted" id="0x7var_c" />
-    <public type="drawable" name="msg_voicechat" id="0x7var_d" />
-    <public type="drawable" name="msg_voicechat2" id="0x7var_e" />
-    <public type="drawable" name="msg_voiceclose" id="0x7var_f" />
+    <public type="drawable" name="msg_voice_phone" id="0x7var_a" />
+    <public type="drawable" name="msg_voice_pip" id="0x7var_b" />
+    <public type="drawable" name="msg_voice_speaker" id="0x7var_c" />
+    <public type="drawable" name="msg_voice_unmuted" id="0x7var_d" />
+    <public type="drawable" name="msg_voicechat" id="0x7var_e" />
+    <public type="drawable" name="msg_voicechat2" id="0x7var_f" />
+    <public type="drawable" name="msg_voiceclose" id="0x7var_" />
     <public type="drawable" name="msg_voiceshare" id="0x7var_" />
     <public type="drawable" name="msg_warning" id="0x7var_" />
     <public type="drawable" name="msg_work" id="0x7var_" />
@@ -1043,13 +1044,13 @@
     <public type="drawable" name="music_empty" id="0x7var_" />
     <public type="drawable" name="navigate" id="0x7var_" />
     <public type="drawable" name="nearby_l" id="0x7var_" />
-    <public type="drawable" name="nearby_m" id="0x7var_" />
-    <public type="drawable" name="newmsg_divider" id="0x7var_a" />
-    <public type="drawable" name="newyear" id="0x7var_b" />
-    <public type="drawable" name="no_passport" id="0x7var_c" />
-    <public type="drawable" name="no_password" id="0x7var_d" />
-    <public type="drawable" name="nocover_big" id="0x7var_e" />
-    <public type="drawable" name="nocover_small" id="0x7var_f" />
+    <public type="drawable" name="nearby_m" id="0x7var_a" />
+    <public type="drawable" name="newmsg_divider" id="0x7var_b" />
+    <public type="drawable" name="newyear" id="0x7var_c" />
+    <public type="drawable" name="no_passport" id="0x7var_d" />
+    <public type="drawable" name="no_password" id="0x7var_e" />
+    <public type="drawable" name="nocover_big" id="0x7var_f" />
+    <public type="drawable" name="nocover_small" id="0x7var_" />
     <public type="drawable" name="nophotos" id="0x7var_" />
     <public type="drawable" name="nophotos3" id="0x7var_" />
     <public type="drawable" name="notification" id="0x7var_" />
@@ -1059,13 +1060,13 @@
     <public type="drawable" name="notification_bg_low_normal" id="0x7var_" />
     <public type="drawable" name="notification_bg_low_pressed" id="0x7var_" />
     <public type="drawable" name="notification_bg_normal" id="0x7var_" />
-    <public type="drawable" name="notification_bg_normal_pressed" id="0x7var_" />
-    <public type="drawable" name="notification_icon_background" id="0x7var_a" />
-    <public type="drawable" name="notification_template_icon_bg" id="0x7var_b" />
-    <public type="drawable" name="notification_template_icon_low_bg" id="0x7var_c" />
-    <public type="drawable" name="notification_tile_bg" id="0x7var_d" />
-    <public type="drawable" name="notifications_mute1h" id="0x7var_e" />
-    <public type="drawable" name="notifications_mute2d" id="0x7var_f" />
+    <public type="drawable" name="notification_bg_normal_pressed" id="0x7var_a" />
+    <public type="drawable" name="notification_icon_background" id="0x7var_b" />
+    <public type="drawable" name="notification_template_icon_bg" id="0x7var_c" />
+    <public type="drawable" name="notification_template_icon_low_bg" id="0x7var_d" />
+    <public type="drawable" name="notification_tile_bg" id="0x7var_e" />
+    <public type="drawable" name="notifications_mute1h" id="0x7var_f" />
+    <public type="drawable" name="notifications_mute2d" id="0x7var_" />
     <public type="drawable" name="notifications_off" id="0x7var_" />
     <public type="drawable" name="notifications_on" id="0x7var_" />
     <public type="drawable" name="notifications_settings" id="0x7var_" />
@@ -1075,13 +1076,13 @@
     <public type="drawable" name="other_lockedfolders2" id="0x7var_" />
     <public type="drawable" name="pagedown" id="0x7var_" />
     <public type="drawable" name="pagedown_shadow" id="0x7var_" />
-    <public type="drawable" name="paint_elliptical_brush" id="0x7var_" />
-    <public type="drawable" name="paint_neon_brush" id="0x7var_a" />
-    <public type="drawable" name="paint_radial_brush" id="0x7var_b" />
-    <public type="drawable" name="passcode_check" id="0x7var_c" />
-    <public type="drawable" name="passcode_delete" id="0x7var_d" />
-    <public type="drawable" name="permission_locked" id="0x7var_e" />
-    <public type="drawable" name="permissions_camera1" id="0x7var_f" />
+    <public type="drawable" name="paint_elliptical_brush" id="0x7var_a" />
+    <public type="drawable" name="paint_neon_brush" id="0x7var_b" />
+    <public type="drawable" name="paint_radial_brush" id="0x7var_c" />
+    <public type="drawable" name="passcode_check" id="0x7var_d" />
+    <public type="drawable" name="passcode_delete" id="0x7var_e" />
+    <public type="drawable" name="permission_locked" id="0x7var_f" />
+    <public type="drawable" name="permissions_camera1" id="0x7var_" />
     <public type="drawable" name="permissions_camera2" id="0x7var_" />
     <public type="drawable" name="permissions_contacts" id="0x7var_" />
     <public type="drawable" name="permissions_gallery1" id="0x7var_" />
@@ -1091,13 +1092,13 @@
     <public type="drawable" name="photo_outline" id="0x7var_" />
     <public type="drawable" name="photo_paint_brush" id="0x7var_" />
     <public type="drawable" name="photo_placeholder_in" id="0x7var_" />
-    <public type="drawable" name="photo_tooltip2" id="0x7var_" />
-    <public type="drawable" name="photo_undo" id="0x7var_a" />
-    <public type="drawable" name="photo_w" id="0x7var_b" />
-    <public type="drawable" name="photobadge" id="0x7var_c" />
-    <public type="drawable" name="photocheck" id="0x7var_d" />
-    <public type="drawable" name="photos_arrow" id="0x7var_e" />
-    <public type="drawable" name="photos_header_shadow" id="0x7var_f" />
+    <public type="drawable" name="photo_tooltip2" id="0x7var_a" />
+    <public type="drawable" name="photo_undo" id="0x7var_b" />
+    <public type="drawable" name="photo_w" id="0x7var_c" />
+    <public type="drawable" name="photobadge" id="0x7var_d" />
+    <public type="drawable" name="photocheck" id="0x7var_e" />
+    <public type="drawable" name="photos_arrow" id="0x7var_f" />
+    <public type="drawable" name="photos_header_shadow" id="0x7var_" />
     <public type="drawable" name="photos_rounded" id="0x7var_" />
     <public type="drawable" name="phototime" id="0x7var_" />
     <public type="drawable" name="photoview_placeholder" id="0x7var_" />
@@ -1107,13 +1108,13 @@
     <public type="drawable" name="pip_pause_large" id="0x7var_" />
     <public type="drawable" name="pip_play_large" id="0x7var_" />
     <public type="drawable" name="pip_replay_large" id="0x7var_" />
-    <public type="drawable" name="pip_video_close" id="0x7var_" />
-    <public type="drawable" name="pip_video_expand" id="0x7var_a" />
-    <public type="drawable" name="places_btn" id="0x7var_b" />
-    <public type="drawable" name="play_big" id="0x7var_c" />
-    <public type="drawable" name="play_mini_video" id="0x7var_d" />
-    <public type="drawable" name="play_roundvideo" id="0x7var_e" />
-    <public type="drawable" name="player" id="0x7var_f" />
+    <public type="drawable" name="pip_video_close" id="0x7var_a" />
+    <public type="drawable" name="pip_video_expand" id="0x7var_b" />
+    <public type="drawable" name="places_btn" id="0x7var_c" />
+    <public type="drawable" name="play_big" id="0x7var_d" />
+    <public type="drawable" name="play_mini_video" id="0x7var_e" />
+    <public type="drawable" name="play_roundvideo" id="0x7var_f" />
+    <public type="drawable" name="player" id="0x7var_" />
     <public type="drawable" name="player_new_next" id="0x7var_" />
     <public type="drawable" name="player_new_order" id="0x7var_" />
     <public type="drawable" name="player_new_pause" id="0x7var_" />
@@ -1123,109 +1124,109 @@
     <public type="drawable" name="player_new_repeat_shuffle" id="0x7var_" />
     <public type="drawable" name="player_new_repeatall" id="0x7var_" />
     <public type="drawable" name="player_new_repeatone" id="0x7var_" />
-    <public type="drawable" name="player_new_shuffle" id="0x7var_" />
-    <public type="drawable" name="plus" id="0x7var_a" />
-    <public type="drawable" name="poll_add_circle" id="0x7var_b" />
-    <public type="drawable" name="poll_add_plus" id="0x7var_c" />
-    <public type="drawable" name="poll_remove" id="0x7var_d" />
-    <public type="drawable" name="poll_reorder" id="0x7var_e" />
-    <public type="drawable" name="poll_right" id="0x7var_f" />
-    <public type="drawable" name="poll_wrong" id="0x7var_a0" />
-    <public type="drawable" name="popup_fixed" id="0x7var_a1" />
-    <public type="drawable" name="popup_fixed_alert" id="0x7var_a2" />
-    <public type="drawable" name="popup_fixed_alert2" id="0x7var_a3" />
-    <public type="drawable" name="popup_fixed_alert3" id="0x7var_a4" />
-    <public type="drawable" name="popup_fixed_top" id="0x7var_a5" />
-    <public type="drawable" name="preview_arrow" id="0x7var_a6" />
-    <public type="drawable" name="preview_back" id="0x7var_a7" />
-    <public type="drawable" name="preview_custom" id="0x7var_a8" />
-    <public type="drawable" name="preview_dots" id="0x7var_a9" />
-    <public type="drawable" name="preview_mic" id="0x7var_aa" />
-    <public type="drawable" name="preview_smile" id="0x7var_ab" />
-    <public type="drawable" name="profile_discuss" id="0x7var_ac" />
-    <public type="drawable" name="profile_newmsg" id="0x7var_ad" />
-    <public type="drawable" name="profile_phone" id="0x7var_ae" />
-    <public type="drawable" name="profile_video" id="0x7var_af" />
-    <public type="drawable" name="proxy_check" id="0x7var_b0" />
-    <public type="drawable" name="proxy_off" id="0x7var_b1" />
-    <public type="drawable" name="proxy_on" id="0x7var_b2" />
-    <public type="drawable" name="qr_at_large" id="0x7var_b3" />
-    <public type="drawable" name="qr_at_medium" id="0x7var_b4" />
-    <public type="drawable" name="qr_at_small" id="0x7var_b5" />
-    <public type="drawable" name="qr_flashlight" id="0x7var_b6" />
-    <public type="drawable" name="qr_gallery" id="0x7var_b7" />
-    <public type="drawable" name="reactionbutton" id="0x7var_b8" />
-    <public type="drawable" name="reactionchatslist" id="0x7var_b9" />
-    <public type="drawable" name="reactions_bubble_shadow" id="0x7var_ba" />
-    <public type="drawable" name="redcircle" id="0x7var_bb" />
-    <public type="drawable" name="regbtn2" id="0x7var_bc" />
-    <public type="drawable" name="regbtn2_pressed" id="0x7var_bd" />
-    <public type="drawable" name="replyvideo" id="0x7var_be" />
-    <public type="drawable" name="round_check2" id="0x7var_bf" />
-    <public type="drawable" name="s_pause" id="0x7var_c0" />
-    <public type="drawable" name="s_play" id="0x7var_c1" />
-    <public type="drawable" name="screencast_big" id="0x7var_c2" />
-    <public type="drawable" name="scroll_tip" id="0x7var_c3" />
-    <public type="drawable" name="scrollbar_vertical_thumb" id="0x7var_c4" />
-    <public type="drawable" name="scrollbar_vertical_thumb_inset" id="0x7var_c5" />
-    <public type="drawable" name="search_arrow" id="0x7var_c6" />
-    <public type="drawable" name="search_arrow2" id="0x7var_c7" />
-    <public type="drawable" name="search_dark" id="0x7var_c8" />
-    <public type="drawable" name="search_dark_activated" id="0x7var_c9" />
-    <public type="drawable" name="search_date_filled" id="0x7var_ca" />
-    <public type="drawable" name="search_files_filled" id="0x7var_cb" />
-    <public type="drawable" name="search_links_filled" id="0x7var_cc" />
-    <public type="drawable" name="search_media_filled" id="0x7var_cd" />
-    <public type="drawable" name="search_music_filled" id="0x7var_ce" />
-    <public type="drawable" name="search_users_filled" id="0x7var_cf" />
-    <public type="drawable" name="search_voice_filled" id="0x7var_d0" />
-    <public type="drawable" name="selectphoto_large" id="0x7var_d1" />
-    <public type="drawable" name="settings_arrow" id="0x7var_d2" />
-    <public type="drawable" name="settings_noresults" id="0x7var_d3" />
-    <public type="drawable" name="shadowdown" id="0x7var_d4" />
-    <public type="drawable" name="shadowed_bubble1" id="0x7var_d5" />
-    <public type="drawable" name="shadowed_bubble2_half" id="0x7var_d6" />
-    <public type="drawable" name="share" id="0x7var_d7" />
-    <public type="drawable" name="share_arrow" id="0x7var_d8" />
-    <public type="drawable" name="sheet_shadow" id="0x7var_d9" />
-    <public type="drawable" name="sheet_shadow_round" id="0x7var_da" />
-    <public type="drawable" name="shortcut_compose" id="0x7var_db" />
-    <public type="drawable" name="shortcut_user" id="0x7var_dc" />
-    <public type="drawable" name="slide_dot_big" id="0x7var_dd" />
-    <public type="drawable" name="slide_dot_small" id="0x7var_de" />
-    <public type="drawable" name="slidearrow" id="0x7var_df" />
-    <public type="drawable" name="smallanimationpin" id="0x7var_e0" />
-    <public type="drawable" name="smallanimationpinleft" id="0x7var_e1" />
-    <public type="drawable" name="smallanimationpinright" id="0x7var_e2" />
-    <public type="drawable" name="smiles_info" id="0x7var_e3" />
-    <public type="drawable" name="smiles_inputsearch" id="0x7var_e4" />
-    <public type="drawable" name="smiles_popup" id="0x7var_e5" />
-    <public type="drawable" name="smiles_tab_clear" id="0x7var_e6" />
-    <public type="drawable" name="smiles_tab_gif" id="0x7var_e7" />
-    <public type="drawable" name="smiles_tab_search" id="0x7var_e8" />
-    <public type="drawable" name="smiles_tab_settings" id="0x7var_e9" />
-    <public type="drawable" name="smiles_tab_smiles" id="0x7var_ea" />
-    <public type="drawable" name="smiles_tab_stickers" id="0x7var_eb" />
-    <public type="drawable" name="sms_bubble" id="0x7var_ec" />
-    <public type="drawable" name="sms_code" id="0x7var_ed" />
-    <public type="drawable" name="sms_devices" id="0x7var_ee" />
-    <public type="drawable" name="stats_tooltip" id="0x7var_ef" />
-    <public type="drawable" name="sticker_added" id="0x7var_f0" />
-    <public type="drawable" name="stickers_back_all" id="0x7var_f1" />
-    <public type="drawable" name="stickers_back_arrow" id="0x7var_f2" />
-    <public type="drawable" name="stickers_back_center" id="0x7var_f3" />
-    <public type="drawable" name="stickers_back_left" id="0x7var_f4" />
-    <public type="drawable" name="stickers_back_right" id="0x7var_f5" />
-    <public type="drawable" name="stickers_empty" id="0x7var_f6" />
-    <public type="drawable" name="stickers_favorites" id="0x7var_f7" />
-    <public type="drawable" name="stickers_gifs_trending" id="0x7var_f8" />
-    <public type="drawable" name="stickers_recent" id="0x7var_f9" />
-    <public type="drawable" name="stickers_trending1" id="0x7var_fa" />
-    <public type="drawable" name="stickers_trending2" id="0x7var_fb" />
-    <public type="drawable" name="stickers_trending3" id="0x7var_fc" />
-    <public type="drawable" name="switch_thumb" id="0x7var_fd" />
-    <public type="drawable" name="switch_to_on1" id="0x7var_fe" />
-    <public type="drawable" name="switch_to_on2" id="0x7var_ff" />
+    <public type="drawable" name="player_new_shuffle" id="0x7var_a" />
+    <public type="drawable" name="plus" id="0x7var_b" />
+    <public type="drawable" name="poll_add_circle" id="0x7var_c" />
+    <public type="drawable" name="poll_add_plus" id="0x7var_d" />
+    <public type="drawable" name="poll_remove" id="0x7var_e" />
+    <public type="drawable" name="poll_reorder" id="0x7var_f" />
+    <public type="drawable" name="poll_right" id="0x7var_a0" />
+    <public type="drawable" name="poll_wrong" id="0x7var_a1" />
+    <public type="drawable" name="popup_fixed" id="0x7var_a2" />
+    <public type="drawable" name="popup_fixed_alert" id="0x7var_a3" />
+    <public type="drawable" name="popup_fixed_alert2" id="0x7var_a4" />
+    <public type="drawable" name="popup_fixed_alert3" id="0x7var_a5" />
+    <public type="drawable" name="popup_fixed_top" id="0x7var_a6" />
+    <public type="drawable" name="preview_arrow" id="0x7var_a7" />
+    <public type="drawable" name="preview_back" id="0x7var_a8" />
+    <public type="drawable" name="preview_custom" id="0x7var_a9" />
+    <public type="drawable" name="preview_dots" id="0x7var_aa" />
+    <public type="drawable" name="preview_mic" id="0x7var_ab" />
+    <public type="drawable" name="preview_smile" id="0x7var_ac" />
+    <public type="drawable" name="profile_discuss" id="0x7var_ad" />
+    <public type="drawable" name="profile_newmsg" id="0x7var_ae" />
+    <public type="drawable" name="profile_phone" id="0x7var_af" />
+    <public type="drawable" name="profile_video" id="0x7var_b0" />
+    <public type="drawable" name="proxy_check" id="0x7var_b1" />
+    <public type="drawable" name="proxy_off" id="0x7var_b2" />
+    <public type="drawable" name="proxy_on" id="0x7var_b3" />
+    <public type="drawable" name="qr_at_large" id="0x7var_b4" />
+    <public type="drawable" name="qr_at_medium" id="0x7var_b5" />
+    <public type="drawable" name="qr_at_small" id="0x7var_b6" />
+    <public type="drawable" name="qr_flashlight" id="0x7var_b7" />
+    <public type="drawable" name="qr_gallery" id="0x7var_b8" />
+    <public type="drawable" name="reactionbutton" id="0x7var_b9" />
+    <public type="drawable" name="reactionchatslist" id="0x7var_ba" />
+    <public type="drawable" name="reactions_bubble_shadow" id="0x7var_bb" />
+    <public type="drawable" name="redcircle" id="0x7var_bc" />
+    <public type="drawable" name="regbtn2" id="0x7var_bd" />
+    <public type="drawable" name="regbtn2_pressed" id="0x7var_be" />
+    <public type="drawable" name="replyvideo" id="0x7var_bf" />
+    <public type="drawable" name="round_check2" id="0x7var_c0" />
+    <public type="drawable" name="s_pause" id="0x7var_c1" />
+    <public type="drawable" name="s_play" id="0x7var_c2" />
+    <public type="drawable" name="screencast_big" id="0x7var_c3" />
+    <public type="drawable" name="scroll_tip" id="0x7var_c4" />
+    <public type="drawable" name="scrollbar_vertical_thumb" id="0x7var_c5" />
+    <public type="drawable" name="scrollbar_vertical_thumb_inset" id="0x7var_c6" />
+    <public type="drawable" name="search_arrow" id="0x7var_c7" />
+    <public type="drawable" name="search_arrow2" id="0x7var_c8" />
+    <public type="drawable" name="search_dark" id="0x7var_c9" />
+    <public type="drawable" name="search_dark_activated" id="0x7var_ca" />
+    <public type="drawable" name="search_date_filled" id="0x7var_cb" />
+    <public type="drawable" name="search_files_filled" id="0x7var_cc" />
+    <public type="drawable" name="search_links_filled" id="0x7var_cd" />
+    <public type="drawable" name="search_media_filled" id="0x7var_ce" />
+    <public type="drawable" name="search_music_filled" id="0x7var_cf" />
+    <public type="drawable" name="search_users_filled" id="0x7var_d0" />
+    <public type="drawable" name="search_voice_filled" id="0x7var_d1" />
+    <public type="drawable" name="selectphoto_large" id="0x7var_d2" />
+    <public type="drawable" name="settings_arrow" id="0x7var_d3" />
+    <public type="drawable" name="settings_noresults" id="0x7var_d4" />
+    <public type="drawable" name="shadowdown" id="0x7var_d5" />
+    <public type="drawable" name="shadowed_bubble1" id="0x7var_d6" />
+    <public type="drawable" name="shadowed_bubble2_half" id="0x7var_d7" />
+    <public type="drawable" name="share" id="0x7var_d8" />
+    <public type="drawable" name="share_arrow" id="0x7var_d9" />
+    <public type="drawable" name="sheet_shadow" id="0x7var_da" />
+    <public type="drawable" name="sheet_shadow_round" id="0x7var_db" />
+    <public type="drawable" name="shortcut_compose" id="0x7var_dc" />
+    <public type="drawable" name="shortcut_user" id="0x7var_dd" />
+    <public type="drawable" name="slide_dot_big" id="0x7var_de" />
+    <public type="drawable" name="slide_dot_small" id="0x7var_df" />
+    <public type="drawable" name="slidearrow" id="0x7var_e0" />
+    <public type="drawable" name="smallanimationpin" id="0x7var_e1" />
+    <public type="drawable" name="smallanimationpinleft" id="0x7var_e2" />
+    <public type="drawable" name="smallanimationpinright" id="0x7var_e3" />
+    <public type="drawable" name="smiles_info" id="0x7var_e4" />
+    <public type="drawable" name="smiles_inputsearch" id="0x7var_e5" />
+    <public type="drawable" name="smiles_popup" id="0x7var_e6" />
+    <public type="drawable" name="smiles_tab_clear" id="0x7var_e7" />
+    <public type="drawable" name="smiles_tab_gif" id="0x7var_e8" />
+    <public type="drawable" name="smiles_tab_search" id="0x7var_e9" />
+    <public type="drawable" name="smiles_tab_settings" id="0x7var_ea" />
+    <public type="drawable" name="smiles_tab_smiles" id="0x7var_eb" />
+    <public type="drawable" name="smiles_tab_stickers" id="0x7var_ec" />
+    <public type="drawable" name="sms_bubble" id="0x7var_ed" />
+    <public type="drawable" name="sms_code" id="0x7var_ee" />
+    <public type="drawable" name="sms_devices" id="0x7var_ef" />
+    <public type="drawable" name="stats_tooltip" id="0x7var_f0" />
+    <public type="drawable" name="sticker_added" id="0x7var_f1" />
+    <public type="drawable" name="stickers_back_all" id="0x7var_f2" />
+    <public type="drawable" name="stickers_back_arrow" id="0x7var_f3" />
+    <public type="drawable" name="stickers_back_center" id="0x7var_f4" />
+    <public type="drawable" name="stickers_back_left" id="0x7var_f5" />
+    <public type="drawable" name="stickers_back_right" id="0x7var_f6" />
+    <public type="drawable" name="stickers_empty" id="0x7var_f7" />
+    <public type="drawable" name="stickers_favorites" id="0x7var_f8" />
+    <public type="drawable" name="stickers_gifs_trending" id="0x7var_f9" />
+    <public type="drawable" name="stickers_recent" id="0x7var_fa" />
+    <public type="drawable" name="stickers_trending1" id="0x7var_fb" />
+    <public type="drawable" name="stickers_trending2" id="0x7var_fc" />
+    <public type="drawable" name="stickers_trending3" id="0x7var_fd" />
+    <public type="drawable" name="switch_thumb" id="0x7var_fe" />
+    <public type="drawable" name="switch_to_on1" id="0x7var_ff" />
+    <public type="drawable" name="switch_to_on2" id="0x7var_" />
     <public type="drawable" name="switch_track" id="0x7var_" />
     <public type="drawable" name="system" id="0x7var_" />
     <public type="drawable" name="tabs_reorder" id="0x7var_" />
@@ -1235,13 +1236,13 @@
     <public type="drawable" name="theme_preview_image" id="0x7var_" />
     <public type="drawable" name="toast_pallete" id="0x7var_" />
     <public type="drawable" name="tooltip_arrow" id="0x7var_" />
-    <public type="drawable" name="tooltip_arrow_up" id="0x7var_" />
-    <public type="drawable" name="tooltip_sound" id="0x7var_a" />
-    <public type="drawable" name="transparent" id="0x7var_b" />
-    <public type="drawable" name="vd_flip" id="0x7var_c" />
-    <public type="drawable" name="venue_tooltip" id="0x7var_d" />
-    <public type="drawable" name="verified_area" id="0x7var_e" />
-    <public type="drawable" name="verified_check" id="0x7var_f" />
+    <public type="drawable" name="tooltip_arrow_up" id="0x7var_a" />
+    <public type="drawable" name="tooltip_sound" id="0x7var_b" />
+    <public type="drawable" name="transparent" id="0x7var_c" />
+    <public type="drawable" name="vd_flip" id="0x7var_d" />
+    <public type="drawable" name="venue_tooltip" id="0x7var_e" />
+    <public type="drawable" name="verified_area" id="0x7var_f" />
+    <public type="drawable" name="verified_check" id="0x7var_" />
     <public type="drawable" name="verified_profile" id="0x7var_" />
     <public type="drawable" name="video_actions" id="0x7var_" />
     <public type="drawable" name="video_cropleft" id="0x7var_" />
@@ -1251,13 +1252,13 @@
     <public type="drawable" name="video_pause1" id="0x7var_" />
     <public type="drawable" name="video_play1" id="0x7var_" />
     <public type="drawable" name="video_png" id="0x7var_" />
-    <public type="drawable" name="video_quality1" id="0x7var_" />
-    <public type="drawable" name="video_quality2" id="0x7var_a" />
-    <public type="drawable" name="video_quality3" id="0x7var_b" />
-    <public type="drawable" name="video_send_mute" id="0x7var_c" />
-    <public type="drawable" name="video_send_unmute" id="0x7var_d" />
-    <public type="drawable" name="videopreview" id="0x7var_e" />
-    <public type="drawable" name="voice_expand" id="0x7var_f" />
+    <public type="drawable" name="video_quality1" id="0x7var_a" />
+    <public type="drawable" name="video_quality2" id="0x7var_b" />
+    <public type="drawable" name="video_quality3" id="0x7var_c" />
+    <public type="drawable" name="video_send_mute" id="0x7var_d" />
+    <public type="drawable" name="video_send_unmute" id="0x7var_e" />
+    <public type="drawable" name="videopreview" id="0x7var_f" />
+    <public type="drawable" name="voice_expand" id="0x7var_" />
     <public type="drawable" name="voice_mini_0_5" id="0x7var_" />
     <public type="drawable" name="voice_mini_1_5" id="0x7var_" />
     <public type="drawable" name="voice_mini_2_0" id="0x7var_" />
@@ -1267,13 +1268,13 @@
     <public type="drawable" name="voice_volume_speaker" id="0x7var_" />
     <public type="drawable" name="voicechat_active" id="0x7var_" />
     <public type="drawable" name="voicechat_muted" id="0x7var_" />
-    <public type="drawable" name="voicechat_screencast" id="0x7var_" />
-    <public type="drawable" name="wall_selection" id="0x7var_a" />
-    <public type="drawable" name="widget_avatar_1" id="0x7var_b" />
-    <public type="drawable" name="widget_avatar_2" id="0x7var_c" />
-    <public type="drawable" name="widget_avatar_3" id="0x7var_d" />
-    <public type="drawable" name="widget_avatar_4" id="0x7var_e" />
-    <public type="drawable" name="widget_avatar_5" id="0x7var_f" />
+    <public type="drawable" name="voicechat_screencast" id="0x7var_a" />
+    <public type="drawable" name="wall_selection" id="0x7var_b" />
+    <public type="drawable" name="widget_avatar_1" id="0x7var_c" />
+    <public type="drawable" name="widget_avatar_2" id="0x7var_d" />
+    <public type="drawable" name="widget_avatar_3" id="0x7var_e" />
+    <public type="drawable" name="widget_avatar_4" id="0x7var_f" />
+    <public type="drawable" name="widget_avatar_5" id="0x7var_" />
     <public type="drawable" name="widget_avatar_6" id="0x7var_" />
     <public type="drawable" name="widget_avatar_7" id="0x7var_" />
     <public type="drawable" name="widget_background" id="0x7var_" />
@@ -1283,13 +1284,13 @@
     <public type="drawable" name="widget_check" id="0x7var_" />
     <public type="drawable" name="widget_clock" id="0x7var_" />
     <public type="drawable" name="widget_counter" id="0x7var_" />
-    <public type="drawable" name="widget_counter_muted" id="0x7var_" />
-    <public type="drawable" name="widget_edit" id="0x7var_a" />
-    <public type="drawable" name="widget_halfcheck" id="0x7var_b" />
-    <public type="drawable" name="widget_muted" id="0x7var_c" />
-    <public type="drawable" name="widget_online" id="0x7var_d" />
-    <public type="drawable" name="widget_pin" id="0x7var_e" />
-    <public type="drawable" name="widget_verified" id="0x7var_f" />
+    <public type="drawable" name="widget_counter_muted" id="0x7var_a" />
+    <public type="drawable" name="widget_edit" id="0x7var_b" />
+    <public type="drawable" name="widget_halfcheck" id="0x7var_c" />
+    <public type="drawable" name="widget_muted" id="0x7var_d" />
+    <public type="drawable" name="widget_online" id="0x7var_e" />
+    <public type="drawable" name="widget_pin" id="0x7var_f" />
+    <public type="drawable" name="widget_verified" id="0x7var_" />
     <public type="drawable" name="widgets_dark_badgebg" id="0x7var_" />
     <public type="drawable" name="widgets_dark_plus" id="0x7var_" />
     <public type="drawable" name="widgets_light_badgebg" id="0x7var_" />
@@ -1299,7 +1300,7 @@
     <public type="drawable" name="zoom_round" id="0x7var_" />
     <public type="drawable" name="zoom_round_b" id="0x7var_" />
     <public type="drawable" name="zoom_slide" id="0x7var_" />
-    <public type="drawable" name="zoom_slide_a" id="0x7var_" />
+    <public type="drawable" name="zoom_slide_a" id="0x7var_a" />
     <public type="id" name="acc_action_chat_preview" id="0x7var_" />
     <public type="id" name="acc_action_msg_options" id="0x7var_" />
     <public type="id" name="acc_action_open_forwarded_origin" id="0x7var_" />

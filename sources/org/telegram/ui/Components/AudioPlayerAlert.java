@@ -28,12 +28,18 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.core.graphics.ColorUtils;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.FloatValueHolder;
+import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.dynamicanimation.animation.SpringForce;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
@@ -140,14 +146,16 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     private int searchOpenPosition;
     private boolean searchWas;
     private boolean searching;
+    private SpringAnimation seekBarBufferSpring;
     private SeekBarView seekBarView;
     private ActionBarMenuSubItem shuffleListItem;
     private ActionBarMenuSubItem[] speedItems;
     private SimpleTextView timeTextView;
     private ClippingTextViewSwitcher titleTextView;
+    private boolean wasLight;
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ boolean lambda$new$7(View view, MotionEvent motionEvent) {
+    public static /* synthetic */ boolean lambda$new$8(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -262,14 +270,11 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                     this.lastMeasturedHeight = size;
                 }
                 this.ignoreLayout = true;
-                if (Build.VERSION.SDK_INT >= 21 && !((BottomSheet) AudioPlayerAlert.this).isFullscreen) {
-                    setPadding(((BottomSheet) AudioPlayerAlert.this).backgroundPaddingLeft, AndroidUtilities.statusBarHeight, ((BottomSheet) AudioPlayerAlert.this).backgroundPaddingLeft, 0);
-                }
                 AudioPlayerAlert.this.playerLayout.setVisibility((AudioPlayerAlert.this.searchWas || ((BottomSheet) AudioPlayerAlert.this).keyboardVisible) ? 4 : 0);
                 AudioPlayerAlert.this.playerShadow.setVisibility(AudioPlayerAlert.this.playerLayout.getVisibility());
                 int paddingTop = size - getPaddingTop();
-                ((FrameLayout.LayoutParams) AudioPlayerAlert.this.listView.getLayoutParams()).topMargin = ActionBar.getCurrentActionBarHeight();
-                ((FrameLayout.LayoutParams) AudioPlayerAlert.this.actionBarShadow.getLayoutParams()).topMargin = ActionBar.getCurrentActionBarHeight();
+                ((FrameLayout.LayoutParams) AudioPlayerAlert.this.listView.getLayoutParams()).topMargin = ActionBar.getCurrentActionBarHeight() + AndroidUtilities.statusBarHeight;
+                ((FrameLayout.LayoutParams) AudioPlayerAlert.this.actionBarShadow.getLayoutParams()).topMargin = ActionBar.getCurrentActionBarHeight() + AndroidUtilities.statusBarHeight;
                 ((FrameLayout.LayoutParams) AudioPlayerAlert.this.blurredView.getLayoutParams()).topMargin = -getPaddingTop();
                 int dp2 = AndroidUtilities.dp(179.0f);
                 if (AudioPlayerAlert.this.playlist.size() > 1) {
@@ -369,18 +374,16 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                     this.rect.set(((BottomSheet) AudioPlayerAlert.this).backgroundPaddingLeft, ((BottomSheet) AudioPlayerAlert.this).backgroundPaddingTop + i, getMeasuredWidth() - ((BottomSheet) AudioPlayerAlert.this).backgroundPaddingLeft, ((BottomSheet) AudioPlayerAlert.this).backgroundPaddingTop + i + AndroidUtilities.dp(24.0f));
                     canvas.drawRoundRect(this.rect, AndroidUtilities.dp(12.0f) * f, AndroidUtilities.dp(12.0f) * f, Theme.dialogs_onlineCirclePaint);
                 }
-                if (f != 0.0f) {
-                    int dp4 = AndroidUtilities.dp(36.0f);
-                    this.rect.set((getMeasuredWidth() - dp4) / 2, dp2, (getMeasuredWidth() + dp4) / 2, dp2 + AndroidUtilities.dp(4.0f));
-                    int themedColor = AudioPlayerAlert.this.getThemedColor("key_sheet_scrollUp");
-                    int alpha = Color.alpha(themedColor);
-                    Theme.dialogs_onlineCirclePaint.setColor(themedColor);
-                    Theme.dialogs_onlineCirclePaint.setAlpha((int) (alpha * 1.0f * f));
-                    canvas.drawRoundRect(this.rect, AndroidUtilities.dp(2.0f), AndroidUtilities.dp(2.0f), Theme.dialogs_onlineCirclePaint);
+                if (f == 0.0f) {
+                    return;
                 }
-                int themedColor2 = AudioPlayerAlert.this.getThemedColor("dialogBackground");
-                Theme.dialogs_onlineCirclePaint.setColor(Color.argb((int) (AudioPlayerAlert.this.actionBar.getAlpha() * 255.0f), (int) (Color.red(themedColor2) * 0.8f), (int) (Color.green(themedColor2) * 0.8f), (int) (Color.blue(themedColor2) * 0.8f)));
-                canvas.drawRect(((BottomSheet) AudioPlayerAlert.this).backgroundPaddingLeft, 0.0f, getMeasuredWidth() - ((BottomSheet) AudioPlayerAlert.this).backgroundPaddingLeft, AndroidUtilities.statusBarHeight, Theme.dialogs_onlineCirclePaint);
+                int dp4 = AndroidUtilities.dp(36.0f);
+                this.rect.set((getMeasuredWidth() - dp4) / 2, dp2, (getMeasuredWidth() + dp4) / 2, dp2 + AndroidUtilities.dp(4.0f));
+                int themedColor = AudioPlayerAlert.this.getThemedColor("key_sheet_scrollUp");
+                int alpha = Color.alpha(themedColor);
+                Theme.dialogs_onlineCirclePaint.setColor(themedColor);
+                Theme.dialogs_onlineCirclePaint.setAlpha((int) (alpha * 1.0f * f));
+                canvas.drawRoundRect(this.rect, AndroidUtilities.dp(2.0f), AndroidUtilities.dp(2.0f), Theme.dialogs_onlineCirclePaint);
             }
 
             @Override // android.view.ViewGroup, android.view.View
@@ -440,7 +443,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         this.actionBar.setTitleColor(getThemedColor("player_actionBarTitle"));
         this.actionBar.setTitle(LocaleController.getString("AttachMusic", R.string.AttachMusic));
         this.actionBar.setSubtitleColor(getThemedColor("player_actionBarSubtitle"));
-        this.actionBar.setOccupyStatusBar(false);
+        this.actionBar.setOccupyStatusBar(true);
         this.actionBar.setAlpha(0.0f);
         if (playingMessageObject != null && !MediaController.getInstance().currentPlaylistIsGlobalSearch()) {
             long dialogId = playingMessageObject.getDialogId();
@@ -612,6 +615,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         });
         this.seekBarView.setReportChanges(true);
         this.playerLayout.addView(this.seekBarView, LayoutHelper.createFrame(-1, 38.0f, 51, 5.0f, 70.0f, 5.0f, 0.0f));
+        this.seekBarBufferSpring = new SpringAnimation(new FloatValueHolder(0.0f)).setSpring(new SpringForce().setStiffness(750.0f).setDampingRatio(1.0f)).addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener() { // from class: org.telegram.ui.Components.AudioPlayerAlert$$ExternalSyntheticLambda6
+            @Override // androidx.dynamicanimation.animation.DynamicAnimation.OnAnimationUpdateListener
+            public final void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
+                AudioPlayerAlert.this.lambda$new$0(dynamicAnimation, f, f2);
+            }
+        });
         LineProgressView lineProgressView = new LineProgressView(context);
         this.progressView = lineProgressView;
         lineProgressView.setVisibility(4);
@@ -641,7 +650,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         this.playbackSpeedButton.setDelegate(new ActionBarMenuItem.ActionBarMenuItemDelegate() { // from class: org.telegram.ui.Components.AudioPlayerAlert$$ExternalSyntheticLambda8
             @Override // org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemDelegate
             public final void onItemClick(int i3) {
-                AudioPlayerAlert.this.lambda$new$0(i3);
+                AudioPlayerAlert.this.lambda$new$1(i3);
             }
         });
         this.speedItems[0] = this.playbackSpeedButton.addSubItem(1, R.drawable.msg_speed_0_5, LocaleController.getString("SpeedSlow", R.string.SpeedSlow));
@@ -657,15 +666,15 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         this.playbackSpeedButton.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.AudioPlayerAlert$$ExternalSyntheticLambda0
             @Override // android.view.View.OnClickListener
             public final void onClick(View view3) {
-                AudioPlayerAlert.this.lambda$new$1(view3);
+                AudioPlayerAlert.this.lambda$new$2(view3);
             }
         });
         this.playbackSpeedButton.setOnLongClickListener(new View.OnLongClickListener() { // from class: org.telegram.ui.Components.AudioPlayerAlert$$ExternalSyntheticLambda4
             @Override // android.view.View.OnLongClickListener
             public final boolean onLongClick(View view3) {
-                boolean lambda$new$2;
-                lambda$new$2 = AudioPlayerAlert.this.lambda$new$2(view3);
-                return lambda$new$2;
+                boolean lambda$new$3;
+                lambda$new$3 = AudioPlayerAlert.this.lambda$new$3(view3);
+                return lambda$new$3;
             }
         });
         updatePlaybackButton();
@@ -696,7 +705,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         this.repeatButton.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.AudioPlayerAlert$$ExternalSyntheticLambda1
             @Override // android.view.View.OnClickListener
             public final void onClick(View view3) {
-                AudioPlayerAlert.this.lambda$new$3(view3);
+                AudioPlayerAlert.this.lambda$new$4(view3);
             }
         });
         this.repeatSongItem = this.repeatButton.addSubItem(3, R.drawable.player_new_repeatone, LocaleController.getString("RepeatSong", R.string.RepeatSong));
@@ -704,10 +713,10 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         this.shuffleListItem = this.repeatButton.addSubItem(2, R.drawable.player_new_shuffle, LocaleController.getString("ShuffleList", R.string.ShuffleList));
         this.reverseOrderItem = this.repeatButton.addSubItem(1, R.drawable.player_new_order, LocaleController.getString("ReverseOrder", R.string.ReverseOrder));
         this.repeatButton.setShowedFromBottom(true);
-        this.repeatButton.setDelegate(new ActionBarMenuItem.ActionBarMenuItemDelegate() { // from class: org.telegram.ui.Components.AudioPlayerAlert$$ExternalSyntheticLambda9
+        this.repeatButton.setDelegate(new ActionBarMenuItem.ActionBarMenuItemDelegate() { // from class: org.telegram.ui.Components.AudioPlayerAlert$$ExternalSyntheticLambda10
             @Override // org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemDelegate
             public final void onItemClick(int i4) {
-                AudioPlayerAlert.this.lambda$new$4(i4);
+                AudioPlayerAlert.this.lambda$new$5(i4);
             }
         });
         int themedColor = getThemedColor("player_button");
@@ -780,10 +789,10 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         this.optionsButton.setOnClickListener(new View.OnClickListener() { // from class: org.telegram.ui.Components.AudioPlayerAlert$$ExternalSyntheticLambda2
             @Override // android.view.View.OnClickListener
             public final void onClick(View view3) {
-                AudioPlayerAlert.this.lambda$new$6(view3);
+                AudioPlayerAlert.this.lambda$new$7(view3);
             }
         });
-        this.optionsButton.setDelegate(new ActionBarMenuItem.ActionBarMenuItemDelegate() { // from class: org.telegram.ui.Components.AudioPlayerAlert$$ExternalSyntheticLambda7
+        this.optionsButton.setDelegate(new ActionBarMenuItem.ActionBarMenuItemDelegate() { // from class: org.telegram.ui.Components.AudioPlayerAlert$$ExternalSyntheticLambda9
             @Override // org.telegram.ui.ActionBar.ActionBarMenuItem.ActionBarMenuItemDelegate
             public final void onItemClick(int i5) {
                 AudioPlayerAlert.this.onSubItemClick(i5);
@@ -871,7 +880,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         this.listAdapter = listAdapter;
         recyclerListView3.setAdapter(listAdapter);
         this.listView.setGlowColor(getThemedColor("dialogScrollGlow"));
-        this.listView.setOnItemClickListener(AudioPlayerAlert$$ExternalSyntheticLambda11.INSTANCE);
+        this.listView.setOnItemClickListener(AudioPlayerAlert$$ExternalSyntheticLambda12.INSTANCE);
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() { // from class: org.telegram.ui.Components.AudioPlayerAlert.16
             @Override // androidx.recyclerview.widget.RecyclerView.OnScrollListener
             public void onScrollStateChanged(RecyclerView recyclerView, int i5) {
@@ -999,7 +1008,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$0(int i) {
+    public /* synthetic */ void lambda$new$0(DynamicAnimation dynamicAnimation, float f, float f2) {
+        this.seekBarView.setBufferedProgress(f / 1000.0f);
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$new$1(int i) {
         MediaController.getInstance().getPlaybackSpeed(true);
         if (i == 1) {
             MediaController.getInstance().setPlaybackSpeed(true, 0.5f);
@@ -1014,7 +1028,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$1(View view) {
+    public /* synthetic */ void lambda$new$2(View view) {
         if (Math.abs(MediaController.getInstance().getPlaybackSpeed(true) - 1.0f) > 0.001f) {
             MediaController.getInstance().setPlaybackSpeed(true, 1.0f);
         } else {
@@ -1024,19 +1038,19 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ boolean lambda$new$2(View view) {
+    public /* synthetic */ boolean lambda$new$3(View view) {
         this.playbackSpeedButton.toggleSubMenu();
         return true;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$3(View view) {
+    public /* synthetic */ void lambda$new$4(View view) {
         updateSubMenu();
         this.repeatButton.toggleSubMenu();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$4(int i) {
+    public /* synthetic */ void lambda$new$5(int i) {
         if (i == 1 || i == 2) {
             boolean z = SharedConfig.playOrderReversed;
             if ((z && i == 1) || (SharedConfig.shuffleMusic && i == 2)) {
@@ -1162,7 +1176,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             /*
                 r9 = this;
                 org.telegram.ui.Components.AudioPlayerAlert r0 = org.telegram.ui.Components.AudioPlayerAlert.this
-                org.telegram.ui.Components.SeekBarView r0 = org.telegram.ui.Components.AudioPlayerAlert.access$6100(r0)
+                org.telegram.ui.Components.SeekBarView r0 = org.telegram.ui.Components.AudioPlayerAlert.access$5500(r0)
                 boolean r0 = r0.isDragging()
                 r1 = 0
                 if (r0 != 0) goto Le0
@@ -1220,11 +1234,11 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 org.telegram.messenger.MediaController r10 = org.telegram.messenger.MediaController.getInstance()
                 r10.playPreviousMessage()
                 org.telegram.ui.Components.AudioPlayerAlert r10 = org.telegram.ui.Components.AudioPlayerAlert.this
-                org.telegram.ui.Components.RLottieImageView r10 = org.telegram.ui.Components.AudioPlayerAlert.access$6200(r10)
+                org.telegram.ui.Components.RLottieImageView r10 = org.telegram.ui.Components.AudioPlayerAlert.access$5600(r10)
                 r0 = 0
                 r10.setProgress(r0)
                 org.telegram.ui.Components.AudioPlayerAlert r10 = org.telegram.ui.Components.AudioPlayerAlert.this
-                org.telegram.ui.Components.RLottieImageView r10 = org.telegram.ui.Components.AudioPlayerAlert.access$6200(r10)
+                org.telegram.ui.Components.RLottieImageView r10 = org.telegram.ui.Components.AudioPlayerAlert.access$5600(r10)
                 r10.playAnimation()
             L8e:
                 int r10 = r9.pressedCount
@@ -1280,7 +1294,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ void lambda$new$5(View view) {
+    public static /* synthetic */ void lambda$new$6(View view) {
         if (MediaController.getInstance().isDownloadingCurrentMessage()) {
             return;
         }
@@ -1352,7 +1366,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             /*
                 r6 = this;
                 org.telegram.ui.Components.AudioPlayerAlert r0 = org.telegram.ui.Components.AudioPlayerAlert.this
-                org.telegram.ui.Components.SeekBarView r0 = org.telegram.ui.Components.AudioPlayerAlert.access$6100(r0)
+                org.telegram.ui.Components.SeekBarView r0 = org.telegram.ui.Components.AudioPlayerAlert.access$5500(r0)
                 boolean r0 = r0.isDragging()
                 r1 = 0
                 if (r0 != 0) goto Ldd
@@ -1401,11 +1415,11 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 org.telegram.messenger.MediaController r7 = org.telegram.messenger.MediaController.getInstance()
                 r7.playNextMessage()
                 org.telegram.ui.Components.AudioPlayerAlert r7 = org.telegram.ui.Components.AudioPlayerAlert.this
-                org.telegram.ui.Components.RLottieImageView r7 = org.telegram.ui.Components.AudioPlayerAlert.access$6400(r7)
+                org.telegram.ui.Components.RLottieImageView r7 = org.telegram.ui.Components.AudioPlayerAlert.access$5800(r7)
                 r0 = 0
                 r7.setProgress(r0)
                 org.telegram.ui.Components.AudioPlayerAlert r7 = org.telegram.ui.Components.AudioPlayerAlert.this
-                org.telegram.ui.Components.RLottieImageView r7 = org.telegram.ui.Components.AudioPlayerAlert.access$6400(r7)
+                org.telegram.ui.Components.RLottieImageView r7 = org.telegram.ui.Components.AudioPlayerAlert.access$5800(r7)
                 r7.playAnimation()
             L7a:
                 java.lang.Runnable r7 = r6.pressedRunnable
@@ -1467,12 +1481,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$new$6(View view) {
+    public /* synthetic */ void lambda$new$7(View view) {
         this.optionsButton.toggleSubMenu();
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public static /* synthetic */ void lambda$new$8(View view, int i) {
+    public static /* synthetic */ void lambda$new$9(View view, int i) {
         if (view instanceof AudioPlayerCell) {
             ((AudioPlayerCell) view).didPressedButton();
         }
@@ -1648,7 +1662,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$onSubItemClick$9(ArrayList arrayList, DialogsActivity dialogsActivity, ArrayList arrayList2, CharSequence charSequence, boolean z) {
+    public /* synthetic */ void lambda$onSubItemClick$10(ArrayList arrayList, DialogsActivity dialogsActivity, ArrayList arrayList2, CharSequence charSequence, boolean z) {
         long j;
         if (arrayList2.size() > 1 || ((MessagesStorage.TopicKey) arrayList2.get(0)).dialogId == UserConfig.getInstance(this.currentAccount).getClientUserId() || charSequence != null) {
             for (int i = 0; i < arrayList2.size(); i++) {
@@ -1684,7 +1698,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$onSubItemClick$10() {
+    public /* synthetic */ void lambda$onSubItemClick$11() {
         BulletinFactory.of((FrameLayout) this.containerView, this.resourcesProvider).createDownloadBulletin(BulletinFactory.FileType.AUDIO).show();
     }
 
@@ -1830,7 +1844,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             if (f == -1.0f) {
                 return;
             }
-            this.seekBarView.setBufferedProgress(f);
+            this.seekBarBufferSpring.getSpring().setFinalPosition(f * 1000.0f);
+            this.seekBarBufferSpring.start();
         }
     }
 
@@ -1844,6 +1859,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             this.containerView.invalidate();
             return;
         }
+        boolean z = false;
         View childAt = this.listView.getChildAt(0);
         RecyclerListView.Holder holder = (RecyclerListView.Holder) this.listView.findContainingViewHolder(childAt);
         int top = childAt.getTop();
@@ -1851,9 +1867,10 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         if (top < AndroidUtilities.dp(7.0f) || holder == null || holder.getAdapterPosition() != 0) {
             top = dp;
         }
-        boolean z = top <= AndroidUtilities.dp(12.0f);
-        if ((z && this.actionBar.getTag() == null) || (!z && this.actionBar.getTag() != null)) {
-            this.actionBar.setTag(z ? 1 : null);
+        boolean z2 = top <= AndroidUtilities.dp(12.0f);
+        float f = 1.0f;
+        if ((z2 && this.actionBar.getTag() == null) || (!z2 && this.actionBar.getTag() != null)) {
+            this.actionBar.setTag(z2 ? 1 : null);
             AnimatorSet animatorSet = this.actionBarAnimation;
             if (animatorSet != null) {
                 animatorSet.cancel();
@@ -1867,16 +1884,16 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             ActionBar actionBar = this.actionBar;
             Property property = View.ALPHA;
             float[] fArr = new float[1];
-            float f = 1.0f;
-            fArr[0] = z ? 1.0f : 0.0f;
+            float f2 = 0.0f;
+            fArr[0] = z2 ? 1.0f : 0.0f;
             animatorArr[0] = ObjectAnimator.ofFloat(actionBar, property, fArr);
             View view = this.actionBarShadow;
             Property property2 = View.ALPHA;
             float[] fArr2 = new float[1];
-            if (!z) {
-                f = 0.0f;
+            if (z2) {
+                f2 = 1.0f;
             }
-            fArr2[0] = f;
+            fArr2[0] = f2;
             animatorArr[1] = ObjectAnimator.ofFloat(view, property2, fArr2);
             animatorSet3.playTogether(animatorArr);
             this.actionBarAnimation.addListener(new AnimatorListenerAdapter() { // from class: org.telegram.ui.Components.AudioPlayerAlert.20
@@ -1892,14 +1909,30 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             this.actionBarAnimation.start();
         }
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.listView.getLayoutParams();
-        int dp2 = top + (layoutParams.topMargin - AndroidUtilities.dp(11.0f));
-        if (this.scrollOffsetY == dp2) {
+        int dp2 = top + ((layoutParams.topMargin - AndroidUtilities.statusBarHeight) - AndroidUtilities.dp(11.0f));
+        if (this.scrollOffsetY != dp2) {
+            RecyclerListView recyclerListView2 = this.listView;
+            this.scrollOffsetY = dp2;
+            recyclerListView2.setTopGlowOffset((dp2 - layoutParams.topMargin) - AndroidUtilities.statusBarHeight);
+            this.containerView.invalidate();
+        }
+        int dp3 = AndroidUtilities.dp(13.0f);
+        int i = (this.scrollOffsetY - this.backgroundPaddingTop) - dp3;
+        if (this.currentSheetAnimationType == 1) {
+            i = (int) (i + this.listView.getTranslationY());
+        }
+        if (this.backgroundPaddingTop + i < ActionBar.getCurrentActionBarHeight()) {
+            f = 1.0f - Math.min(1.0f, ((ActionBar.getCurrentActionBarHeight() - i) - this.backgroundPaddingTop) / (dp3 + AndroidUtilities.dp(4.0f)));
+        }
+        if (f <= 0.5f && ColorUtils.calculateLuminance(getThemedColor("dialogBackground")) > 0.699999988079071d) {
+            z = true;
+        }
+        if (z == this.wasLight) {
             return;
         }
-        RecyclerListView recyclerListView2 = this.listView;
-        this.scrollOffsetY = dp2;
-        recyclerListView2.setTopGlowOffset(dp2 - layoutParams.topMargin);
-        this.containerView.invalidate();
+        Window window = getWindow();
+        this.wasLight = z;
+        AndroidUtilities.setLightStatusBar(window, z);
     }
 
     @Override // org.telegram.ui.ActionBar.BottomSheet, android.app.Dialog, android.content.DialogInterface
@@ -2021,7 +2054,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                     }
                 }
                 if (f != -1.0f) {
-                    this.seekBarView.setBufferedProgress(f);
+                    this.seekBarBufferSpring.getSpring().setFinalPosition(f * 1000.0f);
+                    this.seekBarBufferSpring.start();
                 }
                 if (z2) {
                     int duration = (int) (messageObject.getDuration() * this.seekBarView.getProgress());
@@ -2408,10 +2442,10 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     @Override // org.telegram.ui.ActionBar.BottomSheet
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate = new ThemeDescription.ThemeDescriptionDelegate() { // from class: org.telegram.ui.Components.AudioPlayerAlert$$ExternalSyntheticLambda10
+        ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate = new ThemeDescription.ThemeDescriptionDelegate() { // from class: org.telegram.ui.Components.AudioPlayerAlert$$ExternalSyntheticLambda11
             @Override // org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate
             public final void didSetColor() {
-                AudioPlayerAlert.this.lambda$getThemeDescriptions$11();
+                AudioPlayerAlert.this.lambda$getThemeDescriptions$12();
             }
 
             @Override // org.telegram.ui.ActionBar.ThemeDescription.ThemeDescriptionDelegate
@@ -2488,7 +2522,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$getThemeDescriptions$11() {
+    public /* synthetic */ void lambda$getThemeDescriptions$12() {
         this.searchItem.getSearchField().setCursorColor(getThemedColor("player_actionBarTitle"));
         ActionBarMenuItem actionBarMenuItem = this.repeatButton;
         actionBarMenuItem.setIconColor(getThemedColor((String) actionBarMenuItem.getTag()));

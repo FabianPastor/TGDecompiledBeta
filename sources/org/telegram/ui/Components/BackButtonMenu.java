@@ -31,8 +31,8 @@ public class BackButtonMenu {
     }
 
     /* JADX WARN: Multi-variable type inference failed */
-    /* JADX WARN: Removed duplicated region for block: B:63:0x01e1  */
-    /* JADX WARN: Removed duplicated region for block: B:74:0x0202 A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:63:0x01ee  */
+    /* JADX WARN: Removed duplicated region for block: B:74:0x020f A[SYNTHETIC] */
     /* JADX WARN: Type inference failed for: r13v0, types: [android.widget.FrameLayout, android.view.View] */
     /* JADX WARN: Type inference failed for: r15v3, types: [android.graphics.drawable.BitmapDrawable] */
     /* JADX WARN: Type inference failed for: r2v1, types: [org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout, android.widget.FrameLayout, android.view.View] */
@@ -42,7 +42,7 @@ public class BackButtonMenu {
     */
     public static org.telegram.ui.ActionBar.ActionBarPopupWindow show(final org.telegram.ui.ActionBar.BaseFragment r26, android.view.View r27, long r28, int r30, org.telegram.ui.ActionBar.Theme.ResourcesProvider r31) {
         /*
-            Method dump skipped, instructions count: 653
+            Method dump skipped, instructions count: 666
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BackButtonMenu.show(org.telegram.ui.ActionBar.BaseFragment, android.view.View, long, int, org.telegram.ui.ActionBar.Theme$ResourcesProvider):org.telegram.ui.ActionBar.ActionBarPopupWindow");

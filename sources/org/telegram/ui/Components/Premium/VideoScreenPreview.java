@@ -258,8 +258,8 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
                 }
             }
             this.attachFileName = FileLoader.getAttachFileName(tLRPC$Document);
-            this.imageReceiver.setImage(null, null, combinedDrawable, null, null, 1);
-            FileLoader.getInstance(this.currentAccount).loadFile(tLRPC$Document, null, 3, 0);
+            this.imageReceiver.setImage(null, null, combinedDrawable, null, premiumPromo, 1);
+            FileLoader.getInstance(this.currentAccount).loadFile(tLRPC$Document, premiumPromo, 3, 0);
             this.document = tLRPC$Document;
             Utilities.globalQueue.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.Premium.VideoScreenPreview$$ExternalSyntheticLambda2
                 @Override // java.lang.Runnable
@@ -631,7 +631,7 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
                     sb.append("&mime=");
                     sb.append(URLEncoder.encode(this.document.mime_type, "UTF-8"));
                     sb.append("&rid=");
-                    sb.append(FileLoader.getInstance(this.currentAccount).getFileReference(this.document));
+                    sb.append(FileLoader.getInstance(this.currentAccount).getFileReference(MediaDataController.getInstance(this.currentAccount).getPremiumPromo()));
                     sb.append("&name=");
                     sb.append(URLEncoder.encode(FileLoader.getDocumentFileName(this.document), "UTF-8"));
                     sb.append("&reference=");

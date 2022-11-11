@@ -13,6 +13,7 @@ import android.os.Build;
 import android.util.StateSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
@@ -21,25 +22,36 @@ public class CanvasButton {
     private static final int[] pressedState = {16842910, 16842919};
     boolean buttonPressed;
     private Runnable delegate;
-    Path drawingPath = new Path();
-    ArrayList<RectF> drawingRects = new ArrayList<>();
-    Paint paint;
+    private boolean longPressEnabled;
+    Runnable longPressRunnable;
     private final View parent;
     private boolean pathCreated;
     RippleDrawable selectorDrawable;
     int usingRectCount;
+    Path drawingPath = new Path();
+    ArrayList<RectF> drawingRects = new ArrayList<>();
+    Paint paint = new Paint(1);
+    Runnable longPressRunnableInner = new Runnable() { // from class: org.telegram.ui.Components.CanvasButton.1
+        @Override // java.lang.Runnable
+        public void run() {
+            CanvasButton.this.checkTouchEvent(MotionEvent.obtain(0L, 0L, 3, 0.0f, 0.0f, 0));
+            CanvasButton.this.parent.performHapticFeedback(0);
+            Runnable runnable = CanvasButton.this.longPressRunnable;
+            if (runnable != null) {
+                runnable.run();
+            }
+        }
+    };
 
     public CanvasButton(View view) {
-        Paint paint = new Paint(1);
-        this.paint = paint;
         this.parent = view;
-        paint.setPathEffect(new CornerPathEffect(AndroidUtilities.dp(12.0f)));
+        this.paint.setPathEffect(new CornerPathEffect(AndroidUtilities.dp(12.0f)));
         if (Build.VERSION.SDK_INT >= 21) {
-            final Paint paint2 = new Paint(1);
-            paint2.setFilterBitmap(true);
-            paint2.setPathEffect(new CornerPathEffect(AndroidUtilities.dp(12.0f)));
-            paint2.setColor(-1);
-            this.selectorDrawable = new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{Theme.getColor("listSelectorSDK21") & NUM}), null, new Drawable() { // from class: org.telegram.ui.Components.CanvasButton.1
+            final Paint paint = new Paint(1);
+            paint.setFilterBitmap(true);
+            paint.setPathEffect(new CornerPathEffect(AndroidUtilities.dp(12.0f)));
+            paint.setColor(-1);
+            this.selectorDrawable = new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{Theme.getColor("listSelectorSDK21") & NUM}), null, new Drawable() { // from class: org.telegram.ui.Components.CanvasButton.2
                 @Override // android.graphics.drawable.Drawable
                 public int getOpacity() {
                     return -2;
@@ -55,7 +67,7 @@ public class CanvasButton {
 
                 @Override // android.graphics.drawable.Drawable
                 public void draw(Canvas canvas) {
-                    CanvasButton.this.drawInternal(canvas, paint2);
+                    CanvasButton.this.drawInternal(canvas, paint);
                 }
             });
         }
@@ -72,6 +84,7 @@ public class CanvasButton {
     /* JADX INFO: Access modifiers changed from: private */
     public void drawInternal(Canvas canvas, Paint paint) {
         int i = this.usingRectCount;
+        int i2 = 0;
         if (i <= 1) {
             if (i != 1) {
                 return;
@@ -81,28 +94,43 @@ public class CanvasButton {
         }
         if (!this.pathCreated) {
             this.drawingPath.rewind();
-            int i2 = 0;
             int i3 = 0;
             int i4 = 0;
             int i5 = 0;
-            for (int i6 = 0; i6 < this.usingRectCount; i6++) {
-                if (i6 == 0 || this.drawingRects.get(i6).bottom > i2) {
-                    i2 = (int) this.drawingRects.get(i6).bottom;
+            int i6 = 0;
+            while (true) {
+                int i7 = this.usingRectCount;
+                if (i2 >= i7) {
+                    break;
                 }
-                if (i6 == 0 || this.drawingRects.get(i6).right > i3) {
-                    i3 = (int) this.drawingRects.get(i6).right;
+                int i8 = i2 + 1;
+                if (i8 < i7) {
+                    float f = this.drawingRects.get(i2).right;
+                    float f2 = this.drawingRects.get(i8).right;
+                    if (Math.abs(f - f2) < AndroidUtilities.dp(4.0f)) {
+                        float max = Math.max(f, f2);
+                        this.drawingRects.get(i2).right = max;
+                        this.drawingRects.get(i8).right = max;
+                    }
                 }
-                if (i6 == 0 || this.drawingRects.get(i6).left < i4) {
-                    i4 = (int) this.drawingRects.get(i6).left;
+                if (i2 == 0 || this.drawingRects.get(i2).bottom > i3) {
+                    i3 = (int) this.drawingRects.get(i2).bottom;
                 }
-                if (i6 == 0 || this.drawingRects.get(i6).top < i5) {
-                    i5 = (int) this.drawingRects.get(i6).top;
+                if (i2 == 0 || this.drawingRects.get(i2).right > i4) {
+                    i4 = (int) this.drawingRects.get(i2).right;
                 }
-                this.drawingPath.addRect(this.drawingRects.get(i6), Path.Direction.CCW);
+                if (i2 == 0 || this.drawingRects.get(i2).left < i5) {
+                    i5 = (int) this.drawingRects.get(i2).left;
+                }
+                if (i2 == 0 || this.drawingRects.get(i2).top < i6) {
+                    i6 = (int) this.drawingRects.get(i2).top;
+                }
+                this.drawingPath.addRect(this.drawingRects.get(i2), Path.Direction.CCW);
                 RippleDrawable rippleDrawable = this.selectorDrawable;
                 if (rippleDrawable != null) {
-                    rippleDrawable.setBounds(i4, i5, i3, i2);
+                    rippleDrawable.setBounds(i5, i6, i4, i3);
                 }
+                i2 = i8;
             }
             this.pathCreated = true;
         }
@@ -123,6 +151,10 @@ public class CanvasButton {
                     rippleDrawable3.setHotspot(x, y);
                     this.selectorDrawable.setState(pressedState);
                 }
+                AndroidUtilities.cancelRunOnUIThread(this.longPressRunnableInner);
+                if (this.longPressEnabled) {
+                    AndroidUtilities.runOnUIThread(this.longPressRunnableInner, ViewConfiguration.getLongPressTimeout());
+                }
                 this.parent.invalidate();
                 return true;
             }
@@ -138,6 +170,7 @@ public class CanvasButton {
                 this.buttonPressed = false;
                 this.parent.invalidate();
             }
+            AndroidUtilities.cancelRunOnUIThread(this.longPressRunnableInner);
         } else if (motionEvent.getAction() == 2 && this.buttonPressed && Build.VERSION.SDK_INT >= 21 && (rippleDrawable2 = this.selectorDrawable) != null) {
             rippleDrawable2.setHotspot(x, y);
         }
@@ -178,5 +211,10 @@ public class CanvasButton {
             this.drawingRects.add(new RectF());
         }
         this.drawingRects.get(this.usingRectCount - 1).set(rectF);
+    }
+
+    public void setLongPress(Runnable runnable) {
+        this.longPressEnabled = true;
+        this.longPressRunnable = runnable;
     }
 }

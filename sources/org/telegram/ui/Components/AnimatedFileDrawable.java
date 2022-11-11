@@ -33,7 +33,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     private Bitmap backgroundBitmap;
     private int backgroundBitmapTime;
     private Paint[] backgroundPaint;
-    private BitmapShader backgroundShader;
+    private BitmapShader[] backgroundShader;
     BitmapsCache bitmapsCache;
     Runnable cacheGenRunnable;
     long cacheGenerateNativePtr;
@@ -72,7 +72,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     public volatile long nativePtr;
     private Bitmap nextRenderingBitmap;
     private int nextRenderingBitmapTime;
-    private BitmapShader nextRenderingShader;
+    private BitmapShader[] nextRenderingShader;
     private View parentView;
     private ArrayList<ImageReceiver> parents;
     private File path;
@@ -85,17 +85,17 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     private Bitmap renderingBitmap;
     private int renderingBitmapTime;
     private int renderingHeight;
-    private BitmapShader renderingShader;
+    private BitmapShader[] renderingShader;
     private int renderingWidth;
     public int repeatCount;
-    private Path roundPath;
+    private Path[] roundPath;
     private int[] roundRadius;
     private int[] roundRadiusBackup;
     private float scaleFactor;
     private float scaleX;
     private float scaleY;
     private ArrayList<View> secondParentViews;
-    private Matrix shaderMatrix;
+    private Matrix[] shaderMatrix;
     private boolean singleFrameDecoded;
     public boolean skipFrameUpdate;
     private float startTime;
@@ -296,7 +296,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         this(file, z, j, tLRPC$Document, imageLocation, obj, j2, i, z2, 0, 0, cacheOptions);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:40:0x015d  */
+    /* JADX WARN: Removed duplicated region for block: B:40:0x0164  */
     /* JADX WARN: Removed duplicated region for block: B:42:? A[RETURN, SYNTHETIC] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -304,7 +304,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     */
     public AnimatedFileDrawable(java.io.File r18, boolean r19, long r20, org.telegram.tgnet.TLRPC$Document r22, org.telegram.messenger.ImageLocation r23, java.lang.Object r24, long r25, int r27, boolean r28, int r29, int r30, org.telegram.messenger.utils.BitmapsCache.CacheOptions r31) {
         /*
-            Method dump skipped, instructions count: 353
+            Method dump skipped, instructions count: 360
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedFileDrawable.<init>(java.io.File, boolean, long, org.telegram.tgnet.TLRPC$Document, org.telegram.messenger.ImageLocation, java.lang.Object, long, int, boolean, int, int, org.telegram.messenger.utils.BitmapsCache$CacheOptions):void");
@@ -686,15 +686,15 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         drawInternal(canvas, true, 0L, i2);
     }
 
-    /* JADX WARN: Removed duplicated region for block: B:41:0x00b3  */
-    /* JADX WARN: Removed duplicated region for block: B:65:0x0163  */
+    /* JADX WARN: Removed duplicated region for block: B:41:0x00b1  */
+    /* JADX WARN: Removed duplicated region for block: B:78:0x0173  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void drawInternal(android.graphics.Canvas r18, boolean r19, long r20, int r22) {
+    public void drawInternal(android.graphics.Canvas r19, boolean r20, long r21, int r23) {
         /*
-            Method dump skipped, instructions count: 427
+            Method dump skipped, instructions count: 447
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AnimatedFileDrawable.drawInternal(android.graphics.Canvas, boolean, long, int):void");
@@ -929,33 +929,53 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             if (bitmap2 == null && this.nextRenderingBitmap == null) {
                 scheduleNextGetFrame();
             } else if (this.nextRenderingBitmap != null && (bitmap2 == null || (Math.abs(j - this.lastFrameTime) >= this.invalidateAfter && !this.skipFrameUpdate))) {
-                if (this.precache) {
-                    this.backgroundBitmap = this.renderingBitmap;
-                }
+                this.backgroundBitmap = this.renderingBitmap;
                 this.renderingBitmap = this.nextRenderingBitmap;
                 this.renderingBitmapTime = this.nextRenderingBitmapTime;
-                this.renderingShader = this.nextRenderingShader;
-                this.nextRenderingBitmap = null;
-                this.nextRenderingBitmapTime = 0;
-                this.nextRenderingShader = null;
-                this.lastFrameTime = j;
-                scheduleNextGetFrame();
+                int i = 0;
+                while (true) {
+                    BitmapShader[] bitmapShaderArr = this.backgroundShader;
+                    if (i < bitmapShaderArr.length) {
+                        BitmapShader[] bitmapShaderArr2 = this.renderingShader;
+                        bitmapShaderArr[i] = bitmapShaderArr2[i];
+                        BitmapShader[] bitmapShaderArr3 = this.nextRenderingShader;
+                        bitmapShaderArr2[i] = bitmapShaderArr3[i];
+                        bitmapShaderArr3[i] = null;
+                        i++;
+                    } else {
+                        this.nextRenderingBitmap = null;
+                        this.nextRenderingBitmapTime = 0;
+                        this.lastFrameTime = j;
+                        scheduleNextGetFrame();
+                        return;
+                    }
+                }
             } else {
                 invalidateInternal();
             }
         } else if (this.isRunning || !this.decodeSingleFrame || Math.abs(j - this.lastFrameTime) < this.invalidateAfter || (bitmap = this.nextRenderingBitmap) == null) {
         } else {
-            if (this.precache) {
-                this.backgroundBitmap = this.renderingBitmap;
-            }
+            this.backgroundBitmap = this.renderingBitmap;
             this.renderingBitmap = bitmap;
             this.renderingBitmapTime = this.nextRenderingBitmapTime;
-            this.renderingShader = this.nextRenderingShader;
-            this.nextRenderingBitmap = null;
-            this.nextRenderingBitmapTime = 0;
-            this.nextRenderingShader = null;
-            this.lastFrameTime = j;
-            scheduleNextGetFrame();
+            int i2 = 0;
+            while (true) {
+                BitmapShader[] bitmapShaderArr4 = this.backgroundShader;
+                if (i2 < bitmapShaderArr4.length) {
+                    BitmapShader[] bitmapShaderArr5 = this.renderingShader;
+                    bitmapShaderArr4[i2] = bitmapShaderArr5[i2];
+                    BitmapShader[] bitmapShaderArr6 = this.nextRenderingShader;
+                    bitmapShaderArr5[i2] = bitmapShaderArr6[i2];
+                    bitmapShaderArr6[i2] = null;
+                    i2++;
+                } else {
+                    this.nextRenderingBitmap = null;
+                    this.nextRenderingBitmapTime = 0;
+                    this.lastFrameTime = j;
+                    scheduleNextGetFrame();
+                    return;
+                }
+            }
         }
     }
 }

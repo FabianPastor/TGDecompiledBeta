@@ -178,9 +178,8 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
                     super(view);
                 }
 
-                /* JADX INFO: Access modifiers changed from: protected */
                 @Override // org.telegram.messenger.ImageReceiver
-                public boolean setImageBitmapByKey(Drawable drawable, String str, int i, boolean z, int i2) {
+                protected boolean setImageBitmapByKey(Drawable drawable, String str, int i, boolean z, int i2) {
                     boolean imageBitmapByKey = super.setImageBitmapByKey(drawable, str, i, z, i2);
                     ValueAnimator duration = ValueAnimator.ofFloat(0.0f, 1.0f).setDuration(300L);
                     duration.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() { // from class: org.telegram.ui.Components.BotWebViewContainer$1$1$$ExternalSyntheticLambda0
