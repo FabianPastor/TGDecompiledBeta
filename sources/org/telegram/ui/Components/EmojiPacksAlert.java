@@ -1188,6 +1188,10 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
     @Override // org.telegram.ui.ActionBar.BottomSheet, android.app.Dialog, android.content.DialogInterface
     public void dismiss() {
         super.dismiss();
+        EmojiPacksLoader emojiPacksLoader = this.customEmojiPacks;
+        if (emojiPacksLoader != null) {
+            emojiPacksLoader.recycle();
+        }
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 4);
     }
 
@@ -1968,6 +1972,10 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                     i2++;
                 }
             }
+        }
+
+        public void recycle() {
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.groupStickersDidLoad);
         }
 
         public int getItemsCount() {

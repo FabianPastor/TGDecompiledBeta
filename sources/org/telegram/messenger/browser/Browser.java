@@ -163,7 +163,7 @@ public class Browser {
         StringBuilder sb = new StringBuilder();
         sb.append("^(https");
         sb.append(z2 ? "" : "?");
-        sb.append("://)?(te\\.?legra\\.ph|graph\\.org).*");
+        sb.append("://)?(te\\.?legra\\.ph|graph\\.org)(/.*|$)");
         return str.matches(sb.toString());
     }
 
@@ -190,7 +190,7 @@ public class Browser {
     }
 
     public static boolean urlMustNotHaveConfirmation(String str) {
-        return isTelegraphUrl(str, false, true) || str.matches("^(https://)?t\\.me/iv\\??.*") || str.matches("^(https://)?telegram\\.org/(blog|tour)/?.*") || str.matches("^(https://)?fragment\\.com/?.*");
+        return isTelegraphUrl(str, false, true) || str.matches("^(https://)?t\\.me/iv\\??(/.*|$)") || str.matches("^(https://)?telegram\\.org/(blog|tour)(/.*|$)") || str.matches("^(https://)?fragment\\.com(/.*|$)");
     }
 
     /* JADX WARN: Can't wrap try/catch for region: R(14:40|(2:41|42)|(11:46|47|(5:51|(2:53|54)(1:56)|55|48|49)|57|58|(3:60|(4:63|(2:64|(1:1)(2:66|(3:69|70|71)(1:68)))|72|61)|74)(3:94|(4:97|(2:103|104)(1:101)|102|95)|105)|75|(3:77|(3:80|81|78)|82)|84|85|(2:90|91))|110|57|58|(0)(0)|75|(0)|84|85|(0)|90|91) */

@@ -141,11 +141,6 @@ public class LNavigation extends FrameLayout implements INavigationLayout, Float
     }
 
     @Override // org.telegram.ui.ActionBar.INavigationLayout
-    public /* synthetic */ void bringToFront(int i) {
-        INavigationLayout.CC.$default$bringToFront(this, i);
-    }
-
-    @Override // org.telegram.ui.ActionBar.INavigationLayout
     public /* synthetic */ void closeLastFragment() {
         closeLastFragment(true);
     }

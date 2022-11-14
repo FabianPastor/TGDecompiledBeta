@@ -458,9 +458,10 @@ public class ReactedUsersListView extends FrameLayout {
             this.titleView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
             this.titleView.setEllipsizeByGradient(true);
             this.titleView.setImportantForAccessibility(2);
-            this.titleView.setWidthWrapContent(true);
             this.titleView.setPadding(0, AndroidUtilities.dp(12.0f), 0, AndroidUtilities.dp(12.0f));
-            addView(this.titleView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 58.0f, 0.0f, 42.0f, 0.0f));
+            this.titleView.setRightPadding(AndroidUtilities.dp(30.0f));
+            this.titleView.setTranslationX(LocaleController.isRTL ? AndroidUtilities.dp(30.0f) : 0.0f);
+            addView(this.titleView, LayoutHelper.createFrameRelatively(-1.0f, -2.0f, 23, 58.0f, 0.0f, 12.0f, 0.0f));
             BackupImageView backupImageView2 = new BackupImageView(context);
             this.reactView = backupImageView2;
             addView(backupImageView2, LayoutHelper.createFrameRelatively(24.0f, 24.0f, 8388629, 0.0f, 0.0f, 12.0f, 0.0f));
@@ -471,6 +472,7 @@ public class ReactedUsersListView extends FrameLayout {
         }
 
         void setUserReaction(TLRPC$MessagePeerReaction tLRPC$MessagePeerReaction) {
+            boolean z;
             Drawable drawable;
             TLRPC$User user = MessagesController.getInstance(ReactedUsersListView.this.currentAccount).getUser(Long.valueOf(MessageObject.getPeerId(tLRPC$MessagePeerReaction.peer_id)));
             if (user == null) {
@@ -485,6 +487,7 @@ public class ReactedUsersListView extends FrameLayout {
             }
             this.avatarView.setImage(ImageLocation.getForUser(user, 1), "50_50", drawable2, user);
             TLRPC$Reaction tLRPC$Reaction = tLRPC$MessagePeerReaction.reaction;
+            boolean z2 = false;
             if (tLRPC$Reaction != null) {
                 ReactionsLayoutInBubble.VisibleReaction fromTLReaction = ReactionsLayoutInBubble.VisibleReaction.fromTLReaction(tLRPC$Reaction);
                 if (fromTLReaction.emojicon != null) {
@@ -493,15 +496,27 @@ public class ReactedUsersListView extends FrameLayout {
                         this.reactView.setImage(ImageLocation.getForDocument(tLRPC$TL_availableReaction.center_icon), "40_40_lastframe", "webp", DocumentObject.getSvgThumb(tLRPC$TL_availableReaction.static_icon.thumbs, "windowBackgroundGray", 1.0f), tLRPC$TL_availableReaction);
                     } else {
                         this.reactView.setImageDrawable(null);
+                        z = false;
+                        setContentDescription(LocaleController.formatString("AccDescrReactedWith", R.string.AccDescrReactedWith, UserObject.getUserName(user), tLRPC$MessagePeerReaction.reaction));
+                        z2 = z;
                     }
                 } else {
                     this.reactView.setAnimatedEmojiDrawable(new AnimatedEmojiDrawable(0, ReactedUsersListView.this.currentAccount, fromTLReaction.documentId));
                 }
+                z = true;
                 setContentDescription(LocaleController.formatString("AccDescrReactedWith", R.string.AccDescrReactedWith, UserObject.getUserName(user), tLRPC$MessagePeerReaction.reaction));
-                return;
+                z2 = z;
+            } else {
+                this.reactView.setImageDrawable(null);
+                setContentDescription(LocaleController.formatString("AccDescrPersonHasSeen", R.string.AccDescrPersonHasSeen, UserObject.getUserName(user)));
             }
-            this.reactView.setImageDrawable(null);
-            setContentDescription(LocaleController.formatString("AccDescrPersonHasSeen", R.string.AccDescrPersonHasSeen, UserObject.getUserName(user)));
+            float f = 0.0f;
+            this.titleView.setRightPadding(AndroidUtilities.dp(z2 ? 30.0f : 0.0f));
+            SimpleTextView simpleTextView = this.titleView;
+            if (z2 && LocaleController.isRTL) {
+                f = AndroidUtilities.dp(30.0f);
+            }
+            simpleTextView.setTranslationX(f);
         }
 
         @Override // android.widget.FrameLayout, android.view.View

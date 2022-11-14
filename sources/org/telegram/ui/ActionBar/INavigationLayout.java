@@ -30,8 +30,6 @@ public interface INavigationLayout {
 
     void animateThemedValues(Theme.ThemeInfo themeInfo, int i, boolean z, boolean z2, Runnable runnable);
 
-    void bringToFront(int i);
-
     boolean checkTransitionAnimation();
 
     void closeLastFragment();
@@ -208,13 +206,6 @@ public interface INavigationLayout {
                 return null;
             }
             return _this.getFragmentStack().get(_this.getFragmentStack().size() - 1);
-        }
-
-        public static void $default$bringToFront(INavigationLayout _this, int i) {
-            BaseFragment baseFragment = _this.getFragmentStack().get(i);
-            _this.removeFragmentFromStack(baseFragment);
-            _this.addFragmentToStack(baseFragment);
-            _this.rebuildFragments(2);
         }
 
         public static void $default$removeAllFragments(INavigationLayout _this) {

@@ -11,8 +11,8 @@ public final /* synthetic */ class DialogCell$$ExternalSyntheticLambda6 implemen
 
     @Override // j$.util.function.ToIntFunction
     public final int applyAsInt(Object obj) {
-        int i;
-        i = ((TLRPC$TL_forumTopic) obj).date;
-        return i;
+        int lambda$formatTopicsNames$0;
+        lambda$formatTopicsNames$0 = DialogCell.lambda$formatTopicsNames$0((TLRPC$TL_forumTopic) obj);
+        return lambda$formatTopicsNames$0;
     }
 }

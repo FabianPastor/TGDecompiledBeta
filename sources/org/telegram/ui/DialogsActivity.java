@@ -7710,7 +7710,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     */
     public java.util.ArrayList<org.telegram.ui.ActionBar.ThemeDescription> getThemeDescriptions() {
         /*
-            Method dump skipped, instructions count: 6854
+            Method dump skipped, instructions count: 6942
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.getThemeDescriptions():java.util.ArrayList");

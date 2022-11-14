@@ -134,7 +134,7 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         detachCurrentListeners();
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.onDownloadingFilesChanged);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.onDownloadingFilesChanged);
         this.downloadImageReceiver.onDetachedFromWindow();
         this.downloadCompleteImageReceiver.onDetachedFromWindow();
     }

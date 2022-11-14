@@ -5774,7 +5774,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         @Override // org.telegram.ui.Components.ChatActivityEnterView.ChatActivityEnterViewDelegate
         public void onMessageSend(CharSequence charSequence, boolean z, int i) {
-            int topicId;
             TLRPC$Message tLRPC$Message;
             if (ChatActivity.this.chatListItemAnimator != null) {
                 ChatActivity chatActivity = ChatActivity.this;
@@ -5823,8 +5822,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             if (ChatObject.isForum(ChatActivity.this.currentChat)) {
                 ChatActivity chatActivity3 = ChatActivity.this;
-                if (!chatActivity3.isTopic && chatActivity3.replyingMessageObject != null && (topicId = MessageObject.getTopicId(ChatActivity.this.replyingMessageObject.messageOwner)) != 0) {
-                    ChatActivity.this.getMediaDataController().cleanDraft(ChatActivity.this.dialog_id, topicId, false);
+                if (!chatActivity3.isTopic && chatActivity3.replyingMessageObject != null) {
+                    int topicId = ChatActivity.this.replyingMessageObject.replyToForumTopic != null ? ChatActivity.this.replyingMessageObject.replyToForumTopic.id : MessageObject.getTopicId(ChatActivity.this.replyingMessageObject.messageOwner);
+                    if (topicId != 0) {
+                        ChatActivity.this.getMediaDataController().cleanDraft(ChatActivity.this.dialog_id, topicId, false);
+                    }
                 }
             }
             ChatActivity.this.hideFieldPanel(z, i, true);
@@ -10545,7 +10547,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     */
     public void updateMessagesVisiblePart(boolean r55) {
         /*
-            Method dump skipped, instructions count: 2937
+            Method dump skipped, instructions count: 2952
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.updateMessagesVisiblePart(boolean):void");

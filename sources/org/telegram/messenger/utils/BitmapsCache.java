@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.utils.BitmapsCache;
 import org.telegram.ui.Components.RLottieDrawable;
@@ -37,7 +38,7 @@ public class BitmapsCache {
     int compressQuality;
     boolean error;
     final File file;
-    boolean fileExist;
+    volatile boolean fileExist;
     String fileName;
     private int frameIndex;
     int h;
@@ -48,7 +49,7 @@ public class BitmapsCache {
     final boolean useSharedBuffers;
     int w;
     static ConcurrentHashMap<Thread, byte[]> sharedBuffers = new ConcurrentHashMap<>();
-    private static final int N = Utilities.clamp(Runtime.getRuntime().availableProcessors(), 8, 1);
+    private static final int N = Utilities.clamp(Runtime.getRuntime().availableProcessors() - 2, 8, 1);
     ArrayList<FrameOffset> frameOffsets = new ArrayList<>();
     private final Object mutex = new Object();
     public AtomicBoolean cancelled = new AtomicBoolean(false);
@@ -91,7 +92,7 @@ public class BitmapsCache {
     public void cancelCreate() {
     }
 
-    /* JADX WARN: Unsupported multi-entry loop pattern (BACK_EDGE: B:37:0x00ed -> B:54:0x00fd). Please submit an issue!!! */
+    /* JADX WARN: Unsupported multi-entry loop pattern (BACK_EDGE: B:47:0x010c -> B:66:0x0124). Please submit an issue!!! */
     public BitmapsCache(File file, Cacheable cacheable, CacheOptions cacheOptions, int i, int i2, boolean z) {
         RandomAccessFile randomAccessFile;
         Throwable th;
@@ -116,9 +117,11 @@ public class BitmapsCache {
         File file3 = new File(file2, sb.toString());
         this.file = file3;
         this.useSharedBuffers = i < AndroidUtilities.dp(60.0f) && i2 < AndroidUtilities.dp(60.0f);
-        boolean exists = file3.exists();
-        this.fileExist = exists;
-        if (exists) {
+        if (SharedConfig.getDevicePerformanceClass() >= 2) {
+            this.fileExist = file3.exists();
+            if (!this.fileExist) {
+                return;
+            }
             try {
                 try {
                     randomAccessFile = new RandomAccessFile(file3, "r");
@@ -127,31 +130,35 @@ public class BitmapsCache {
                         if (this.cacheCreated && this.frameOffsets.isEmpty()) {
                             randomAccessFile.seek(randomAccessFile.readInt());
                             int readInt = randomAccessFile.readInt();
-                            fillFrames(randomAccessFile, readInt);
-                            if (readInt == 0) {
+                            fillFrames(randomAccessFile, readInt > 10000 ? 0 : readInt);
+                            if (this.frameOffsets.size() == 0) {
                                 file3.delete();
                                 this.cacheCreated = false;
                                 this.fileExist = false;
+                            } else {
+                                this.cachedFile = randomAccessFile;
                             }
                         }
-                        randomAccessFile.close();
+                        if (this.cachedFile != randomAccessFile) {
+                            randomAccessFile.close();
+                        }
                     } catch (Throwable th2) {
                         th = th2;
                         try {
                             th.printStackTrace();
                             this.file.delete();
                             this.fileExist = false;
-                            if (randomAccessFile == null) {
-                                return;
+                            if (this.cachedFile != randomAccessFile && randomAccessFile != null) {
+                                randomAccessFile.close();
                             }
-                            randomAccessFile.close();
+                            return;
                         } catch (Throwable th3) {
-                            if (randomAccessFile != null) {
-                                try {
+                            try {
+                                if (this.cachedFile != randomAccessFile && randomAccessFile != null) {
                                     randomAccessFile.close();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
                                 }
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
                             throw th3;
                         }
@@ -163,7 +170,10 @@ public class BitmapsCache {
             } catch (IOException e2) {
                 e2.printStackTrace();
             }
+            return;
         }
+        this.fileExist = false;
+        this.cacheCreated = false;
     }
 
     public static void incrementTaskCounter() {
@@ -188,16 +198,54 @@ public class BitmapsCache {
         }
     }
 
-    /* JADX WARN: Code restructure failed: missing block: B:23:0x005e, code lost:
-        if (r0 == null) goto L6;
+    /* JADX WARN: Code restructure failed: missing block: B:24:0x005e, code lost:
+        if (r24.cachedFile != r0) goto L107;
      */
+    /* JADX WARN: Code restructure failed: missing block: B:70:0x01b3, code lost:
+        r13 = r5;
+        r20 = r7;
+        r22 = r9;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:71:0x01bc, code lost:
+        if (org.telegram.messenger.BuildVars.DEBUG_VERSION == false) goto L55;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:72:0x01be, code lost:
+        org.telegram.messenger.FileLog.d("cancelled cache generation");
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:73:0x01c3, code lost:
+        r13.set(true);
+        r10 = 0;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:75:0x01c9, code lost:
+        if (r10 >= org.telegram.messenger.utils.BitmapsCache.N) goto L74;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:77:0x01cd, code lost:
+        if (r20[r10] == null) goto L60;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:78:0x01cf, code lost:
+        r20[r10].await();
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:80:0x01d5, code lost:
+        r0 = move-exception;
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:81:0x01d6, code lost:
+        r0.printStackTrace();
+     */
+    /* JADX WARN: Code restructure failed: missing block: B:86:0x01e5, code lost:
+        r22.close();
+        r24.source.releaseForGenerateCache();
+     */
+    /* JADX WARN: Removed duplicated region for block: B:111:0x00b9 A[EXC_TOP_SPLITTER, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:124:0x00dd A[SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:35:0x007e A[Catch: all -> 0x01ef, IOException -> 0x01f1, FileNotFoundException -> 0x01f6, TryCatch #12 {FileNotFoundException -> 0x01f6, IOException -> 0x01f1, blocks: (B:3:0x0002, B:14:0x0044, B:23:0x005c, B:29:0x006a, B:33:0x0071, B:35:0x007e, B:36:0x0085, B:37:0x00b5, B:39:0x00b9, B:43:0x00c3, B:45:0x00cb, B:48:0x00d3, B:51:0x00de, B:53:0x00e2, B:55:0x00e6, B:59:0x00f0, B:58:0x00ed, B:60:0x00f3, B:61:0x0110, B:63:0x0116, B:64:0x0133, B:65:0x016b, B:70:0x01b3, B:72:0x01be, B:73:0x01c3, B:74:0x01c7, B:76:0x01cb, B:78:0x01cf, B:82:0x01d9, B:81:0x01d6, B:86:0x01e5, B:42:0x00c0), top: B:121:0x0002, outer: #11 }] */
+    /* JADX WARN: Removed duplicated region for block: B:65:0x016b A[Catch: all -> 0x01ef, IOException -> 0x01f1, FileNotFoundException -> 0x01f6, TryCatch #12 {FileNotFoundException -> 0x01f6, IOException -> 0x01f1, blocks: (B:3:0x0002, B:14:0x0044, B:23:0x005c, B:29:0x006a, B:33:0x0071, B:35:0x007e, B:36:0x0085, B:37:0x00b5, B:39:0x00b9, B:43:0x00c3, B:45:0x00cb, B:48:0x00d3, B:51:0x00de, B:53:0x00e2, B:55:0x00e6, B:59:0x00f0, B:58:0x00ed, B:60:0x00f3, B:61:0x0110, B:63:0x0116, B:64:0x0133, B:65:0x016b, B:70:0x01b3, B:72:0x01be, B:73:0x01c3, B:74:0x01c7, B:76:0x01cb, B:78:0x01cf, B:82:0x01d9, B:81:0x01d6, B:86:0x01e5, B:42:0x00c0), top: B:121:0x0002, outer: #11 }] */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public void createCache() {
         /*
-            Method dump skipped, instructions count: 485
+            Method dump skipped, instructions count: 520
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.utils.BitmapsCache.createCache():void");

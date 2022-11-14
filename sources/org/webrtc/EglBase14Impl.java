@@ -12,9 +12,10 @@ import android.os.Build;
 import android.view.Surface;
 import org.webrtc.EglBase;
 import org.webrtc.EglBase14;
+/* JADX INFO: Access modifiers changed from: package-private */
 @TargetApi(18)
 /* loaded from: classes.dex */
-class EglBase14Impl implements EglBase14 {
+public class EglBase14Impl implements EglBase14 {
     private static final int CURRENT_SDK_VERSION = Build.VERSION.SDK_INT;
     private static final int EGLExt_SDK_VERSION = 18;
     private static final String TAG = "EglBase14Impl";

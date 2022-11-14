@@ -69,19 +69,17 @@ public class BackButtonMenu {
                     iNavigationLayout.removeFragmentFromStack(size);
                 }
             } else if (iNavigationLayout != null && iNavigationLayout.getFragmentStack() != null) {
-                int size2 = iNavigationLayout.getFragmentStack().size() - 2;
+                ArrayList arrayList = new ArrayList(iNavigationLayout.getFragmentStack());
+                int size2 = arrayList.size() - 2;
                 while (true) {
                     i = pulledDialog.stackIndex;
                     if (size2 <= i) {
                         break;
                     }
-                    if (size2 >= 0 && size2 < iNavigationLayout.getFragmentStack().size()) {
-                        iNavigationLayout.removeFragmentFromStack(size2);
-                    }
+                    ((BaseFragment) arrayList.get(size2)).removeSelfFromStack();
                     size2--;
                 }
                 if (i < iNavigationLayout.getFragmentStack().size()) {
-                    iNavigationLayout.bringToFront(pulledDialog.stackIndex);
                     iNavigationLayout.closeLastFragment(true);
                     return;
                 }
@@ -136,12 +134,15 @@ public class BackButtonMenu {
             bundle2.putLong("dialog_id", pulledDialog.dialogId);
             baseFragment.presentFragment(new ProfileActivity(bundle2), true);
         }
-        if (pulledDialog.activity != TopicsFragment.class) {
+        if (pulledDialog.activity == TopicsFragment.class) {
+            Bundle bundle3 = new Bundle();
+            bundle3.putLong("chat_id", pulledDialog.chat.id);
+            baseFragment.presentFragment(new TopicsFragment(bundle3), true);
+        }
+        if (pulledDialog.activity != DialogsActivity.class) {
             return;
         }
-        Bundle bundle3 = new Bundle();
-        bundle3.putLong("chat_id", pulledDialog.chat.id);
-        baseFragment.presentFragment(new TopicsFragment(bundle3), true);
+        baseFragment.presentFragment(new DialogsActivity(null), true);
     }
 
     /* JADX WARN: Multi-variable type inference failed */

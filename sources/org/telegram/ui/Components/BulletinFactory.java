@@ -5,6 +5,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
@@ -186,10 +187,17 @@ public final class BulletinFactory {
             i = 0;
         }
         usersLayout.avatarsImageView.commitTransition(false);
-        usersLayout.textView.setSingleLine(true);
-        usersLayout.textView.setLines(1);
+        usersLayout.textView.setSingleLine(false);
+        usersLayout.textView.setMaxLines(2);
         usersLayout.textView.setText(charSequence);
-        usersLayout.textView.setTranslationX((-(3 - i)) * AndroidUtilities.dp(12.0f));
+        if (usersLayout.textView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            int dp = AndroidUtilities.dp(70 - ((3 - i) * 12));
+            if (LocaleController.isRTL) {
+                ((ViewGroup.MarginLayoutParams) usersLayout.textView.getLayoutParams()).rightMargin = dp;
+            } else {
+                ((ViewGroup.MarginLayoutParams) usersLayout.textView.getLayoutParams()).leftMargin = dp;
+            }
+        }
         return create(usersLayout, 2750);
     }
 
@@ -200,10 +208,10 @@ public final class BulletinFactory {
         } else if (arrayList.size() == 1) {
             if (ChatObject.isChannelAndNotMegaGroup(tLRPC$Chat)) {
                 int i = R.string.HasBeenAddedToChannel;
-                spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HasBeenAddedToChannel", i, "**" + UserObject.getUserName(arrayList.get(0)) + "**"));
+                spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HasBeenAddedToChannel", i, "**" + UserObject.getFirstName(arrayList.get(0)) + "**"));
             } else {
                 int i2 = R.string.HasBeenAddedToGroup;
-                spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HasBeenAddedToGroup", i2, "**" + UserObject.getUserName(arrayList.get(0)) + "**"));
+                spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatString("HasBeenAddedToGroup", i2, "**" + UserObject.getFirstName(arrayList.get(0)) + "**"));
             }
         } else if (ChatObject.isChannelAndNotMegaGroup(tLRPC$Chat)) {
             spannableStringBuilder = AndroidUtilities.replaceTags(LocaleController.formatPluralString("AddedMembersToChannel", arrayList.size(), new Object[0]));

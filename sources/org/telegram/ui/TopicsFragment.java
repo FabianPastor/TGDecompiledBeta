@@ -1154,7 +1154,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
         bundle.putLong("chat_id", this.chatId);
         ProfileActivity profileActivity = new ProfileActivity(bundle, this.avatarContainer.getSharedMediaPreloader());
         profileActivity.setChatInfo(this.chatFull);
-        profileActivity.setPlayProfileAnimation(z ? 2 : 1);
+        profileActivity.setPlayProfileAnimation((this.fragmentView.getMeasuredHeight() <= this.fragmentView.getMeasuredWidth() || !z) ? 1 : 2);
         presentFragment(profileActivity);
     }
 
@@ -2556,7 +2556,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
             String lowerCase = str.trim().toLowerCase();
             ArrayList arrayList = new ArrayList();
             for (int i = 0; i < TopicsFragment.this.forumTopics.size(); i++) {
-                if (TopicsFragment.this.forumTopics.get(i).topic.title.toLowerCase().contains(lowerCase)) {
+                if (TopicsFragment.this.forumTopics.get(i).topic != null && TopicsFragment.this.forumTopics.get(i).topic.title.toLowerCase().contains(lowerCase)) {
                     arrayList.add(TopicsFragment.this.forumTopics.get(i).topic);
                     TopicsFragment.this.forumTopics.get(i).topic.searchQuery = lowerCase;
                 }

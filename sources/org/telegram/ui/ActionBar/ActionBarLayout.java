@@ -2055,7 +2055,6 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         }
     }
 
-    @Override // org.telegram.ui.ActionBar.INavigationLayout
     public void bringToFront(int i) {
         ViewGroup viewGroup;
         ViewGroup viewGroup2;
