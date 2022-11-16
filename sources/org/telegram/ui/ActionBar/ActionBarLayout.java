@@ -191,6 +191,11 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
     }
 
     @Override // org.telegram.ui.ActionBar.INavigationLayout
+    public /* synthetic */ boolean isActionBarInCrossfade() {
+        return INavigationLayout.CC.$default$isActionBarInCrossfade(this);
+    }
+
+    @Override // org.telegram.ui.ActionBar.INavigationLayout
     public /* synthetic */ boolean presentFragment(BaseFragment baseFragment) {
         boolean presentFragment;
         presentFragment = presentFragment(new INavigationLayout.NavigationParams(baseFragment));

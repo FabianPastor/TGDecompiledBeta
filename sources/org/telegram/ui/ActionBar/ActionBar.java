@@ -36,6 +36,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.FiltersView;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
@@ -64,6 +65,7 @@ public class ActionBar extends FrameLayout {
     private boolean allowOverlayTitle;
     private Drawable backButtonDrawable;
     private ImageView backButtonImageView;
+    private INavigationLayout.BackButtonState backButtonState;
     public Paint blurScrimPaint;
     boolean blurredBackground;
     private boolean castShadows;
@@ -158,6 +160,10 @@ public class ActionBar extends FrameLayout {
         if (!isSearchFieldVisible() && (runnable = this.titleActionRunnable) != null) {
             runnable.run();
         }
+    }
+
+    public INavigationLayout.BackButtonState getBackButtonState() {
+        return this.backButtonState;
     }
 
     private void createBackButtonImage() {
@@ -272,52 +278,56 @@ public class ActionBar extends FrameLayout {
     @Override // android.view.ViewGroup
     public boolean drawChild(Canvas canvas, View view, long j) {
         Drawable currentHolidayDrawable;
-        boolean shouldClipChild = shouldClipChild(view);
-        if (shouldClipChild) {
-            canvas.save();
-            canvas.clipRect(0.0f, (-getTranslationY()) + (this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0), getMeasuredWidth(), getMeasuredHeight());
-        }
-        boolean drawChild = super.drawChild(canvas, view, j);
-        if (this.supportsHolidayImage && !this.titleOverlayShown && !LocaleController.isRTL) {
-            SimpleTextView[] simpleTextViewArr = this.titleTextView;
-            if ((view == simpleTextViewArr[0] || view == simpleTextViewArr[1]) && (currentHolidayDrawable = Theme.getCurrentHolidayDrawable()) != null) {
-                SimpleTextView simpleTextView = (SimpleTextView) view;
-                if (simpleTextView.getVisibility() == 0 && (simpleTextView.getText() instanceof String)) {
-                    TextPaint textPaint = simpleTextView.getTextPaint();
-                    textPaint.getFontMetricsInt(this.fontMetricsInt);
-                    textPaint.getTextBounds((String) simpleTextView.getText(), 0, 1, this.rect);
-                    int textStartX = simpleTextView.getTextStartX() + Theme.getCurrentHolidayDrawableXOffset() + ((this.rect.width() - (currentHolidayDrawable.getIntrinsicWidth() + Theme.getCurrentHolidayDrawableXOffset())) / 2);
-                    int textStartY = simpleTextView.getTextStartY() + Theme.getCurrentHolidayDrawableYOffset() + ((int) Math.ceil((simpleTextView.getTextHeight() - this.rect.height()) / 2.0f));
-                    currentHolidayDrawable.setBounds(textStartX, textStartY - currentHolidayDrawable.getIntrinsicHeight(), currentHolidayDrawable.getIntrinsicWidth() + textStartX, textStartY);
-                    currentHolidayDrawable.setAlpha((int) (simpleTextView.getAlpha() * 255.0f));
-                    currentHolidayDrawable.draw(canvas);
-                    if (this.overlayTitleAnimationInProgress) {
-                        view.invalidate();
-                        invalidate();
+        BaseFragment baseFragment = this.parentFragment;
+        if (baseFragment == null || !baseFragment.getParentLayout().isActionBarInCrossfade()) {
+            boolean shouldClipChild = shouldClipChild(view);
+            if (shouldClipChild) {
+                canvas.save();
+                canvas.clipRect(0.0f, (-getTranslationY()) + (this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0), getMeasuredWidth(), getMeasuredHeight());
+            }
+            boolean drawChild = super.drawChild(canvas, view, j);
+            if (this.supportsHolidayImage && !this.titleOverlayShown && !LocaleController.isRTL) {
+                SimpleTextView[] simpleTextViewArr = this.titleTextView;
+                if ((view == simpleTextViewArr[0] || view == simpleTextViewArr[1]) && (currentHolidayDrawable = Theme.getCurrentHolidayDrawable()) != null) {
+                    SimpleTextView simpleTextView = (SimpleTextView) view;
+                    if (simpleTextView.getVisibility() == 0 && (simpleTextView.getText() instanceof String)) {
+                        TextPaint textPaint = simpleTextView.getTextPaint();
+                        textPaint.getFontMetricsInt(this.fontMetricsInt);
+                        textPaint.getTextBounds((String) simpleTextView.getText(), 0, 1, this.rect);
+                        int textStartX = simpleTextView.getTextStartX() + Theme.getCurrentHolidayDrawableXOffset() + ((this.rect.width() - (currentHolidayDrawable.getIntrinsicWidth() + Theme.getCurrentHolidayDrawableXOffset())) / 2);
+                        int textStartY = simpleTextView.getTextStartY() + Theme.getCurrentHolidayDrawableYOffset() + ((int) Math.ceil((simpleTextView.getTextHeight() - this.rect.height()) / 2.0f));
+                        currentHolidayDrawable.setBounds(textStartX, textStartY - currentHolidayDrawable.getIntrinsicHeight(), currentHolidayDrawable.getIntrinsicWidth() + textStartX, textStartY);
+                        currentHolidayDrawable.setAlpha((int) (simpleTextView.getAlpha() * 255.0f));
+                        currentHolidayDrawable.draw(canvas);
+                        if (this.overlayTitleAnimationInProgress) {
+                            view.invalidate();
+                            invalidate();
+                        }
                     }
-                }
-                if (Theme.canStartHolidayAnimation()) {
-                    if (this.snowflakesEffect == null) {
-                        this.snowflakesEffect = new SnowflakesEffect(0);
+                    if (Theme.canStartHolidayAnimation()) {
+                        if (this.snowflakesEffect == null) {
+                            this.snowflakesEffect = new SnowflakesEffect(0);
+                        }
+                    } else if (!this.manualStart && this.snowflakesEffect != null) {
+                        this.snowflakesEffect = null;
                     }
-                } else if (!this.manualStart && this.snowflakesEffect != null) {
-                    this.snowflakesEffect = null;
-                }
-                SnowflakesEffect snowflakesEffect = this.snowflakesEffect;
-                if (snowflakesEffect != null) {
-                    snowflakesEffect.onDraw(this, canvas);
-                } else {
-                    FireworksEffect fireworksEffect = this.fireworksEffect;
-                    if (fireworksEffect != null) {
-                        fireworksEffect.onDraw(this, canvas);
+                    SnowflakesEffect snowflakesEffect = this.snowflakesEffect;
+                    if (snowflakesEffect != null) {
+                        snowflakesEffect.onDraw(this, canvas);
+                    } else {
+                        FireworksEffect fireworksEffect = this.fireworksEffect;
+                        if (fireworksEffect != null) {
+                            fireworksEffect.onDraw(this, canvas);
+                        }
                     }
                 }
             }
+            if (shouldClipChild) {
+                canvas.restore();
+            }
+            return drawChild;
         }
-        if (shouldClipChild) {
-            canvas.restore();
-        }
-        return drawChild;
+        return false;
     }
 
     @Override // android.view.View
@@ -334,6 +344,9 @@ public class ActionBar extends FrameLayout {
         }
         this.backButtonImageView.setVisibility(i == 0 ? 8 : 0);
         this.backButtonImageView.setImageResource(i);
+        if (i == R.drawable.ic_ab_back) {
+            this.backButtonState = INavigationLayout.BackButtonState.BACK;
+        }
     }
 
     private void createSubtitleTextView() {
@@ -639,6 +652,45 @@ public class ActionBar extends FrameLayout {
         this.actionMode.setLayoutParams(layoutParams);
         this.actionMode.setVisibility(4);
         return this.actionMode;
+    }
+
+    public void onDrawCrossfadeBackground(Canvas canvas) {
+        if (this.blurredBackground && this.actionBarColor != 0) {
+            this.rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+            this.blurScrimPaint.setColor(this.actionBarColor);
+            this.contentView.drawBlurRect(canvas, getY(), this.rectTmp, this.blurScrimPaint, true);
+            return;
+        }
+        Drawable background = getBackground();
+        if (background == null) {
+            return;
+        }
+        background.setBounds(0, 0, getWidth(), getHeight());
+        background.draw(canvas);
+    }
+
+    public void onDrawCrossfadeContent(Canvas canvas, boolean z, boolean z2, float f) {
+        for (int i = 0; i < getChildCount(); i++) {
+            View childAt = getChildAt(i);
+            if ((!z2 || childAt != this.backButtonImageView) && childAt.getVisibility() == 0 && (childAt instanceof ActionBarMenu)) {
+                canvas.save();
+                canvas.translate(childAt.getX(), childAt.getY());
+                childAt.draw(canvas);
+                canvas.restore();
+            }
+        }
+        canvas.save();
+        canvas.translate(z ? getWidth() * f * 0.5f : (-getWidth()) * 0.4f * (1.0f - f), 0.0f);
+        for (int i2 = 0; i2 < getChildCount(); i2++) {
+            View childAt2 = getChildAt(i2);
+            if ((!z2 || childAt2 != this.backButtonImageView) && childAt2.getVisibility() == 0 && !(childAt2 instanceof ActionBarMenu)) {
+                canvas.save();
+                canvas.translate(childAt2.getX(), childAt2.getY());
+                childAt2.draw(canvas);
+                canvas.restore();
+            }
+        }
+        canvas.restore();
     }
 
     public void showActionMode() {

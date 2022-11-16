@@ -467,11 +467,14 @@ public class TopicsController extends BaseController {
         getMessagesStorage().saveTopics(-j, this.topicsByChatId.get(j), true, true);
     }
 
-    public void updateMaxReadId(long j, int i, int i2, int i3) {
+    public void updateMaxReadId(long j, int i, int i2, int i3, int i4) {
         TLRPC$TL_forumTopic findTopic = findTopic(j, i);
         if (findTopic != null) {
             findTopic.read_inbox_max_id = i2;
             findTopic.unread_count = i3;
+            if (i4 >= 0) {
+                findTopic.unread_mentions_count = i4;
+            }
             sortTopics(j);
         }
     }

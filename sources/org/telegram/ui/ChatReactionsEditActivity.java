@@ -377,6 +377,10 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
         } else {
             this.chatReactions.remove(tLRPC$TL_availableReaction.reaction);
             if (this.chatReactions.isEmpty()) {
+                RecyclerView.Adapter adapter = this.listAdapter;
+                if (adapter != null) {
+                    adapter.notifyItemRangeRemoved(this.isChannel ? 1 : 2, this.availableReactions.size() + 1);
+                }
                 setCheckedEnableReactionCell(2, true);
             }
         }

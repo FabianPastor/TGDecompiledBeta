@@ -6578,7 +6578,7 @@ public class MessagesStorage extends BaseController {
 
     public void processPendingRead(final long j, final int i, final int i2, final int i3) {
         final int i4 = this.lastSavedDate;
-        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda75
+        this.storageQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.MessagesStorage$$ExternalSyntheticLambda74
             @Override // java.lang.Runnable
             public final void run() {
                 MessagesStorage.this.lambda$processPendingRead$118(j, i, i3, i4, i2);
@@ -8910,27 +8910,29 @@ public class MessagesStorage extends BaseController {
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    /* JADX WARN: Removed duplicated region for block: B:61:0x0181  */
-    /* JADX WARN: Removed duplicated region for block: B:63:0x0186  */
-    /* JADX WARN: Removed duplicated region for block: B:67:0x018d  */
-    /* JADX WARN: Removed duplicated region for block: B:69:0x0192  */
-    /* JADX WARN: Removed duplicated region for block: B:82:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:58:0x018a  */
+    /* JADX WARN: Removed duplicated region for block: B:75:0x0224  */
+    /* JADX WARN: Removed duplicated region for block: B:77:0x0229  */
+    /* JADX WARN: Removed duplicated region for block: B:81:0x0230  */
+    /* JADX WARN: Removed duplicated region for block: B:83:0x0235  */
+    /* JADX WARN: Removed duplicated region for block: B:95:? A[RETURN, SYNTHETIC] */
+    /* JADX WARN: Removed duplicated region for block: B:96:? A[RETURN, SYNTHETIC] */
     /* renamed from: updateRepliesMaxReadIdInternal */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
-    public void lambda$updateRepliesMaxReadId$164(final long r19, final int r21, final int r22, int r23) {
+    public void lambda$updateRepliesMaxReadId$164(final long r21, final int r23, final int r24, int r25) {
         /*
-            Method dump skipped, instructions count: 406
+            Method dump skipped, instructions count: 569
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$updateRepliesMaxReadId$164(long, int, int, int):void");
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$updateRepliesMaxReadIdInternal$163(long j, int i, int i2, int i3) {
-        getMessagesController().getTopicsController().updateMaxReadId(j, i, i2, i3);
+    public /* synthetic */ void lambda$updateRepliesMaxReadIdInternal$163(long j, int i, int i2, int i3, int i4) {
+        getMessagesController().getTopicsController().updateMaxReadId(j, i, i2, i3, i4);
     }
 
     private void resetForumBadgeIfNeed(long j) {

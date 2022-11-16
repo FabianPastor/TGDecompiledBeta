@@ -138,7 +138,6 @@ public class FilePathDatabase {
             }
             final CountDownLatch countDownLatch = new CountDownLatch(1);
             final String[] strArr = new String[1];
-            System.currentTimeMillis();
             this.dispatchQueue.postRunnable(new Runnable() { // from class: org.telegram.messenger.FilePathDatabase$$ExternalSyntheticLambda4
                 @Override // java.lang.Runnable
                 public final void run() {

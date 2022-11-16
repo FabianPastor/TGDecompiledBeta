@@ -34,6 +34,7 @@ public class UnreadCounterTextView extends View {
     private int rippleColor;
     Drawable selectableBackground;
     int textColor;
+    String textColorKey;
     private StaticLayout textLayout;
     private StaticLayout textLayoutOut;
     private TextPaint textPaint;
@@ -58,6 +59,7 @@ public class UnreadCounterTextView extends View {
         this.rect = new RectF();
         this.layoutPaint = new TextPaint(1);
         this.replaceProgress = 1.0f;
+        this.textColorKey = "chat_fieldOverlayText";
         this.textPaint.setTextSize(AndroidUtilities.dp(13.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.layoutPaint.setTextSize(AndroidUtilities.dp(15.0f));
@@ -208,7 +210,7 @@ public class UnreadCounterTextView extends View {
         Drawable drawable;
         Drawable drawable2;
         StaticLayout staticLayout = this.textLayout;
-        int color = Theme.getColor(isEnabled() ? "chat_fieldOverlayText" : "windowBackgroundWhiteGrayText", getResourceProvider());
+        int color = Theme.getColor(isEnabled() ? this.textColorKey : "windowBackgroundWhiteGrayText", getResourceProvider());
         if (this.textColor != color) {
             TextPaint textPaint = this.layoutPaint;
             this.textColor = color;
@@ -229,9 +231,9 @@ public class UnreadCounterTextView extends View {
         if (getParent() != null) {
             int measuredWidth2 = getMeasuredWidth();
             int measuredWidth3 = (getMeasuredWidth() - measuredWidth2) / 2;
-            if (this.rippleColor != Theme.getColor("chat_fieldOverlayText", getResourceProvider()) || this.selectableBackground == null) {
+            if (this.rippleColor != Theme.getColor(this.textColorKey, getResourceProvider()) || this.selectableBackground == null) {
                 int dp = AndroidUtilities.dp(60.0f);
-                int color4 = Theme.getColor("chat_fieldOverlayText", getResourceProvider());
+                int color4 = Theme.getColor(this.textColorKey, getResourceProvider());
                 this.rippleColor = color4;
                 Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(dp, 0, ColorUtils.setAlphaComponent(color4, 26));
                 this.selectableBackground = createSimpleSelectorCircleDrawable;
@@ -302,5 +304,10 @@ public class UnreadCounterTextView extends View {
         this.rect.set(((((getMeasuredWidth() - ceil) / 2) + ceil) - (this.circleWidth / 2)) + AndroidUtilities.dp(6.0f), (getMeasuredHeight() / 2) - AndroidUtilities.dp(10.0f), measuredWidth + this.circleWidth, (getMeasuredHeight() / 2) + AndroidUtilities.dp(10.0f));
         canvas.drawRoundRect(this.rect, AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), this.paint);
         canvas.drawText(this.currentCounterString, this.rect.centerX() - (this.textWidth / 2.0f), this.rect.top + AndroidUtilities.dp(14.5f), this.textPaint);
+    }
+
+    public void setTextColorKey(String str) {
+        this.textColorKey = str;
+        invalidate();
     }
 }

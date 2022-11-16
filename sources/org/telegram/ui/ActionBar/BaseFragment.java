@@ -242,6 +242,14 @@ public abstract class BaseFragment {
         return this.inPreviewMode;
     }
 
+    public INavigationLayout.BackButtonState getBackButtonState() {
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null) {
+            return actionBar.getBackButtonState();
+        }
+        return null;
+    }
+
     public void setInPreviewMode(boolean z) {
         this.inPreviewMode = z;
         ActionBar actionBar = this.actionBar;

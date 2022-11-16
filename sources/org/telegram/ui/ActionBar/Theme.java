@@ -202,6 +202,8 @@ public class Theme {
     public static TextPaint chat_gamePaint = null;
     public static Drawable chat_gifIcon = null;
     public static Drawable chat_goIconDrawable = null;
+    public static Drawable chat_gradientLeftDrawable = null;
+    public static Drawable chat_gradientRightDrawable = null;
     public static TextPaint chat_infoPaint = null;
     public static Drawable chat_inlineResultAudio = null;
     public static Drawable chat_inlineResultFile = null;
@@ -5785,6 +5787,8 @@ public class Theme {
             chat_commentDrawable = resources.getDrawable(R.drawable.msg_msgbubble);
             chat_commentStickerDrawable = resources.getDrawable(R.drawable.msg_msgbubble2);
             chat_commentArrowDrawable = resources.getDrawable(R.drawable.msg_arrowright);
+            chat_gradientLeftDrawable = resources.getDrawable(R.drawable.gradient_left);
+            chat_gradientRightDrawable = resources.getDrawable(R.drawable.gradient_right);
             chat_contextResult_shadowUnderSwitchDrawable = resources.getDrawable(R.drawable.header_shadow).mutate();
             chat_attachButtonDrawables[0] = new RLottieDrawable(R.raw.attach_gallery, "attach_gallery", AndroidUtilities.dp(26.0f), AndroidUtilities.dp(26.0f));
             chat_attachButtonDrawables[1] = new RLottieDrawable(R.raw.attach_music, "attach_music", AndroidUtilities.dp(26.0f), AndroidUtilities.dp(26.0f));
@@ -6132,6 +6136,8 @@ public class Theme {
         setDrawableColorByKey(chat_commentDrawable, "chat_inInstant");
         setDrawableColorByKey(chat_commentStickerDrawable, "chat_serviceIcon");
         setDrawableColorByKey(chat_commentArrowDrawable, "chat_inInstant");
+        setDrawableColorByKey(chat_gradientLeftDrawable, "chat_stickersHintPanel");
+        setDrawableColorByKey(chat_gradientRightDrawable, "chat_stickersHintPanel");
         for (int i = 0; i < 2; i++) {
             setDrawableColorByKey(chat_msgInCallDrawable[i], "chat_inInstant");
             setDrawableColorByKey(chat_msgInCallSelectedDrawable[i], "chat_inInstantSelected");

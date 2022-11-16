@@ -34,7 +34,6 @@ public class BitmapsCache {
     byte[] bufferTmp;
     volatile boolean cacheCreated;
     RandomAccessFile cachedFile;
-    volatile boolean checkCache;
     int compressQuality;
     boolean error;
     final File file;
@@ -132,9 +131,9 @@ public class BitmapsCache {
                             int readInt = randomAccessFile.readInt();
                             fillFrames(randomAccessFile, readInt > 10000 ? 0 : readInt);
                             if (this.frameOffsets.size() == 0) {
-                                file3.delete();
                                 this.cacheCreated = false;
                                 this.fileExist = false;
+                                file3.delete();
                             } else {
                                 this.cachedFile = randomAccessFile;
                             }
@@ -286,6 +285,9 @@ public class BitmapsCache {
     }
 
     private void fillFrames(RandomAccessFile randomAccessFile, int i) throws Throwable {
+        if (i == 0) {
+            return;
+        }
         byte[] bArr = new byte[i * 8];
         randomAccessFile.read(bArr);
         ByteBuffer wrap = ByteBuffer.wrap(bArr);
@@ -308,64 +310,6 @@ public class BitmapsCache {
             }
         }
         return frame;
-    }
-
-    public boolean cacheExist() {
-        RandomAccessFile randomAccessFile;
-        Throwable th;
-        if (this.checkCache) {
-            return this.cacheCreated;
-        }
-        RandomAccessFile randomAccessFile2 = null;
-        try {
-            try {
-                try {
-                } catch (Throwable th2) {
-                    th = th2;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (Exception unused) {
-        } catch (Throwable th3) {
-            randomAccessFile = null;
-            th = th3;
-        }
-        synchronized (this.mutex) {
-            try {
-                RandomAccessFile randomAccessFile3 = new RandomAccessFile(this.file, "r");
-                this.cacheCreated = randomAccessFile3.readBoolean();
-                if (randomAccessFile3.readInt() <= 0) {
-                    this.cacheCreated = false;
-                }
-                randomAccessFile3.close();
-                this.checkCache = true;
-                return this.cacheCreated;
-            } catch (Throwable th4) {
-                randomAccessFile = null;
-                th = th4;
-                try {
-                    throw th;
-                } catch (Exception unused2) {
-                    randomAccessFile2 = null;
-                    if (randomAccessFile2 != null) {
-                        randomAccessFile2.close();
-                    }
-                    this.checkCache = true;
-                    return this.cacheCreated;
-                } catch (Throwable th5) {
-                    th = th5;
-                    if (randomAccessFile != null) {
-                        try {
-                            randomAccessFile.close();
-                        } catch (IOException e2) {
-                            e2.printStackTrace();
-                        }
-                    }
-                    throw th;
-                }
-            }
-        }
     }
 
     public int getFrame(int i, Bitmap bitmap) {

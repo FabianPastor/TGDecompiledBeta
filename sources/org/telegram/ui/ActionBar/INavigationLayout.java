@@ -20,6 +20,13 @@ import org.telegram.ui.Components.BackButtonMenu;
 import org.telegram.ui.LNavigation.LNavigation;
 /* loaded from: classes3.dex */
 public interface INavigationLayout {
+
+    /* loaded from: classes3.dex */
+    public enum BackButtonState {
+        BACK,
+        MENU
+    }
+
     boolean addFragmentToStack(BaseFragment baseFragment);
 
     boolean addFragmentToStack(BaseFragment baseFragment, int i);
@@ -75,6 +82,8 @@ public interface INavigationLayout {
     ViewGroup getView();
 
     boolean hasIntegratedBlurInPreview();
+
+    boolean isActionBarInCrossfade();
 
     boolean isInBubbleMode();
 
@@ -167,6 +176,10 @@ public interface INavigationLayout {
     /* loaded from: classes3.dex */
     public final /* synthetic */ class CC {
         public static boolean $default$hasIntegratedBlurInPreview(INavigationLayout iNavigationLayout) {
+            return false;
+        }
+
+        public static boolean $default$isActionBarInCrossfade(INavigationLayout iNavigationLayout) {
             return false;
         }
 

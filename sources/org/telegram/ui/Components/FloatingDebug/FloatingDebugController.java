@@ -3,6 +3,7 @@ package org.telegram.ui.Components.FloatingDebug;
 import android.annotation.SuppressLint;
 import android.widget.FrameLayout;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.LaunchActivity;
 /* loaded from: classes3.dex */
 public class FloatingDebugController {
@@ -10,7 +11,9 @@ public class FloatingDebugController {
 
     /* loaded from: classes3.dex */
     public enum DebugItemType {
-        SIMPLE
+        SIMPLE,
+        HEADER,
+        SEEKBAR
     }
 
     public static boolean isActive() {
@@ -67,13 +70,30 @@ public class FloatingDebugController {
 
     /* loaded from: classes3.dex */
     public static class DebugItem {
-        final Runnable action;
+        Runnable action;
+        AnimationProperties.FloatProperty floatProperty;
+        float from;
         final CharSequence title;
-        final DebugItemType type = DebugItemType.SIMPLE;
+        float to;
+        final DebugItemType type;
 
         public DebugItem(CharSequence charSequence, Runnable runnable) {
+            this.type = DebugItemType.SIMPLE;
             this.title = charSequence;
             this.action = runnable;
+        }
+
+        public DebugItem(CharSequence charSequence) {
+            this.type = DebugItemType.HEADER;
+            this.title = charSequence;
+        }
+
+        public DebugItem(CharSequence charSequence, float f, float f2, AnimationProperties.FloatProperty floatProperty) {
+            this.type = DebugItemType.SEEKBAR;
+            this.title = charSequence;
+            this.from = f;
+            this.to = f2;
+            this.floatProperty = floatProperty;
         }
     }
 }

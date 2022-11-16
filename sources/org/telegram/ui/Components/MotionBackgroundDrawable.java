@@ -47,6 +47,7 @@ public class MotionBackgroundDrawable extends Drawable {
     private Canvas gradientFromCanvas;
     private BitmapShader gradientShader;
     private Bitmap[] gradientToBitmap;
+    private float indeterminateSpeedScale;
     private int intensity;
     private final CubicBezierInterpolator interpolator;
     private boolean invalidateLegacy;
@@ -126,6 +127,7 @@ public class MotionBackgroundDrawable extends Drawable {
         this.patternAlpha = 1.0f;
         this.backgroundAlpha = 1.0f;
         this.alpha = 255;
+        this.indeterminateSpeedScale = 1.0f;
         init();
     }
 
@@ -154,6 +156,7 @@ public class MotionBackgroundDrawable extends Drawable {
         this.patternAlpha = 1.0f;
         this.backgroundAlpha = 1.0f;
         this.alpha = 255;
+        this.indeterminateSpeedScale = 1.0f;
         this.isPreview = z;
         setColors(i, i2, i3, i4, i5, false);
         init();
@@ -926,7 +929,7 @@ public class MotionBackgroundDrawable extends Drawable {
         }
         boolean z3 = this.postInvalidateParent || this.rotatingPreview;
         if (z2) {
-            float f5 = f4 + (((float) j) / 12000.0f);
+            float f5 = f4 + ((((float) j) / 12000.0f) * this.indeterminateSpeedScale);
             this.posAnimationProgress = f5;
             if (f5 >= 1.0f) {
                 this.posAnimationProgress = 0.0f;
@@ -1049,6 +1052,14 @@ public class MotionBackgroundDrawable extends Drawable {
     public boolean isOneColor() {
         int[] iArr = this.colors;
         return iArr[0] == iArr[1] && iArr[0] == iArr[2] && iArr[0] == iArr[3];
+    }
+
+    public void setIndeterminateSpeedScale(float f) {
+        this.indeterminateSpeedScale = f;
+    }
+
+    public boolean isIndeterminateAnimation() {
+        return this.isIndeterminateAnimation;
     }
 
     public void setIndeterminateAnimation(boolean z) {

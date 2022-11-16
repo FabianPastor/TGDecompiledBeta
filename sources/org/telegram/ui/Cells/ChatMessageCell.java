@@ -5267,15 +5267,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     /* JADX WARN: Code restructure failed: missing block: B:9:0x0017, code lost:
         if ((r1 & 1) != 0) goto L9;
      */
-    /* JADX WARN: Removed duplicated region for block: B:89:0x0194  */
-    /* JADX WARN: Removed duplicated region for block: B:90:0x01b0  */
+    /* JADX WARN: Removed duplicated region for block: B:95:0x01a1  */
+    /* JADX WARN: Removed duplicated region for block: B:96:0x01bd  */
     /*
         Code decompiled incorrectly, please refer to instructions dump.
         To view partially-correct add '--show-bad-code' argument
     */
     public void updateReactionLayoutPosition() {
         /*
-            Method dump skipped, instructions count: 499
+            Method dump skipped, instructions count: 512
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.updateReactionLayoutPosition():void");

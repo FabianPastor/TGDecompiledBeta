@@ -45,7 +45,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
     private Paint[] backgroundPaint;
     BitmapsCache bitmapsCache;
     protected Runnable cacheGenerateTask;
-    private Runnable cancelCache;
     protected int currentFrame;
     private View currentParentView;
     protected int customEndFrame;
@@ -176,9 +175,12 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
 
         /* JADX INFO: Access modifiers changed from: private */
         public /* synthetic */ void lambda$run$0() {
-            BitmapsCache bitmapsCache = RLottieDrawable.this.bitmapsCache;
-            if (bitmapsCache != null) {
-                bitmapsCache.createCache();
+            try {
+                BitmapsCache bitmapsCache = RLottieDrawable.this.bitmapsCache;
+                if (bitmapsCache != null) {
+                    bitmapsCache.createCache();
+                }
+            } catch (Throwable unused) {
             }
             RLottieDrawable.uiHandler.post(RLottieDrawable.this.uiRunnableCacheFinished);
         }
@@ -1135,7 +1137,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
                 return false;
             }
             this.loadingInBackground = true;
-            Utilities.globalQueue.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda7
+            Utilities.globalQueue.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda4
                 @Override // java.lang.Runnable
                 public final void run() {
                     RLottieDrawable.this.lambda$setBaseDice$1(readRes);
@@ -1148,7 +1150,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$setBaseDice$1(String str) {
         this.nativePtr = createWithJson(str, "dice", this.metaData, null);
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda1
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda0
             @Override // java.lang.Runnable
             public final void run() {
                 RLottieDrawable.this.lambda$setBaseDice$0();
@@ -1183,7 +1185,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
                 this.setLastFrame = true;
             }
             this.secondLoadingInBackground = true;
-            Utilities.globalQueue.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda8
+            Utilities.globalQueue.postRunnable(new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda5
                 @Override // java.lang.Runnable
                 public final void run() {
                     RLottieDrawable.this.lambda$setDiceNumber$4(readRes);
@@ -1196,7 +1198,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
     /* JADX INFO: Access modifiers changed from: private */
     public /* synthetic */ void lambda$setDiceNumber$4(String str) {
         if (this.destroyAfterLoading) {
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda2
+            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda1
                 @Override // java.lang.Runnable
                 public final void run() {
                     RLottieDrawable.this.lambda$setDiceNumber$2();
@@ -1206,7 +1208,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         }
         final int[] iArr = new int[3];
         this.secondNativePtr = createWithJson(str, "dice", iArr, null);
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda9
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda6
             @Override // java.lang.Runnable
             public final void run() {
                 RLottieDrawable.this.lambda$setDiceNumber$3(iArr);
@@ -1591,7 +1593,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
             return;
         }
         this.parentViews.add(imageReceiver);
-        checkCacheCancel();
     }
 
     public void removeParentView(ImageReceiver imageReceiver) {
@@ -1603,7 +1604,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
     }
 
     public void checkCacheCancel() {
-        Runnable runnable;
         View view;
         if (this.bitmapsCache == null || lottieCacheGenerateQueue == null || this.cacheGenerateTask == null) {
             return;
@@ -1613,30 +1613,17 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         if (Build.VERSION.SDK_INT < 19 ? !z2 || this.masterParent != null : !z2 || ((view = this.masterParent) != null && view.isAttachedToWindow())) {
             z = false;
         }
-        if (z && this.cancelCache == null) {
-            Runnable runnable2 = new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda0
-                @Override // java.lang.Runnable
-                public final void run() {
-                    RLottieDrawable.this.lambda$checkCacheCancel$5();
-                }
-            };
-            this.cancelCache = runnable2;
-            AndroidUtilities.runOnUIThread(runnable2, 600L);
-        } else if (z || (runnable = this.cancelCache) == null) {
-        } else {
-            AndroidUtilities.cancelRunOnUIThread(runnable);
-            this.cancelCache = null;
+        if (!z) {
+            return;
         }
-    }
-
-    /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkCacheCancel$5() {
-        lottieCacheGenerateQueue.cancelRunnable(this.cacheGenerateTask);
-        BitmapsCache bitmapsCache = this.bitmapsCache;
-        if (bitmapsCache != null) {
-            bitmapsCache.cancelCreate();
+        Runnable runnable = this.cacheGenerateTask;
+        if (runnable != null) {
+            lottieCacheGenerateQueue.cancelRunnable(runnable);
+            BitmapsCache.decrementTaskCounter();
+            this.cacheGenerateTask = null;
         }
-        BitmapsCache.decrementTaskCounter();
+        this.generatingCache = false;
+        this.genCacheSend = false;
     }
 
     /* JADX INFO: Access modifiers changed from: protected */
@@ -2193,66 +2180,47 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
     public void checkCache(final Runnable runnable) {
         if (this.bitmapsCache == null) {
             AndroidUtilities.runOnUIThread(runnable);
-        } else {
-            loadFrameRunnableQueue.execute(new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda6
-                @Override // java.lang.Runnable
-                public final void run() {
-                    RLottieDrawable.this.lambda$checkCache$9(runnable);
-                }
-            });
+            return;
         }
-    }
-
-    /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkCache$9(final Runnable runnable) {
-        if (this.bitmapsCache.cacheExist()) {
-            AndroidUtilities.runOnUIThread(runnable);
-        } else {
-            AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda3
-                @Override // java.lang.Runnable
-                public final void run() {
-                    RLottieDrawable.this.lambda$checkCache$8(runnable);
-                }
-            });
-        }
-    }
-
-    /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkCache$8(final Runnable runnable) {
         this.generatingCache = true;
         if (lottieCacheGenerateQueue == null) {
             createCacheGenQueue();
         }
-        if (this.cacheGenerateTask == null) {
-            BitmapsCache.incrementTaskCounter();
-            DispatchQueue dispatchQueue = lottieCacheGenerateQueue;
-            Runnable runnable2 = new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda5
-                @Override // java.lang.Runnable
-                public final void run() {
-                    RLottieDrawable.this.lambda$checkCache$7(runnable);
-                }
-            };
-            this.cacheGenerateTask = runnable2;
-            dispatchQueue.postRunnable(runnable2);
+        if (this.cacheGenerateTask != null) {
+            return;
         }
-    }
-
-    /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkCache$7(final Runnable runnable) {
-        BitmapsCache bitmapsCache = this.bitmapsCache;
-        if (bitmapsCache != null) {
-            bitmapsCache.createCache();
-        }
-        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda4
+        BitmapsCache.incrementTaskCounter();
+        DispatchQueue dispatchQueue = lottieCacheGenerateQueue;
+        Runnable runnable2 = new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda2
             @Override // java.lang.Runnable
             public final void run() {
                 RLottieDrawable.this.lambda$checkCache$6(runnable);
+            }
+        };
+        this.cacheGenerateTask = runnable2;
+        dispatchQueue.postRunnable(runnable2);
+    }
+
+    /* JADX INFO: Access modifiers changed from: private */
+    public /* synthetic */ void lambda$checkCache$6(final Runnable runnable) {
+        try {
+            BitmapsCache bitmapsCache = this.bitmapsCache;
+            if (bitmapsCache != null) {
+                bitmapsCache.createCache();
+            }
+        } catch (Throwable th) {
+            FileLog.e(th);
+        }
+        AndroidUtilities.runOnUIThread(new Runnable() { // from class: org.telegram.ui.Components.RLottieDrawable$$ExternalSyntheticLambda3
+            @Override // java.lang.Runnable
+            public final void run() {
+                RLottieDrawable.this.lambda$checkCache$5(runnable);
             }
         });
     }
 
     /* JADX INFO: Access modifiers changed from: private */
-    public /* synthetic */ void lambda$checkCache$6(Runnable runnable) {
+    public /* synthetic */ void lambda$checkCache$5(Runnable runnable) {
         runnable.run();
         if (this.cacheGenerateTask != null) {
             this.cacheGenerateTask = null;

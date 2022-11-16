@@ -1054,9 +1054,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             this.nestedScrollingParentHelper.onStopNestedScroll(view);
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
         @Override // org.telegram.ui.Components.SizeNotifierFrameLayout
-        public void drawList(Canvas canvas, boolean z) {
+        protected void drawList(Canvas canvas, boolean z) {
             super.drawList(canvas, z);
             canvas.save();
             canvas.translate(0.0f, ProfileActivity.this.listView.getY());
@@ -3317,9 +3316,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
         @Override // org.telegram.ui.Components.SizeNotifierFrameLayout, android.widget.FrameLayout, android.view.ViewGroup, android.view.View
-        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        protected void onLayout(boolean z, int i, int i2, int i3, int i4) {
             super.onLayout(z, i, i2, i3, i4);
             ProfileActivity profileActivity = ProfileActivity.this;
             profileActivity.savedScrollPosition = -1;
@@ -3341,9 +3339,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             return (int) (view.getY() - view2.getY());
         }
 
-        /* JADX INFO: Access modifiers changed from: protected */
         @Override // org.telegram.ui.Components.SizeNotifierFrameLayout, android.view.ViewGroup, android.view.View
-        public void dispatchDraw(Canvas canvas) {
+        protected void dispatchDraw(Canvas canvas) {
             int top;
             FragmentContextView fragmentContextView;
             boolean z;

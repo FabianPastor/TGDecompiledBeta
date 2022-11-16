@@ -1455,10 +1455,13 @@
     <string name="Days_two">%1$d days</string>
     <string name="Days_zero">%1$d days</string>
     <string name="Deactivate">DELETE NOW</string>
-    <string name="DebugAltNavigationToggleControls">Toggle navigation stiffness controls</string>
+    <string name="DebugAltNavigation">Alternative navigation</string>
+    <string name="DebugAltNavigationToggleControls">Toggle stiffness controls</string>
     <string name="DebugClearLocalDatabaseSuccess">Cleared local database.</string>
     <string name="DebugClearLogs">Clear Logs</string>
     <string name="DebugClearSendMessageAsPeers">Clear Send Message As... peers</string>
+    <string name="DebugDialogsActivity">Dialogs Activity</string>
+    <string name="DebugGeneral">General</string>
     <string name="DebugMenu">Debug Menu</string>
     <string name="DebugMenuCallSettings">Call settings</string>
     <string name="DebugMenuCheckAppUpdate">Check app update</string>
@@ -1483,8 +1486,12 @@
     <string name="DebugMenuResetDialogs">Reset Dialogs</string>
     <string name="DebugMenuWebViewDebugDisabled">Debug disabled!</string>
     <string name="DebugMenuWebViewDebugEnabled">Debug enabled!</string>
+    <string name="DebugMessageSkeletons">Message Skeletons</string>
+    <string name="DebugMessageSkeletonsLightOverlayAlpha">Light overlay alpha</string>
+    <string name="DebugMessageSkeletonsSaturation">Saturation</string>
     <string name="DebugSendLastLogs">Send Last Logs</string>
     <string name="DebugSendLogs">Send Logs</string>
+    <string name="DebugShareAlert">Share Alert</string>
     <string name="DebugShareAlertDialogsModeLess">Less</string>
     <string name="DebugShareAlertDialogsModeMore">More</string>
     <string name="DebugShareAlertDialogsModeNormal">Normal</string>

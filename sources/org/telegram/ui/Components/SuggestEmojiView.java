@@ -29,7 +29,6 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.ui.ActionBar.Theme;
@@ -56,14 +55,12 @@ public class SuggestEmojiView extends FrameLayout implements NotificationCenter.
     private int lastQueryType;
     private float lastSpanY;
     private final LinearLayoutManager layout;
-    private Drawable leftGradient;
     private AnimatedFloat leftGradientAlpha;
     private final RecyclerListView listView;
     private AnimatedFloat listViewCenterAnimated;
     private AnimatedFloat listViewWidthAnimated;
     private Path path;
     private final Theme.ResourcesProvider resourcesProvider;
-    private Drawable rightGradient;
     private AnimatedFloat rightGradientAlpha;
     private Runnable searchRunnable;
     private boolean show;
@@ -176,12 +173,6 @@ public class SuggestEmojiView extends FrameLayout implements NotificationCenter.
                 }
             }
         });
-        Drawable mutate = getResources().getDrawable(R.drawable.gradient_right).mutate();
-        this.leftGradient = mutate;
-        mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_stickersHintPanel", resourcesProvider), PorterDuff.Mode.MULTIPLY));
-        Drawable mutate2 = getResources().getDrawable(R.drawable.gradient_left).mutate();
-        this.rightGradient = mutate2;
-        mutate2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_stickersHintPanel", resourcesProvider), PorterDuff.Mode.MULTIPLY));
         MediaDataController.getInstance(i).checkStickers(5);
     }
 
@@ -204,8 +195,8 @@ public class SuggestEmojiView extends FrameLayout implements NotificationCenter.
         if (paint != null) {
             paint.setColor(Theme.getColor("chat_stickersHintPanel", this.resourcesProvider));
         }
-        this.leftGradient.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_stickersHintPanel", this.resourcesProvider), PorterDuff.Mode.MULTIPLY));
-        this.rightGradient.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_stickersHintPanel", this.resourcesProvider), PorterDuff.Mode.MULTIPLY));
+        Theme.chat_gradientLeftDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_stickersHintPanel", this.resourcesProvider), PorterDuff.Mode.MULTIPLY));
+        Theme.chat_gradientRightDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_stickersHintPanel", this.resourcesProvider), PorterDuff.Mode.MULTIPLY));
     }
 
     public void forceClose() {
@@ -610,16 +601,16 @@ public class SuggestEmojiView extends FrameLayout implements NotificationCenter.
         float f4 = this.leftGradientAlpha.set(this.listView.canScrollHorizontally(-1) ? 1.0f : 0.0f);
         if (f4 > 0.0f) {
             int i = (int) paddingLeft;
-            this.leftGradient.setBounds(i, (int) top, AndroidUtilities.dp(32.0f) + i, (int) bottom);
-            this.leftGradient.setAlpha((int) (f4 * 255.0f));
-            this.leftGradient.draw(canvas);
+            Theme.chat_gradientLeftDrawable.setBounds(i, (int) top, AndroidUtilities.dp(32.0f) + i, (int) bottom);
+            Theme.chat_gradientLeftDrawable.setAlpha((int) (f4 * 255.0f));
+            Theme.chat_gradientLeftDrawable.draw(canvas);
         }
         float f5 = this.rightGradientAlpha.set(this.listView.canScrollHorizontally(1) ? 1.0f : 0.0f);
         if (f5 > 0.0f) {
             int i2 = (int) min;
-            this.rightGradient.setBounds(i2 - AndroidUtilities.dp(32.0f), (int) top, i2, (int) bottom);
-            this.rightGradient.setAlpha((int) (f5 * 255.0f));
-            this.rightGradient.draw(canvas);
+            Theme.chat_gradientRightDrawable.setBounds(i2 - AndroidUtilities.dp(32.0f), (int) top, i2, (int) bottom);
+            Theme.chat_gradientRightDrawable.setAlpha((int) (f5 * 255.0f));
+            Theme.chat_gradientRightDrawable.draw(canvas);
         }
         canvas.restore();
         if (this.showFloat1.get() < 1.0f) {

@@ -109,17 +109,17 @@ public class MenuDrawable extends Drawable {
     }
 
     /* JADX WARN: Removed duplicated region for block: B:39:0x0101  */
-    /* JADX WARN: Removed duplicated region for block: B:54:0x0215  */
-    /* JADX WARN: Removed duplicated region for block: B:64:0x0379  */
-    /* JADX WARN: Removed duplicated region for block: B:65:0x0398  */
-    /* JADX WARN: Removed duplicated region for block: B:76:0x03ec  */
-    /* JADX WARN: Removed duplicated region for block: B:79:0x0409  */
-    /* JADX WARN: Removed duplicated region for block: B:83:0x041f  */
-    /* JADX WARN: Removed duplicated region for block: B:84:0x042f  */
-    /* JADX WARN: Removed duplicated region for block: B:88:0x0458  */
-    /* JADX WARN: Removed duplicated region for block: B:92:0x046c  */
-    /* JADX WARN: Removed duplicated region for block: B:93:0x047b  */
-    /* JADX WARN: Removed duplicated region for block: B:96:0x04d7  */
+    /* JADX WARN: Removed duplicated region for block: B:54:0x0217  */
+    /* JADX WARN: Removed duplicated region for block: B:64:0x037b  */
+    /* JADX WARN: Removed duplicated region for block: B:65:0x039a  */
+    /* JADX WARN: Removed duplicated region for block: B:76:0x03ee  */
+    /* JADX WARN: Removed duplicated region for block: B:79:0x040b  */
+    /* JADX WARN: Removed duplicated region for block: B:83:0x0421  */
+    /* JADX WARN: Removed duplicated region for block: B:84:0x0431  */
+    /* JADX WARN: Removed duplicated region for block: B:88:0x045a  */
+    /* JADX WARN: Removed duplicated region for block: B:92:0x046e  */
+    /* JADX WARN: Removed duplicated region for block: B:93:0x047d  */
+    /* JADX WARN: Removed duplicated region for block: B:96:0x04d9  */
     @Override // android.graphics.drawable.Drawable
     /*
         Code decompiled incorrectly, please refer to instructions dump.
@@ -127,7 +127,7 @@ public class MenuDrawable extends Drawable {
     */
     public void draw(android.graphics.Canvas r26) {
         /*
-            Method dump skipped, instructions count: 1277
+            Method dump skipped, instructions count: 1279
             To view this dump add '--comments-level debug' option
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.MenuDrawable.draw(android.graphics.Canvas):void");
